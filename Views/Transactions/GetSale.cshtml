@@ -22,18 +22,18 @@
         <table class="table">
             <thead class="table-light">
                 <tr>
-                    <th></th>
+                   
                     <th>Trip No</th>
                     <th>Sales No</th>
                     <th>Boat</th>
                     <th>Arr. Date</th>
                     <th>Dis. Date</th>
                     <th>Days</th>
-                    <th>Sale Amount</th>
-                    <th>Commision Amount</th>
-                    <th>Total Expense Amount</th>
-                    <th>Balance Amount</th>
+                    <th>Sale Amt</th>
+                    <th>Total Expense Amt</th>
+                    <th>Balance Amt</th>
                     <th>Users</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -42,6 +42,22 @@
                     @foreach (var item in Model)
                     {
                         <tr>
+                            <td>@Html.DisplayFor(model => item.TripNo)</td>
+                            <td>@Html.DisplayFor(model => item.SaleNo)</td>
+                            <td>@Html.DisplayFor(model => item.BoatName)</td>
+                            <td>@Convert.ToDateTime(item.StartDate).ToString("dd/MMM/yyyy")</td>
+                            <td>@Convert.ToDateTime(item.EndDate).ToString("dd/MMM/yyyy")</td>
+                            <td>@Html.DisplayFor(model => item.NoOfDays)</td>
+                            <td>@Html.DisplayFor(model => item.TotalSaleAmount)</td>
+                            <td>@Html.DisplayFor(model => item.TotalExpenseAmount)</td>
+                            <td>@Html.DisplayFor(model => item.BalanceAmount)</td>
+                            <td>
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="Lilian Fuller">
+                                        <img src="~/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                                    </li>
+                                </ul>
+                            </td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
@@ -54,25 +70,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@Html.DisplayFor(model => item.TripNo)</td>
-                            <td>@Html.DisplayFor(model => item.SaleNo)</td>
-                            <td>@Html.DisplayFor(model => item.BoatName)</td>
-                            <td>@Convert.ToDateTime(item.StartDate).ToString("dd/MMM/yyyy")</td>
-                            <td>@Convert.ToDateTime(item.EndDate).ToString("dd/MMM/yyyy")</td>
-                            <td>@Html.DisplayFor(model => item.NoOfDays)</td>
-                            <td>@Html.DisplayFor(model => item.TotalSaleAmount)</td>
-                            <td>@Html.DisplayFor(model => item.CommisionAmount)</td>
-                            <td>@Html.DisplayFor(model => item.TotalExpenseAmount)</td>
-                            <td>@Html.DisplayFor(model => item.BalanceAmount)</td>
-
                            
-                            <td>
-                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                        <img src="~/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                                    </li>
-                                </ul>
-                            </td>
+                           
 
                         </tr>
                     }

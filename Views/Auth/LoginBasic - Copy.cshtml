@@ -1,0 +1,80 @@
+@model Login;
+
+@{
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Login Basic - Pages";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/page-auth.css">
+}
+
+@* ************** Content ************** *@
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <!-- Register -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="app-brand justify-content-center">
+                        <a href="/" class="app-brand-link gap-2" tabindex="-1">
+                            <img src="~/img/karimbil-01.png" class="img-fluid" />
+                            @* <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span> *@
+                            <span class="app-brand-text demo text-body fw-bold">@TempData.Peek("appName")</span>
+                        </a>
+                    </div>
+                    <!-- /Logo -->
+                    <h4 class="mb-2">Welcome to @TempData.Peek("appName")! 👋</h4>
+                    <p class="mb-4">Please sign-in to your account and start the adventure</p>
+
+                    <form id="formAuthentication" class="mb-3" asp-controller="Auth" asp-action="LoginBasic" method="POST">
+                        @Html.AntiForgeryToken()
+
+                        <div class="text-danger">@ViewData["ValidateMessage"]</div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label">Username</label>
+                            <input asp-for="UserName" type="text" id="username" class="form-control" name="username" placeholder="Enter your email or username" tabindex="1" autofocus>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" asp-for="Password">Password</label>
+                                <a href="~/Auth/ForgotPasswordBasic" tabindex="-1">
+                                    <small tabindex="-1">Forgot Password?</small>
+                                </a>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input asp-for ="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" tabindex="2" />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="remember-me" asp-for="KeepLoggedIn" tabindex="3">
+                                <label class="form-check-label" for="remember-me">
+                                    Remember Me
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit" tabindex="4">Sign in</button>
+                        </div>
+                    </form>
+
+                    <p class="text-center">
+                        <span>New on our platform?</span>
+                        <a href="~/Auth/RegisterBasic">
+                            <span>Create an account</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <!-- /Register -->
+        </div>
+    </div>
+</div>
+

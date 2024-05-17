@@ -1,0 +1,51 @@
+﻿@model CommissionType;
+@{
+    ViewData["Title"] = "Add New CommissionType - CommissionType";
+}
+
+@* ************** Content ************** *@
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="formAccountSettings" asp-controller="Master" asp-action="DefineCommissionType" asp-route-Id="@Model.CommissionTypeId">
+            @Html.AntiForgeryToken()
+            <div class="card mb-4">
+                <h4 class="card-header">
+                    Add CommissionType Details
+                    <div style="float:right">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        
+                        <a asp-controller="Master" asp-action="GetCommissionType" class="btn btn-primary">Back</a>
+                    </div>
+                </h4>
+                <!-- Account -->
+                <div class="card-body pt-2 mt-1">
+                    <div class="row gy-4">
+                        @Html.HiddenFor(m => m.CommissionTypeId)
+                        <div class="col-md-3">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="CommissionTypeCode" class="form-control" type="text" id="txt_CommissionTypecode" name="CommissionTypecode" placeholder="CommissionType Code" />
+                                <label for="CommissionTypecode">CommissionType Code</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="CommissionTypeName" class="form-control" type="text" id="txt_CommissionTypename" name="CommissionTypename" placeholder="CommissionType Name" />
+                                <label for="CommissionTypename">CommissionType Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="align-content:center;">
+                            <div class="form-check form-switch mb-2">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked="@(Model.IsActive)" checked>
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Account -->
+            </div>
+        </form>
+    </div>
+</div>
+
+

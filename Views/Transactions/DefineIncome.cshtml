@@ -1,0 +1,463 @@
+﻿@model IncomeHd;
+
+@{
+    ViewData["Title"] = "Add New Income - Income";
+}
+
+@section PageScripts {
+    <script src="~/js/common.js"></script>
+}
+
+@* ************** Content ************** *@
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.AntiForgeryToken()
+        <div class="card mb-4">
+            <h4 class="card-header">
+                Add Income Details
+                <div style="float:right">
+                    <button class="btn btn-primary" onclick="CreateIncome()">Save</button>
+
+                    <a asp-controller="Transactions" asp-action="GetIncome" class="btn btn-primary">Back</a>
+                </div>
+            </h4>
+            <!-- Account -->
+            <div class="card-body pt-2 mt-1">
+                <div class="row gy-4">
+                    <input asp-for="IncomeId" hidden />
+                    <input asp-for="EncId" hidden />
+                    <label>Header</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="IncomeNo" class="form-control" type="text" id="txt_incomeNo" name="incomeNo" readonly />
+                            <label for="incomeNo">Income Number</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddsaleid" asp-for="SaleId" asp-items="ViewBag.SaleList" class="select2 form-select" autofocus>
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="country">Sale Number</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="BalanceAmount" class="form-control" type="number" id="txt_balanceamount" name="balanceamount" readonly />
+                            <label for="balanceamount">Balance Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TotalAmount" class="form-control" type="number" id="txt_totalamount" name="totalamount" readonly />
+                            <label for="totalamount">Total Amount</label>
+                        </div>
+                    </div>
+
+                    <label>Details</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddIncometype" asp-items="ViewBag.CommissionTypeList" class="select2 form-select">
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="Incometype">Income Type</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Qty" name="qty" onblur="DetailsAmountCalculation()" />
+                            <label for="qty">Qty</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Price" name="price" onblur="DetailsAmountCalculation()" />
+                            <label for="price">Price</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Amount" name="amount" readonly />
+                            <label for="amount">Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1" id="SquenceNo">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" />
+                            <label for="SquenceNo">Squence No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1" id="SquenceNo" style="display:none">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_ItemNumber" name="ItemNumber" readonly />
+                            <label for="ItemNumber">Item Number</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="AddIncomeDetails()">Add</button>
+                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearIncomeDetails()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <label>Grid Details</label>
+
+                <br />
+
+                <div id="grid_IncomeDetails">
+                </div>
+            </div>
+            <!-- /Account -->
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            $("#SquenceNo").hide();
+            ClearIncomeDetails();
+
+            $("#IncomeId").val();
+            $("#EncId").val();
+            LoadGetIncome();
+        });
+
+        function LoadGetIncome() {
+
+            var eid = $("#EncId").val();
+            var GridName = 'IncomeDetails';
+            var Url = '@Url.Action("GetIncomeDetailsList", "Transactions", new { area = "" })';
+            var PageSize = 20;
+
+            var Columns_properties = [
+                { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
+                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                { columnName: 'IncomeId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
+                { columnName: 'IncomeNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
+                { columnName: 'CommissionTypeId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Income Id' },
+                { columnName: 'CommissionTypeName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Income Name' },
+                { columnName: 'Qty', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Qty' },
+                { columnName: 'Price', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Price' },
+                { columnName: 'Amount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Total' },
+            ]
+
+            var Params = { 'eid': eid };
+
+            var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
+
+            FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "");
+        }
+
+        function GridColumnTemplate_IncomeDetails(GridData, Tab) {
+
+            var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditIncomeDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
+            var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteIncomeDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+
+            var Template = Edit + '  ' + Delete;
+
+            columnsOptions.push({
+                field: "",
+                title: "Action",
+                width: 100,
+                filterable: {
+                    cell: {
+                        enabled: false
+                    }
+                },
+                template: Template
+            });
+        }
+
+        function EditIncomeDt() {
+
+            var gridData = $("#grid_IncomeDetails").data("kendoGrid");
+
+            var selectedRows = gridData.select();
+            selectedRows.each(function (index, row) {
+                var selectedItem = gridData.dataItem(row);
+
+                $("#ddIncometype").val(selectedItem.CommissionTypeId);
+                $("#txt_Qty").val(selectedItem.Qty);
+                $("#txt_Price").val(selectedItem.Price);
+                $("#txt_Amount").val(selectedItem.Amount);
+                $("#txt_SquenceNo").val(selectedItem.SquenceNo);
+                $("#txt_ItemNumber").val(selectedItem.ItemNo);
+            });
+
+            $("#SquenceNo").show();
+            $("#txt_SquenceNo").show();
+        }
+
+        function DeleteIncomeDt() {
+
+            var grid = $("#grid_IncomeDetails").data("kendoGrid");
+            var dataSource = grid.dataSource;
+            var GridLength = dataSource.data().length;
+
+            var rows = grid.select();
+            var selectedItem = grid.dataItem(rows);
+            grid.dataSource.remove(selectedItem);
+
+            HeaderAmountCalculation();
+        }
+
+        function HeaderAmountCalculation() {
+
+            var TotalAMT = 0;
+
+            var grid = $("#grid_IncomeDetails").data("kendoGrid");
+
+            if (grid != undefined) {
+                var gridData = grid.dataSource.data();
+                
+                for (var i = 0; i < gridData.length; i++) {
+
+                    var uid = gridData[i].uid;
+                    var row = grid.table.find("tr[data-uid='" + uid + "']");
+
+                    var Amount = $(row).find("[data-field='Amount']").html();
+
+                    if (Amount != undefined) {
+                        Amount = (Amount.replace(',', ''));
+                        Amount = parseFloat(Amount);
+                    } else {
+                        Amount = gridData[i].Amount;
+                    }
+
+                    TotalAMT = (parseFloat(TotalAMT) + parseFloat(Amount)).toFixed(2);
+                }
+
+                $("#txt_totalamount").val(parseFloat(TotalAMT).toFixed(2));
+            }
+        }
+
+        function ValidateIncomeDetails() {
+            
+            var Valid = true;
+
+            var incometype = $('#ddIncometype').val();
+            var qty = $("#txt_Qty").val();
+            var price = $("#txt_Price").val();
+            var amount = $("#txt_Amount").val();
+
+            if (incometype == "" || parseFloat(incometype) <= 0) {
+                Valid = false;
+                toastr.warning('Please Select Income Type');
+                $("#ddIncometype").focus();
+            } else if (qty == "" || parseFloat(qty) <= 0) {
+                Valid = false;
+                toastr.warning('Please Enter Qty');
+                $("#txt_Qty").focus();
+            } else if (price == "" || parseFloat(price) <= 0) {
+                Valid = false;
+                toastr.warning('Please Enter Price');
+                $("#txt_Price").focus();
+            } else if (amount == "" || parseFloat(amount) <= 0) {
+                Valid = false;
+                toastr.warning('Please Enter Amount');
+                $("#txt_Amount").focus();
+            }
+
+            return Valid;
+        }
+
+        function AddIncomeDetails() {
+
+            if (ValidateIncomeDetails()) {
+
+                var lengthgrid = 0;
+                var INVOICE_ID = 0;
+                var grid = undefined;
+                grid = $("#grid_IncomeDetails").data("kendoGrid");
+                if (grid == undefined) {
+                    grid = $("#grid_IncomeDetails").kendoGrid().data("kendoGrid");
+                    lengthgrid = 0;
+                }
+                else {
+                    lengthgrid = grid.dataSource.data().length;
+                }
+                var dataSource = $("#grid_IncomeDetails").data().kendoGrid.dataSource;
+                var DataAdd = [];
+                
+                for (var i = 0; i < lengthgrid; i++) {
+
+                    DataAdd.push({
+                        SquenceNo: dataSource.data()[i].SquenceNo,
+                        ItemNo: dataSource.data()[i].ItemNo,
+                        IncomeId: dataSource.data()[i].IncomeId,
+                        IncomeNo: dataSource.data()[i].IncomeNo,
+                        CommissionTypeId: dataSource.data()[i].CommissionTypeId,
+                        CommissionTypeName: dataSource.data()[i].CommissionTypeName,
+                        Qty: dataSource.data()[i].Qty,
+                        Price: dataSource.data()[i].Price,
+                        Amount: dataSource.data()[i].Amount,
+                    });
+                }
+
+                if ($("#txt_SquenceNo").val() == '') {
+
+                    DataAdd.push({
+                        SquenceNo: lengthgrid + 1,
+                        ItemNo: lengthgrid + 1,
+                        IncomeId: INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID,
+                        IncomeNo: "",
+                        CommissionTypeId: $('#ddIncometype').val() == '' ? 0 : $("#ddIncometype").val(),
+                        CommissionTypeName: $("#ddIncometype option:selected").text(),
+                        Qty: $("#txt_Qty").val(),
+                        Price: $("#txt_Price").val(),
+                        Amount: $("#txt_Amount").val(),
+                    });
+                }
+                else {
+
+                    objIndex = DataAdd.findIndex((obj => obj.ItemNo == parseInt($("#txt_SquenceNo").val())));
+
+                    DataAdd[objIndex].SquenceNo = $("#txt_SquenceNo").val();
+                    DataAdd[objIndex].ItemNo = $("#txt_ItemNumber").val();
+                    DataAdd[objIndex].IncomeId = INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID;
+                    DataAdd[objIndex].IncomeNo = "";
+                    DataAdd[objIndex].CommissionTypeId = $('#ddIncometype').val() == '' ? 0 : $("#ddIncometype").val();
+                    DataAdd[objIndex].CommissionTypeName = $("#ddIncometype option:selected").text();
+                    DataAdd[objIndex].Qty = $("#txt_Qty").val();
+                    DataAdd[objIndex].Price = $("#txt_Price").val();
+                    DataAdd[objIndex].Amount = $("#txt_Amount").val();
+                }
+            }
+
+
+            var Columns_properties = [
+                { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
+                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                { columnName: 'IncomeId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
+                { columnName: 'IncomeNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
+                { columnName: 'CommissionTypeId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Income Id' },
+                { columnName: 'CommissionTypeName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Income Name' },
+                { columnName: 'Qty', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Qty' },
+                { columnName: 'Price', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Price' },
+                { columnName: 'Amount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Total' },
+            ]
+
+            var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
+
+            FillUpdatedGrid(Url = '', Params = '', GridName = 'IncomeDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "Income", JSON.stringify(DataAdd));
+
+            $('#grid_IncomeDetails').show();
+            ClearIncomeDetails();
+            HeaderAmountCalculation();
+
+        }
+
+        function ClearIncomeDetails() {
+
+            var typeid = $('#ddIncometype').val('');
+            //var typename = $("#ddIncometype option:selected").text();
+
+            $("#txt_Qty").val('0');
+            $("#txt_Price").val('0.00');
+            $("#txt_Amount").val('0.00');
+            $("#SquenceNo").hide();
+        }
+
+        function DetailsAmountCalculation() {
+            var qty = parseFloat($('#txt_Qty').val() == '' ? 0 : $('#txt_Qty').val());
+            var price = parseFloat($('#txt_Price').val() == '' ? 0 : $('#txt_Price').val());
+
+            var amt = qty * price;
+            $("#txt_Amount").val(amt);
+
+        }
+
+        function DetailsAmountCalculation() {
+            var qty = parseFloat($('#txt_Qty').val() == '' ? 0 : $('#txt_Qty').val());
+            var price = parseFloat($('#txt_Price').val() == '' ? 0 : $('#txt_Price').val());
+
+            var amt = qty * price;
+            $("#txt_Amount").val(amt);
+
+        }
+
+        function CreateIncome() {
+
+            if (ValidateIncome()) {
+
+
+                var eid = $("#EncId").val();
+
+                var JsonIncome = {
+                    IncomeId: $("#IncomeId").val(),
+                    IncomeNo: $("#txt_incomeNo").val(),
+                    SaleId: $("#ddsaleid").val(),
+                    SaleNo: $("#ddsaleid option:selected").text(),
+                    BalanceAmount: $("#txt_balanceamount").val(),
+                    TotalAmount: $("#txt_totalamount").val(),
+                }
+
+                var JsonString = JSON.stringify(JsonIncome);
+
+                var grid = $("#grid_IncomeDetails").data("kendoGrid");
+                if (grid != undefined) {
+                    var data = grid.dataSource.data().length;
+                    if (data > 0) {
+                        var gridData = grid.dataSource.data();
+                        var JsonDetails = JSON.stringify(gridData);
+
+                        var Url = '@Url.Action("DefineIncome", "Transactions")';
+                        var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
+
+                        $.ajax({
+                            type: "POST",
+                            url: Url,
+                            data: Params,
+                            success: function (e) {
+                                response = JSON.parse(e)
+                                if (response.Id > 0) {
+                                    toastr.success(response.Msg);
+                                } else {
+                                    toastr.error(response.Msg);
+                                }
+                            },
+                        })
+                    } else {
+
+                        alert("You can not save without details Income");
+                    }
+                }
+            }
+        }
+
+        function ValidateIncome() {
+
+            var Valid = true;
+
+            var SaleNo = $("#ddsaleid").val();
+            var TotalAmt = $("#txt_totalamount").val();
+
+            if (SaleNo == "" || SaleNo == "0") {
+                Valid = false;
+                toastr.warning('Please Select Sales Number');
+            } else if (TotalAmt == "") {
+                Valid = false;
+                toastr.warning('Please Enter Amount');
+                $("#txt_totalamount").focus();
+            }
+
+            return Valid;
+        }
+
+    </script>
+
+}
+
+
+

@@ -1,0 +1,165 @@
+@{
+    TempData.Keep();
+    string? currentPage = ViewContext.HttpContext.Request.Path;
+}
+
+<!-- Menu -->
+@* ! Do this simple *@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+    @* ! Hide app brand if navbar-full *@
+    <div class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+        <a asp-controller="Dashboards" asp-action="Index" class="app-brand-link">
+            <img src="~/img/karimbil-01.png" class="img-fluid" />
+            @* <span class="app-brand-logo demo me-1">@await Html.PartialAsync("../_Partials/_Macros")</span> *@
+            @* <span class="app-brand-text demo menu-text fw-semibold ms-2">@TempData.Peek("appName")</span> *@
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="mdi menu-toggle-icon d-xl-block align-middle mdi-20px"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    @* ! Full version menu-items *@
+    <ul class="menu-inner py-1">
+        <!-- Dashboards -->
+        <li class='menu-item@(currentPage.EndsWith("/") || currentPage.StartsWith("/Dashboards") ? " active open" : "")'>
+            <a asp-controller="Dashboards" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
+                <div>Dashboards</div>
+            </a>
+        </li>
+
+        <!-- Masters -->
+        <li class="menu-header fw-medium mt-4">
+            <span class="menu-header-text">Masters</span>
+        </li>
+        <!-- Masters -->
+        <li class='menu-item@(currentPage.StartsWith("/Master") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+                <div>Masters</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/Master/GetBoat" ? " active" : "")'>
+                    <a asp-controller="Master" asp-action="GetBoat" class="menu-link">
+                        <div>Boat</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Master/GetExpenseType" ? " active" : "")'>
+                    <a asp-controller="Master" asp-action="GetExpenseType" class="menu-link">
+                        <div>Expenses Type</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Master/GetCommissionType" ? " active" : "")'>
+                    <a asp-controller="Master" asp-action="GetCommissionType" class="menu-link">
+                        <div>Commission Type</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Transaction -->
+        <li class="menu-header fw-medium mt-4">
+            <span class="menu-header-text">Transaction &amp; Expenses</span>
+        </li>
+        <!-- Transaction -->
+        <li class='menu-item@(currentPage.StartsWith("/Transactions") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+                <div>Transaction</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/Transactions/GetSale" ? " active" : "")'>
+                    <a asp-controller="Transactions" asp-action="GetSale" class="menu-link">
+                        <div>Sale</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Transactions/GetExpense" ? " active" : "")'>
+                    <a asp-controller="Transactions" asp-action="GetExpense" class="menu-link">
+                        <div>Expenses</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Transactions/GetIncome" ? " active" : "")'>
+                    <a asp-controller="Transactions" asp-action="GetIncome" class="menu-link">
+                        <div>Income</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Transactions/GetCredit" ? " active" : "")'>
+                    <a asp-controller="Transactions" asp-action="GetCredit" class="menu-link">
+                        <div>Credit</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Report -->
+        <li class="menu-header fw-medium mt-4">
+            <span class="menu-header-text">Report</span>
+        </li>
+        <!-- Transaction -->
+        <li class='menu-item@(currentPage.StartsWith("/Report") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+                <div>Report</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/Report/GetReport" ? " active" : "")'>
+                    <a asp-controller="Report" asp-action="GetReport" class="menu-link">
+                        <div>Report</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        
+
+      
+
+
+        <li class="menu-header fw-medium mt-4">
+            <span class="menu-header-text">Setting</span>
+        </li>
+        <!-- Pages -->
+        <li class='menu-item@(currentPage.StartsWith("/Pages") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+                <div>Account Settings</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/Pages/AccountSettings" ? " active" : "")'>
+                    <a asp-controller="Pages" asp-action="AccountSettings" class="menu-link">
+                        <div>Account</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class='menu-item@(currentPage.StartsWith("/Auth") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-lock-open-outline"></i>
+                <div>Authentications</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/Auth/LoginBasic" ? " active" : "")'>
+                    <a asp-controller="Auth" asp-action="LoginBasic" class="menu-link" target="_blank">
+                        <div>Login</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Auth/RegisterBasic" ? " active" : "")'>
+                    <a asp-controller="Auth" asp-action="RegisterBasic" class="menu-link" target="_blank">
+                        <div>Register</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Auth/ForgotPasswordBasic" ? " active" : "")'>
+                    <a asp-controller="Auth" asp-action="ForgotPasswordBasic" class="menu-link" target="_blank">
+                        <div>Forgot Password</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+      
+    </ul>
+
+</aside>
+<!-- / Menu -->

@@ -1,0 +1,1022 @@
+﻿@model SaleHd;
+@{
+    ViewData["Title"] = "Add New Sale - Sale";
+}
+
+@section PageScripts {
+    <script src="~/js/common.js"></script>
+}
+
+@* ************** Content ************** *@
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.AntiForgeryToken()
+        <div class="card mb-4">
+            <h4 class="card-header">
+                Add Sale Details
+                <div style="float:right">
+                    <button class="btn btn-primary" onclick="UpsertSale()">Save</button>
+                    <a type="button" class="btn btn-primary" asp-action="GetSale" >Back</a>
+                </div>
+            </h4>
+            <!-- Account -->
+            <div class="card-body pt-2 mt-1">
+                <div class="row gy-4">
+                    <input asp-for="SaleId" hidden />
+                    <input asp-for="EncId" hidden />
+                    <label>Sale</label>
+
+                    <div class="col mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="SaleNo" class="form-control" type="text" id="txt_saleNo" name="saleNo" readonly />
+                            <label for="saleNo">Sale Number</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddboatid" asp-for="BoatId" asp-items="ViewBag.BoatsList" class="select2 form-select" autofocus>
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="country">Boat</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TripNo" class="form-control" type="number" id="txt_tripno" name="tripno" />
+                            <label for="tripno">Trip No</label>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="StartDate" class="form-control" type="date" id="txt_startdate" name="StartDate" placeholder="start Date" onchange="funcNumberDays()" />
+                            <label for="dobBackdrop">Arr. Date</label>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="EndDate" class="form-control" type="date" id="txt_enddate" name="enddate" placeholder="End Date" onchange="funcNumberDays()" />
+                            <label for="dobBackdrop">Dep. Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="NoOfDays" class="form-control" type="number" id="txt_totaldays" name="totaldays" onblur="onchangedayscalculation()" readonly />
+                            <label for="totaldays">Total Day</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TotalSaleAmount" class="form-control" type="number" id="txt_totalSaleAmount" name="totalSaleAmount" />
+                            <label for="totalSaleAmount">Total Sale Amount</label>
+                        </div>
+                    </div>
+
+
+                    <label>Expense</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="CommisionAmount" class="form-control" type="number" id="txt_commisionAmount" name="commisionAmount" onblur="salecalculation()" />
+                            <label for="commisionAmount">Comsion</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TempleAmount" class="form-control" type="number" id="txt_templeAmount" name="templeAmount" onblur="salecalculation()" />
+                            <label for="templeAmount">Temple</label>
+                        </div>
+                    </div>
+                    <!-- Add Popup -->
+                    <div class="col-md-3 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="IceAmount" class="form-control" type="number" id="txt_iceAmount" name="iceAmount" onblur="salecalculation()" readonly />
+                            <label for="iceAmount">Ice Amount</label>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" data-bs-toggle="modal" data-bs-target="#iceModal">Ice</button>
+                    </div>
+                    <!-- Add Popup -->
+                    <div class="col-md-3 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="FuelAmount" class="form-control" type="number" id="txt_fuelAmount" name="fuelAmount" onblur="salecalculation()" readonly />
+                            <label for="fuelAmount">Fuel Amount</label>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" data-bs-toggle="modal" data-bs-target="#fuelModal">Fuel</button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="FoodAmount" class="form-control" type="number" id="txt_foodAmount" name="foodAmount" onblur="salecalculation()" />
+                            <label for="foodAmount">Food Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="HelperAmount" class="form-control" type="number" id="txt_helperAmount" name="helperAmount" onblur="salecalculation()" />
+                            <label for="helperAmount">Helper Amount</label>
+                        </div>
+                    </div>
+                    <!-- Add Popup -->
+                    <div class="col-md-3 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="MiscellaneousAmount" class="form-control" type="number" id="txt_Amount" name="Amount" onblur="salecalculation()" readonly />
+                            <label for="Amount">Miscellaneous Amount</label>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" data-bs-toggle="modal" data-bs-target="#MISModal" onclick="LoadGetExpense()">MIS</button>
+                    </div>
+                    <!-- Add Popup -->
+                    <div class="col-md-3 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="BataAmount" class="form-control" type="number" id="txt_bataAmount" name="bataAmount" onblur="salecalculation()" readonly />
+                            <label for="bataAmount">Bata Amount</label>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" data-bs-toggle="modal" data-bs-target="#bataModal">Bata</button>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="DrinkingWaterAmount" class="form-control" type="number" id="txt_drinkingwaterprice" name="drinkingwaterprice" onblur="salecalculation()" />
+                            <label for="drinkingwaterprice">Drinking Water Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="SrankAmount" class="form-control" type="number" id="txt_srankAmount" name="srankAmount" onblur="salecalculation()" />
+                            <label for="srankAmount">Srank Fee</label>
+                        </div>
+                    </div>
+
+
+                    <label>Monthly Expense</label>
+                    <!-- Monthly Header -->
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="CPhoneRechargeAmount" class="form-control" type="number" id="txt_cphonerecharge" name="cphonerecharge" onblur="salecalculation()" />
+                            <label for="cphonerecharge">C-Phone Recharge</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="BerthAmount" class="form-control" type="number" id="txt_berthfee" name="berthfee" onblur="salecalculation()" />
+                            <label for="berthfee">Berth Fees</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="CookingGasAmount" class="form-control" type="number" id="txt_cookinggas" name="cookinggas" onblur="salecalculation()" />
+                            <label for="cookinggas">Cooking Gas</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="OilChnageAmount" class="form-control" type="number" id="txt_oilchange" name="oilchange" onblur="salecalculation()" />
+                            <label for="oilchange">Oil Change</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TabRechargeAmount" class="form-control" type="number" id="txt_tabrecharge" name="tabrecharge" onblur="salecalculation()" />
+                            <label for="tabrecharge">Tab Recharge</label>
+                        </div>
+                    </div>
+
+                    <label>Total </label>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TotalExpenseAmount" class="form-control" type="number" id="txt_totalExpenseAmount" name="totalExpenseAmount" readonly />
+                            <label for="totalExpenseAmount">Total Expense Amount</label>
+                        </div>
+                    </div>
+                    <!-- Monthly Header -->
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="BalanceAmount" class="form-control" type="number" id="txt_balanceAmount" name="balanceAmount" readonly />
+                            <label for="balanceAmount">Balance Amount</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /Account -->
+        </div>
+    </div>
+</div>
+
+<!-- ICE Modal Backdrop -->
+<div class="col-lg-4 col-md-3">
+    <!-- Modal -->
+    <div class="modal fade" id="iceModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="iceModalTitle">Ice Bag Details</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row g-2">
+                        <div class="col mb-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="IceQty" class="form-control" type="number" id="txt_iceQty" name="iceQty" onblur="icecalculation()" />
+                                <label for="iceQty">Ice Bag Qantity</label>
+                            </div>
+                        </div>
+                        <div class="col mb-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="IcePrice" class="form-control" type="number" id="txt_iceprice" name="iceprice" onblur="icecalculation()" />
+                                <label for="iceprice">Unit Price</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-4 mt-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="IceAmount" class="form-control" type="number" id="txt_iceAmount1" name="iceAmount" readonly />
+                                <label for="iceAmount">Total Ice Amount</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="iceSave()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Fuel Modal Backdrop -->
+<div class="col-lg-4 col-md-3">
+    <!-- Modal -->
+    <div class="modal fade" id="fuelModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="fuelModalTitle">Fuel Details</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row g-2">
+                        <div class="col mb-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="FuelQty" class="form-control" type="number" id="txt_fuelQty" name="fuelQty" onblur="fuelcalculation()" />
+                                <label for="fuelQty">Fuel Liter</label>
+                            </div>
+                        </div>
+                        <div class="col mb-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="FuelPrice" class="form-control" type="number" id="txt_fuelPrice" name="fuelunitprice" onblur="fuelcalculation()" />
+                                <label for="fuelunitprice">Fuel Unit Price</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-4 mt-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="FuelAmount" class="form-control" type="number" id="txt_fuelAmount1" name="fuelAmount" readonly />
+                                <label for="fuelAmount">Total Fuel Amount</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="fuelSave()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--  Modal Backdrop -->
+<div class="col-lg-4 col-md-3">
+    <!-- Modal -->
+    <div class="modal fade" id="MISModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="MISModalTitle">MIS Details</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <div class="form-floating form-floating-outline">
+                                <select id="ddExpensetype" asp-items="ViewBag.ExpenseTypeList" class="select2 form-select" autofocus>
+                                    <option value="">-- Select --</option>
+                                </select>
+                                <label for="country">Expense</label>
+                            </div>
+                        </div>
+                        <div class="col mb-2">
+                            <div class="form-floating form-floating-outline">
+                                <input class="form-control" type="number" name="Amountprice" id="txt_MisAmount" />
+                                <label for="MisAmount">Mis Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1" id="SquenceNo">
+                            <div class="form-floating form-floating-outline">
+                                <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" />
+                                <label for="SquenceNo">Squence No</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1" id="SquenceNo" style="display:none">
+                            <div class="form-floating form-floating-outline">
+                                <input class="form-control" type="number" id="txt_ItemNumber" name="ItemNumber" readonly />
+                                <label for="ItemNumber">Item Number</label>
+                            </div>
+                        </div>
+                        <div class="col mb-2">
+                            <div class="form-floating form-floating-outline">
+                                <button type="button" class="btn btn-primary" onclick="AddDetails()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="grid_MISDetails">
+                    </div>
+
+                    @* <div class="row">
+
+                    <div class="col mb-4 mt-2">
+                    <div class="table-responsive text-nowrap">
+                    <table class="table" id="mytable">
+                    <thead class="table-light">
+                    <tr>
+                    <th style="display:none">ExpenseId</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="tblexpensetype">
+                    @if (Model.ObjExpense != null)
+                    {
+                    @foreach (var item in Model.ObjExpense)
+                    {
+                    <tr>
+                    <td><i class="mdi mdi-wallet-travel mdi-20px text-danger me-3"></i><span class="fw-medium">@Html.DisplayFor(model => item.Id)</span></td>
+                    <td>@Html.DisplayFor(model => item.ExpenseTypeId)</td>
+                    <td>@Html.DisplayFor(model => item.Amount)</td>
+                    <td>
+                    <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item"><i class="mdi mdi-pencil-outline me-1"></i> Edit</a>
+                    <a class="dropdown-item"><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a>
+                    </div>
+                    </div>
+                    </td>
+                    </tr>
+                    }
+                    }
+                    <tr>
+                    </tr>
+                    </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    </div> *@
+                    <br />
+                    <div class="row">
+                        <div class="col mb-4 mt-2">
+                            <div class="form-floating form-floating-outline">
+                                <input asp-for="MiscellaneousAmount" class="form-control" type="number" id="txt_MISAmount1" name="Amount" readonly />
+                                <label for="Amount">Total  Amount</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="MisSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bata Modal Backdrop -->
+    <div class="col-lg-4 col-md-3">
+        <!-- Modal -->
+        <div class="modal fade" id="bataModal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="bataModalTitle">Bata Details</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row g-2">
+                            <div class="col mb-2">
+                                <div class="form-floating form-floating-outline">
+                                    <input asp-for="NoOfDays" class="form-control" type="number" id="txt_totaldays1" name="totaldays" readonly />
+                                    <label for="totaldays">No. Of Day</label>
+                                </div>
+                            </div>
+                            <div class="col mb-2">
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col mb-2">
+                                <div class="form-floating form-floating-outline">
+                                    <input asp-for="BataNoOfPerson" class="form-control" type="number" id="txt_totalperson" name="totalperson" onblur="betacalculation()" />
+                                    <label for="totalperson">No. Of Person</label>
+                                </div>
+                            </div>
+                            <div class="col mb-2">
+                                <div class="form-floating form-floating-outline">
+                                    <input asp-for="BataPerDayAmount" class="form-control" type="number" id="txt_perdayprice" name="perdayprice" onblur="betacalculation()" />
+                                    <label for="perdayprice">Per Day Price</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-4 mt-2">
+                                <div class="form-floating form-floating-outline">
+                                    <input asp-for="BataAmount" class="form-control" type="number" id="txt_bataAmount1" name="bataAmount" readonly />
+                                    <label for="bataAmount">Total bata Amount</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="betaSave()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts
+    {
+        <script>
+
+            $(document).ready(function () {
+                $("#SquenceNo").hide();
+            });
+
+
+            //#region Fuel Model Calacuation
+            function fuelcalculation() {
+
+                var fuelqty = $('#txt_fuelQty').val();
+                var fuelprice = $('#txt_fuelPrice').val();
+
+                var totalfuelAmount = fuelqty * fuelprice;
+
+                $('#txt_fuelAmount1').val(totalfuelAmount);
+                $('#priceice').val(fuelqty);
+                $('#qtyice').val(fuelprice);
+            }
+
+            function fuelSave() {
+                var iceAMT = $('#txt_fuelAmount1').val();
+
+                $('#txt_fuelAmount').val(iceAMT);
+                salecalculation();
+                $('#fuelModal').modal('hide');
+            }
+
+
+            //#endregion Fuel Model Calacuation
+
+            //#region Ice Model Calacuation
+
+            function icecalculation() {
+                
+                var iceqty = $('#txt_iceQty').val();
+                var iceprice = $('#txt_iceprice').val();
+
+                var totaliceAmount = iceqty * iceprice;
+
+                $('#txt_iceAmount1').val(totaliceAmount);
+            }
+
+            function iceSave() {
+                var iceAMT = $('#txt_iceAmount1').val();
+
+                $('#txt_iceAmount').val(iceAMT);
+                salecalculation();
+                $('#iceModal').modal('hide');
+            }
+
+            //#endregion Ice Model Calacuation
+
+            //#region Beta Model Calacuation
+
+            function betacalculation() {
+
+                var totaldays = $('#txt_totaldays1').val();
+                var totalperson = $('#txt_totalperson').val();
+                var personprice = $('#txt_perdayprice').val();
+
+                var totalbataAmount = totaldays * totalperson * personprice;
+
+                $('#txt_bataAmount').val(totalbataAmount);
+                $('#txt_bataAmount1').val(totalbataAmount);
+            }
+
+            function betaSave() {
+                var iceAMT = $('#txt_iceAmount1').val();
+
+                $('#txt_iceAmount').val(iceAMT);
+                salecalculation();
+                $('#bataModal').modal('hide');
+            }
+
+            //#endregion Beta Model Calacuation
+
+            //#region Beta Model Calacuation
+
+            function MisSave() {
+                
+                var iceAMT = $('#txt_MISAmount1').val();
+                console.log(iceAMT);
+                $('#txt_Amount').val(iceAMT);
+                salecalculation();
+                $('#MISModal').modal('hide');
+            }
+
+            function LoadGetExpense() {
+
+                var eid = $("#EncId").val();
+                var Url = '@Url.Action("GetSaleDetailsList", "Transactions")';
+                var PageSize = 20;
+
+                var Columns_properties = [
+                    { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
+                    { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                    { columnName: 'Id', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Id' },
+                    { columnName: 'SaleId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'SaleId' },
+                    { columnName: 'ExpenseTypeId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense Id' },
+                    { columnName: 'ExpenseTypeName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense Name' },
+                    { columnName: 'MisAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'Amount', title: 'Total' },
+                ]
+
+                var Params = { 'eid': eid };
+
+                var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
+
+                FillUpdatedGrid(Url, Params, GridName = 'MISDetails', PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "");
+            }
+
+            function GridColumnTemplate_MISDetails(GridData, Tab) {
+
+                var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditExpenseDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
+                var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteExpenseDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+
+                var Template = Edit + '  ' + Delete;
+
+                columnsOptions.push({
+                    field: "",
+                    title: "Action",
+                    width: 100,
+                    filterable: {
+                        cell: {
+                            enabled: false
+                        }
+                    },
+                    template: Template
+                });
+            }
+
+            function EditExpenseDt() {
+
+                var gridData = $("#grid_MISDetails").data("kendoGrid");
+
+                var selectedRows = gridData.select();
+                selectedRows.each(function (index, row) {
+                    var selectedItem = gridData.dataItem(row);
+
+                    $("#ddExpensetype").val(selectedItem.ExpenseTypeId);
+                    $("#txt_Qty").val(selectedItem.Qty);
+                    $("#txt_Price").val(selectedItem.Price);
+                    $("#txt_MISAmount").val(selectedItem.Amount);
+                    $("#txt_SquenceNo").val(selectedItem.SquenceNo);
+                    $("#txt_ItemNumber").val(selectedItem.ItemNo);
+                });
+
+                $("#SquenceNo").show();
+                $("#txt_SquenceNo").show();
+            }
+
+            function DeleteExpenseDt() {
+
+                var grid = $("#grid_MISDetails").data("kendoGrid");
+                var dataSource = grid.dataSource;
+                var GridLength = dataSource.data().length;
+
+                var rows = grid.select();
+                var selectedItem = grid.dataItem(rows);
+                grid.dataSource.remove(selectedItem);
+
+                HeaderAmountCalculation();
+            }
+
+            function ValidateDetails() {
+                var Valid = true;
+
+                var expensetype = $('#ddExpensetype').val();
+                var amount = $("#txt_MisAmount").val();
+
+                if (expensetype == "" || parseFloat(expensetype) <= 0) {
+                    Valid = false;
+                    $("#ddIncometype").focus();
+                    toastr.warning('Please Select Expense Type');
+                } else if (amount == "" || parseFloat(amount) <= 0) {
+                    Valid = false;
+                    $("#txt_MisAmount").focus();
+                    toastr.warning('Please Enter Amount');
+                }
+
+                return Valid;
+            }
+
+            function AddDetails() {
+
+                if (ValidateDetails()) {
+                    
+                    var lengthgrid = 0;
+                    var INVOICE_ID = 0;
+                    var grid = undefined;
+                    grid = $("#grid_MISDetails").data("kendoGrid");
+                    if (grid == undefined) {
+                        grid = $("#grid_MISDetails").kendoGrid().data("kendoGrid");
+                        lengthgrid = 0;
+                    }
+                    else {
+                        lengthgrid = grid.dataSource.data().length;
+                    }
+                    var dataSource = $("#grid_MISDetails").data().kendoGrid.dataSource;
+                    var DataAdd = [];
+
+                    for (var i = 0; i < lengthgrid; i++) {
+
+                        DataAdd.push({
+                            SquenceNo: dataSource.data()[i].SquenceNo,
+                            ItemNo: dataSource.data()[i].ItemNo,
+                            SaleId: dataSource.data()[i].SaleId,
+                            SaleNo: dataSource.data()[i].SaleNo,
+                            ExpenseTypeId: dataSource.data()[i].ExpenseTypeId,
+                            ExpenseTypeName: dataSource.data()[i].ExpenseTypeName,
+                            MisAmount: dataSource.data()[i].MisAmount,
+                        });
+                    }
+
+                    if ($("#txt_SquenceNo").val() == '') {
+
+                        DataAdd.push({
+                            SquenceNo: lengthgrid + 1,
+                            ItemNo: lengthgrid + 1,
+                            SaleId: INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID,
+                            SaleNo: $("#txt_saleNo").val(),
+                            ExpenseTypeId: $('#ddExpensetype').val() == '' ? 0 : $("#ddExpensetype").val(),
+                            ExpenseTypeName: $("#ddExpensetype option:selected").text(),
+                            MisAmount: $("#txt_MisAmount").val(),
+                        });
+                    }
+                    else {
+
+                        objIndex = DataAdd.findIndex((obj => obj.ItemNo == parseInt($("#txt_SquenceNo").val())));
+
+                        DataAdd[objIndex].SquenceNo = $("#txt_SquenceNo").val();
+                        DataAdd[objIndex].ItemNo = $("#txt_ItemNumber").val();
+                        DataAdd[objIndex].SaleId = INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID;
+                        DataAdd[objIndex].SaleNo = $("#txt_saleNo").val();
+                        DataAdd[objIndex].ExpenseTypeId = $('#ddExpensetype').val() == '' ? 0 : $("#ddExpensetype").val();
+                        DataAdd[objIndex].ExpenseTypeName = $("#ddExpensetype option:selected").text();
+                        DataAdd[objIndex].Amount = $("#txt_MisAmount").val();
+                    }
+
+                    var Columns_properties = [
+                        { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
+                        { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                        { columnName: 'SaleId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'SaleId' },
+                        { columnName: 'SaleNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'SaleNo' },
+                        { columnName: 'ExpenseTypeId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense Id' },
+                        { columnName: 'ExpenseTypeName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense Name' },
+                        { columnName: 'MisAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'Amount', title: 'Total' },
+                    ]
+
+                    var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
+
+                    FillUpdatedGrid(Url = '', Params = '', GridName = 'MISDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "", JSON.stringify(DataAdd));
+
+                    $('#grid_MISDetails').show();
+                    ClearDetails();
+                    MISAmountCalculation();
+                } else {
+
+                }
+            }
+
+            function ClearDetails() {
+
+                var typeid = $('#ddExpensetype').val('');
+                $("#txt_MisAmount").val('0.00');
+                $("#SquenceNo").hide();
+            }
+
+            function MISAmountCalculation() {
+
+                var TotalAMT = 0;
+
+                var grid = $("#grid_MISDetails").data("kendoGrid");
+
+                if (grid != undefined) {
+                    var gridData = grid.dataSource.data();
+
+                    for (var i = 0; i < gridData.length; i++) {
+                        
+                        var uid = gridData[i].uid;
+                        var row = grid.table.find("tr[data-uid='" + uid + "']");
+
+                        var Amount = $(row).find("[data-field='MisAmount']").html();
+
+                        if (Amount != undefined) {
+                            Amount = (Amount.replace(',', ''));
+                            Amount = parseFloat(Amount);
+                        } else {
+                            Amount = gridData[i].MisAmount;
+                        }
+
+                        TotalAMT = (parseFloat(TotalAMT) + parseFloat(Amount)).toFixed(2);
+                    }
+
+                    $("#txt_MISAmount1").val(parseFloat(TotalAMT).toFixed(2));
+                }
+            }
+
+            //#endregion Beta Model Calacuation
+
+            function funcNumberDays() {
+                
+                var date1 = $("#txt_startdate").val();
+                var date2 = $("#txt_enddate").val();
+
+                date1 = new Date(date1);
+                date2 = new Date(date2);
+                var milli_secs = date1.getTime() - date2.getTime();
+
+                // Convert the milli seconds to Days
+                var days = milli_secs / (1000 * 3600 * 24);
+                // document.getElementById("txt_totaldays").innerHTML =
+                //     Math.round(Math.abs(days));
+
+                $('#txt_totaldays1').val(Math.round(Math.abs(days)));
+                $('#txt_totaldays').val(Math.round(Math.abs(days)));
+            }
+
+            function onchangedayscalculation() {
+                var txt_totaldays = $('#txt_totaldays').val() == '' ? 0 : $('#txt_totaldays').val();
+                betacalculation();
+                betaSave();
+                salecalculation();
+            }
+
+            function salecalculation() {
+                
+                var txt_totalSaleAmount = parseFloat($('#txt_totalSaleAmount').val() == '' ? 0 : $('#txt_totalSaleAmount').val());
+
+                var txt_commisionAmount = parseFloat($('#txt_commisionAmount').val() == '' ? 0 : $('#txt_commisionAmount').val());
+                var txt_templeAmount = parseFloat($('#txt_templeAmount').val() == '' ? 0 : $('#txt_templeAmount').val());
+                var txt_iceAmount = parseFloat($('#txt_iceAmount').val() == '' ? 0 : $('#txt_iceAmount').val());
+                var txt_fuelAmount = parseFloat($('#txt_fuelAmount').val() == '' ? 0 : $('#txt_fuelAmount').val());
+                var txt_foodAmount = parseFloat($('#txt_foodAmount').val() == '' ? 0 : $('#txt_foodAmount').val());
+                var txt_helperAmount = parseFloat($('#txt_helperAmount').val() == '' ? 0 : $('#txt_helperAmount').val());
+                var txt_Amount = parseFloat($('#txt_Amount').val() == '' ? 0 : $('#txt_Amount').val());
+                var txt_bataAmount = parseFloat($('#txt_bataAmount').val() == '' ? 0 : $('#txt_bataAmount').val());
+                var txt_drinkingwaterprice = parseFloat($('#txt_drinkingwaterprice').val() == '' ? 0 : $('#txt_drinkingwaterprice').val());
+                var txt_srankAmount = parseFloat($('#txt_srankAmount').val() == '' ? 0 : $('#txt_srankAmount').val());
+                var txt_cphonerecharge = parseFloat($('#txt_cphonerecharge').val() == '' ? 0 : $('#txt_cphonerecharge').val());
+                var txt_berthfee = parseFloat($('#txt_berthfee').val() == '' ? 0 : $('#txt_berthfee').val());
+                var txt_cookinggas = parseFloat($('#txt_cookinggas').val() == '' ? 0 : $('#txt_cookinggas').val());
+                var txt_oilchange = parseFloat($('#txt_oilchange').val() == '' ? 0 : $('#txt_oilchange').val());
+                var txt_tabrecharge = parseFloat($('#txt_tabrecharge').val() == '' ? 0 : $('#txt_tabrecharge').val());
+
+                console.log(txt_commisionAmount);
+                console.log(txt_templeAmount);
+                console.log(txt_iceAmount);
+                console.log(txt_fuelAmount);
+                console.log(txt_foodAmount);
+                console.log(txt_helperAmount);
+                console.log(txt_Amount);
+                console.log(txt_bataAmount);
+                console.log(txt_drinkingwaterprice);
+                console.log(txt_srankAmount);
+                console.log(txt_cphonerecharge);
+                console.log(txt_berthfee);
+                console.log(txt_cookinggas);
+                console.log(txt_oilchange);
+                console.log(txt_tabrecharge);
+
+                var txt_expenseAmount = txt_commisionAmount + txt_templeAmount + txt_iceAmount + txt_fuelAmount + txt_foodAmount + txt_helperAmount + txt_Amount + txt_bataAmount + txt_drinkingwaterprice + txt_srankAmount + txt_cphonerecharge + txt_berthfee + txt_cookinggas + txt_oilchange + txt_tabrecharge;
+                $('#txt_totalExpenseAmount').val(txt_expenseAmount);
+
+                var txt_balanceAmount = txt_totalSaleAmount - txt_expenseAmount;
+                $('#txt_balanceAmount').val(txt_balanceAmount);
+
+            }
+
+            //#region Save
+
+            function ValidateSale() {
+
+                var Valid = true;
+
+                var BoatId = $("#ddboatid").val();
+                var TripNo = $("#txt_tripno").val();
+                var StartDate = $("#txt_startdate").val();
+                var EndDate = $("#txt_enddate").val();
+                var NoOfDays = $("#txt_totaldays").val();
+                var TotalSaleAmount = $("#txt_totalSaleAmount").val();
+                var commisionAmount = $("#txt_commisionAmount").val();
+                var TempleAmount = $("#txt_templeAmount").val();
+                var IceAmount = $("#txt_iceAmount").val();
+                var FuelAmount = $("#txt_fuelAmount").val();
+                var FoodAmount = $("#txt_foodAmount").val();
+                var MiscellaneousAmount = $("#txt_Amount").val();
+                var HelperAmount = $("#txt_helperAmount").val();
+                var BataNoOfPerson = $("#txt_totalperson").val();
+                var BataPerDayAmount = $("#txt_perdayprice").val();
+                var BataAmount = $("#txt_bataAmount").val();
+                var DrinkingWaterAmount = $("#txt_drinkingwaterprice").val();
+                var SrankAmount = $("#txt_srankAmount").val();
+                var CPhoneRechargeAmount = $("#txt_cphonerecharge").val();
+                var BerthAmount = $("#txt_berthfee").val();
+                var CookingGasAmount = $("#txt_cookinggas").val();
+                var OilChnageAmount = $("#txt_oilchange").val();
+                var TabRechargeAmount = $("#txt_tabrecharge").val();
+                var TotalExpenseAmount = $("#txt_totalExpenseAmount").val();
+                var BalanceAmount = $("#txt_balanceAmount").val();
+
+                if (BoatId == "" || BoatId == "0") {
+                    Valid = false;
+                    toastr.warning('Please Select Boat Name');
+                } else if (TripNo == "" || TripNo == 0) {
+                    Valid = false;
+                    toastr.warning('Please Enter Trip Number');
+                    $("#txt_tripno").focus();
+                } else if (StartDate == "") {
+                    Valid = false;
+                    toastr.warning('Please Enter Trip Number');
+                    $("#txt_tripno").focus();
+                } else if (StartDate == EndDate || EndDate == "") {
+                    Valid = false;
+                    toastr.warning('Please Enter Trip Number');
+                    $("#txt_tripno").focus();
+                } else if (TotalSaleAmount == "") {
+                    Valid = false;
+                    toastr.warning('Please Enter Sale Amount');
+                    $("#txt_totalSaleAmount").focus();
+                } else if (NoOfDays == "" || NoOfDays == 0) {
+                    Valid = false;
+                    toastr.warning('Please Select Date for calculate Number of days');
+                    $("#txt_totaldays").focus();
+                }
+
+
+                return Valid;
+            }
+
+            function UpsertSale() {
+
+                if (ValidateSale()) {
+                    
+                    var eid = $("#EncId").val();
+                    
+                    var JsonSale = {
+                        SaleId: $("#SaleId").val(),
+                        SaleNo: $("#txt_saleNo").val(),
+                        BoatId: $("#ddboatid").val(),
+                        TripNo: $("#txt_tripno").val(),
+                        StartDate: $("#txt_startdate").val(),
+                        EndDate: $("#txt_enddate").val(),
+                        NoOfDays: $("#txt_totaldays").val(),
+                        TotalSaleAmount: $("#txt_totalSaleAmount").val(),
+                        commisionAmount: $("#txt_commisionAmount").val(),
+                        TempleAmount: $("#txt_templeAmount").val(),
+                        IceQty: $("#txt_iceQty").val(),
+                        IcePrice: $("#txt_iceprice").val(),
+                        IceAmount: $("#txt_iceAmount").val(),
+                        FuelQty: $("#txt_fuelQty").val(),
+                        FuelPrice: $("#txt_fuelPrice").val(),
+                        FuelAmount: $("#txt_fuelAmount").val(),
+                        FoodAmount: $("#txt_foodAmount").val(),
+                        MiscellaneousAmount: $("#txt_Amount").val(),
+                        HelperAmount: $("#txt_helperAmount").val(),
+                        BataNoOfPerson: $("#txt_totalperson").val(),
+                        BataPerDayAmount: $("#txt_perdayprice").val(),
+                        BataAmount: $("#txt_bataAmount").val(),
+                        DrinkingWaterAmount: $("#txt_drinkingwaterprice").val(),
+                        SrankAmount: $("#txt_srankAmount").val(),
+                        CPhoneRechargeAmount: $("#txt_cphonerecharge").val(),
+                        BerthAmount: $("#txt_berthfee").val(),
+                        CookingGasAmount: $("#txt_cookinggas").val(),
+                        OilChnageAmount: $("#txt_oilchange").val(),
+                        TabRechargeAmount: $("#txt_tabrecharge").val(),
+                        TotalExpenseAmount: $("#txt_totalExpenseAmount").val(),
+                        BalanceAmount: $("#txt_balanceAmount").val()
+                    }
+
+                    var JsonString = JSON.stringify(JsonSale);
+
+                    var grid = $("#grid_MISDetails").data("kendoGrid");
+                    if (grid != undefined) {
+                        
+                        var data = grid.dataSource.data().length;
+                        if (data > 0) {
+                            var gridData = grid.dataSource.data();
+                            var JsonDetails = JSON.stringify(gridData);
+                        }
+                    } else {
+                        var JsonDetails = '';
+                    }
+
+                    
+                    var Url = '@Url.Action("DefineSale", "Transactions")';
+                    var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
+
+                    $.ajax({
+                        type: "POST",
+                        url: Url,
+                        data: Params,
+                        success: function (e) {
+                            response = JSON.parse(e)
+                            if (response.Id > 0) {
+                                toastr.success(response.Msg);
+                            } else {
+                                toastr.error(response.Msg);
+                            }
+                        },
+                    })
+
+                }
+            }
+
+            //#endregion Save
+
+            function addtogrid() {
+                
+                var tblexpensetype = $('#tblexpensetype').val();
+                var iceAMT = $('#txt_MisAmount').val();
+                var typeid = $('#ddExpensetype').val();
+
+                //var typename = $('#ddExpensetype').text();
+                var typename = $("#ddExpensetype option:selected").text();
+
+                var content = `<tr>
+                                                                                <td style="display:none"> ${typeid}</td>
+                                                                                <td> ${typename}</td>
+                                                                                <td> ${iceAMT}</td>
+                                                                                <td>
+                                                                                    <div class="dropdown">
+                                                                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                                                                                        <div class="dropdown-menu">
+                                                                                                    <a class="dropdown-item"><i class="mdi mdi-pencil-outline me-1" onclick="editgrid()"></i> Edit</a>
+                                                                                                    <a class="dropdown-item"><i class="mdi mdi-trash-can-outline me-1" onclick="deletegrid()"></i> Delete</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </td>
+                                                                        </tr>`;
+                $('#tblexpensetype').append(content);
+
+                var table = document.getElementById('mytable'),
+                    rows = table.getElementsByTagName('tr'),
+                    i, j, cells, amt = 0;
+
+                for (i = 0, j = rows.length; i < j; ++i) {
+                    cells = rows[i].getElementsByTagName('td');
+                    if (!cells.length) {
+                        continue;
+                    }
+
+                    console.log(cells[2].innerHTML);
+                    console.log(parseFloat(cells[2].innerHTML));
+                    AMT = parseFloat(cells[2].innerHTML);
+                    amt = amt + AMT;
+                }
+
+                $('#txt_MISAmount1').val(amt);
+                console.log(amt);
+
+                //$('#ObjExpense').val();
+                //$('#tblexpensetype').empty().append(content);
+            }
+
+        </script>
+    }

@@ -1,0 +1,445 @@
+﻿@model CreditHd;
+
+@{
+    ViewData["Title"] = "Add New  Credit -  Credit";
+}
+
+@section PageScripts {
+    <script src="~/js/common.js"></script>
+}
+
+@* ************** Content ************** *@
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.AntiForgeryToken()
+        <div class="card mb-4">
+            <h4 class="card-header">
+                Add Credit Details
+                <div style="float:right">
+                    <button class="btn btn-primary" onclick="CreateCredit()">Save</button>
+
+                    <a asp-controller="Transactions" asp-action="GetCredit" class="btn btn-primary">Back</a>
+                </div>
+            </h4>
+            <!-- Account -->
+            <div class="card-body pt-2 mt-1">
+                <div class="row gy-4">
+                    <input asp-for="CreditId" hidden />
+                    <input asp-for="EncId" hidden />
+                    <label>Header</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="CreditNo" class="form-control" type="text" id="txt_creditNo" name="creditNo" readonly />
+                            <label for="saleNo">Credit Number</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="PersonName" class="form-control" type="text" id="txt_personname" name="personname" autofocus />
+                            <label for="saleNo">Person Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddboatid" asp-for="BoatId" asp-items="ViewBag.BoatsList" class="select2 form-select">
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="boat">Boat Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="CreditAmount" class="form-control" type="number" id="txt_creditamount" name="creditamount" onblur="HeaderAmountCalculation()" />
+                            <label for="creditamount">Credit Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="CreditDate" class="form-control" type="date" id="txt_creditdate" name="creditdate" />
+                            <label for="creditdate">Credit Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="BalanceAmount" class="form-control" type="number" id="txt_balanceamount" name="balanceamount" readonly />
+                            <label for="balanceamount">Balance Amount</label>
+                        </div>
+                    </div>
+
+
+                    <label>Details</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="date" id="txt_receiveddate" name="receiveddate" />
+                            <label for="dobBackdrop">Received Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Amount" name="amount" />
+                            <label for="amount">Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1" id="SquenceNo">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" />
+                            <label for="SquenceNo">Squence No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1" id="SquenceNo" style="display:none">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_ItemNumber" name="ItemNumber" readonly />
+                            <label for="ItemNumber">Item Number</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="AddCreditDetails()">Add</button>
+                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearCreditDetails()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <label>Grid Details</label>
+
+                <br />
+
+                <div id="grid_CreditDetails">
+                </div>
+            </div>
+            <!-- /Account -->
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            $("#SquenceNo").hide();
+            ClearCreditDetails();
+
+            $("#CreditId").val();
+            $("#EncId").val();
+            LoadGetCredit();
+        });
+
+        function LoadGetCredit() {
+
+            var eid = $("#EncId").val();
+            var GridName = 'CreditDetails';
+            var Url = '@Url.Action("GetCreditDetailsList", "Transactions", new { area = "" })';
+            var PageSize = 20;
+
+            var Columns_properties = [
+                { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
+                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
+                { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
+                { columnName: 'ReceivedDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'ReceivedDate' },
+                { columnName: 'Amount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Total' },
+            ]
+
+            var Params = { 'eid': eid };
+
+            var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
+
+            FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "");
+        }
+
+        function GridColumnTemplate_CreditDetails(GridData, Tab) {
+
+            var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditCreditDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
+            var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteCreditDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+
+            var Template = Edit + '  ' + Delete;
+
+            columnsOptions.push({
+                field: "",
+                title: "Action",
+                width: 100,
+                filterable: {
+                    cell: {
+                        enabled: false
+                    }
+                },
+                template: Template
+            });
+        }
+
+        function EditCreditDt() {
+
+            var gridData = $("#grid_CreditDetails").data("kendoGrid");
+
+            var selectedRows = gridData.select();
+            selectedRows.each(function (index, row) {
+                var selectedItem = gridData.dataItem(row);
+                
+                $("#txt_receiveddate").val(selectedItem.ReceivedDate);
+                $("#txt_Amount").val(selectedItem.Amount);
+                $("#txt_SquenceNo").val(selectedItem.SquenceNo);
+                $("#txt_ItemNumber").val(selectedItem.ItemNo);
+            });
+
+            $("#SquenceNo").show();
+            $("#txt_SquenceNo").show();
+        }
+
+        function DeleteCreditDt() {
+
+            var grid = $("#grid_CreditDetails").data("kendoGrid");
+            var dataSource = grid.dataSource;
+            var GridLength = dataSource.data().length;
+
+            var rows = grid.select();
+            var selectedItem = grid.dataItem(rows);
+            grid.dataSource.remove(selectedItem);
+
+            HeaderAmountCalculation();
+        }
+
+        function HeaderAmountCalculation() {
+
+            var TotalAMT = 0;
+            var creditAmt = parseFloat($("#txt_creditamount").val() == '' ? 0 : $("#txt_creditamount").val());
+
+            var grid = $("#grid_CreditDetails").data("kendoGrid");
+
+            if (grid != undefined) {
+                var gridData = grid.dataSource.data();
+                
+                for (var i = 0; i < gridData.length; i++) {
+
+                    var uid = gridData[i].uid;
+                    var row = grid.table.find("tr[data-uid='" + uid + "']");
+
+                    var Amount = $(row).find("[data-field='Amount']").html();
+
+                    if (Amount != undefined) {
+                        Amount = (Amount.replace(',', ''));
+                        Amount = parseFloat(Amount);
+                    } else {
+                        Amount = gridData[i].Amount;
+                    }
+
+                    TotalAMT = (parseFloat(TotalAMT) + parseFloat(Amount)).toFixed(2);
+                }
+
+                $("#txt_totalamount").val(parseFloat(TotalAMT).toFixed(2));
+            }
+
+            var txt_balanceamount = (creditAmt - parseFloat(TotalAMT)).toFixed(2);
+            $("#txt_balanceamount").val(txt_balanceamount);
+        }
+
+        function ValidateCreditDetails() {
+
+            var Valid = true;
+
+            var Amount = $("#txt_Amount").val();
+
+            if (Amount == "") {
+                toastr.warning('Please Enter Amount.');
+                Valid = false;
+                $("#txt_Amount").focus();
+            }
+
+            return Valid;
+        }
+
+        function AddCreditDetails() {
+
+            if (ValidateCreditDetails()) {
+
+                var lengthgrid = 0;
+                var INVOICE_ID = 0;
+                var grid = undefined;
+                grid = $("#grid_CreditDetails").data("kendoGrid");
+                if (grid == undefined) {
+                    grid = $("#grid_CreditDetails").kendoGrid().data("kendoGrid");
+                    lengthgrid = 0;
+                }
+                else {
+                    lengthgrid = grid.dataSource.data().length;
+                }
+                var dataSource = $("#grid_CreditDetails").data().kendoGrid.dataSource;
+                var DataAdd = [];
+                
+                for (var i = 0; i < lengthgrid; i++) {
+
+                    DataAdd.push({
+                        SquenceNo: dataSource.data()[i].SquenceNo,
+                        ItemNo: dataSource.data()[i].ItemNo,
+                        CreditId: dataSource.data()[i].CreditId,
+                        CreditNo: dataSource.data()[i].CreditNo,
+                        ReceivedDate: dataSource.data()[i].ReceivedDate,
+                        Amount: dataSource.data()[i].Amount,
+                    });
+                }
+
+                if ($("#txt_SquenceNo").val() == '') {
+
+                    DataAdd.push({
+                        SquenceNo: lengthgrid + 1,
+                        ItemNo: lengthgrid + 1,
+                        CreditId: INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID,
+                        CreditNo: "",
+                        ReceivedDate: $("#txt_receiveddate").val(),
+                        Amount: $("#txt_Amount").val(),
+                    });
+                }
+                else {
+
+                    objIndex = DataAdd.findIndex((obj => obj.ItemNo == parseInt($("#txt_SquenceNo").val())));
+
+                    DataAdd[objIndex].SquenceNo = $("#txt_SquenceNo").val();
+                    DataAdd[objIndex].ItemNo = $("#txt_ItemNumber").val();
+                    DataAdd[objIndex].CreditId = INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID;
+                    DataAdd[objIndex].CreditNo = "";
+                    DataAdd[objIndex].ReceivedDate = $("#txt_receiveddate").val();
+                    DataAdd[objIndex].Amount = $("#txt_Amount").val();
+                }
+            }
+
+            var Columns_properties = [
+                { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
+                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
+                { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
+                { columnName: 'ReceivedDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'Received Date' },
+                { columnName: 'Amount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Total' },
+            ]
+
+            var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
+
+            FillUpdatedGrid(Url = '', Params = '', GridName = 'CreditDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "Credit", JSON.stringify(DataAdd));
+
+            $('#grid_CreditDetails').show();
+            ClearCreditDetails();
+            HeaderAmountCalculation();
+
+        }
+
+        function ClearCreditDetails() {
+
+            $("#txt_receiveddate").val('');
+            $("#txt_Amount").val('0.00');
+            $("#SquenceNo").hide();
+        }
+
+        function DetailsAmountCalculation() {
+            var qty = parseFloat($('#txt_Qty').val() == '' ? 0 : $('#txt_Qty').val());
+            var price = parseFloat($('#txt_Price').val() == '' ? 0 : $('#txt_Price').val());
+
+            var amt = qty * price;
+            $("#txt_Amount").val(amt);
+
+        }
+
+        function CreateCredit() {
+
+            if (ValidateCredit()) {
+
+                if (parseInt($("#txt_TotalAmt").val()) != 0) {
+
+                    var eid = $("#EncId").val();
+
+                    var JsonCredit = {
+                        CreditId: $("#CreditId").val(),
+                        CreditNo: $("#txt_CreditNo").val(),
+                        BoatId: $("#ddboatid").val(),
+                        PersonName: $("#txt_personname").val(),
+                        CreditDate: $("#txt_creditdate").val(),
+                        CreditAmount: $("#txt_creditamount").val(),
+                        BalanceAmount: $("#txt_balanceamount").val(),
+                    }
+
+                    var JsonString = JSON.stringify(JsonCredit);
+
+                    var grid = $("#grid_CreditDetails").data("kendoGrid");
+                    if (grid != undefined) {
+                        var data = grid.dataSource.data().length;
+                        if (data > 0) {
+                            var gridData = grid.dataSource.data();
+                            var JsonDetails = JSON.stringify(gridData);
+
+                            var Url = '@Url.Action("DefineCredit", "Transactions")';
+                            var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
+
+                            $.ajax({
+                                type: "POST",
+                                url: Url,
+                                data: Params,
+                                success: function (e) {
+                                    response = JSON.parse(e)
+                                    if (response.Id > 0) {
+                                        toastr.success(response.Msg);
+                                    } else {
+                                        toastr.error(response.Msg);
+                                    }
+                                },
+                            })
+
+                            //CreateRecordNew(Url, Params, IsRedirect);
+                        } else {
+
+                            alert("You can not save without details Credit");
+                        }
+                    }
+                }
+            }
+        }
+
+        function ValidateCredit() {
+
+            var Valid = true;
+
+            var SaleNo = $("#ddsaleid").val();
+            var TotalAmt = $("#txt_totalamount").val();
+
+            if (SaleNo == "" || SaleNo == "0") {
+                toastr.warning('Please select Sales Number');
+                Valid = false;
+            } else if (TotalAmt == "") {
+                toastr.warning('Please Enter Amount');
+                Valid = false;
+                $("#txt_totalamount").focus();
+            }
+
+            return Valid;
+        }
+
+        function RedirectActionToList() {
+
+            var Url = '@Url.Action("GetCredit", "Transactions", new { area = "" })';
+            var Params = "";
+            var Type = 'GET';
+            CommonAjaxRequest(Url, Params, Type);
+        }
+
+        function RedirectActionToEdit(data) {
+
+            if (data.RESULT > 0) {
+                var Url = '@Url.Action("DefineCredit", "Transactions", new { area = "" })';
+                var Params = "{'InvoiceId': '" + data.RESULT + "'}";
+
+                var Type = 'POST'
+                CommonAjaxRequest(Url, Params, Type);
+            }
+        }
+
+    </script>
+
+}
+
+
+

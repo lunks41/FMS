@@ -1,0 +1,75 @@
+﻿@model IEnumerable<IncomeHd>
+
+@{
+    ViewData["Title"] = "Get Owner Income";
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.js"></script>
+}
+
+@* ************** Content ************** *@
+<!-- Bootstrap Table with Header - Light -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title text-bold">
+            Income List
+            <a asp-action="DefineIncome" class=" btn btn-sm btn-primary" style="float:right">Add Income</a>
+        </h3>
+    </div>
+
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Actions</th>
+                    <th>Income Number</th>
+                    <th>Sale Number</th>
+                    <th>Total Income Amount</th>
+                    <th>Users</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-action="DefineIncome" asp-route-eid="@item.EncId"><i class="mdi mdi-pencil-outline me-1"></i> Edit</a>
+                                        <a class="dropdown-item" asp-action="DeleteIncome" asp-route-eid="@item.EncId"><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@Html.DisplayFor(model => item.IncomeNo)</td>
+                            <td>@Html.DisplayFor(model => item.SaleNo)</td>
+                            <td>@Html.DisplayFor(model => item.TotalAmount)</td>
+                            <td>
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="Lilian Fuller">
+                                        <img src="~/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                                    </li>
+                                </ul>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <div>
+                                Income not available into database
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Bootstrap Table with Header - Light -->

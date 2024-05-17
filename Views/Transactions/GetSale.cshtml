@@ -23,6 +23,7 @@
             <thead class="table-light">
                 <tr>
                     <th></th>
+                    <th>Trip No</th>
                     <th>Sales No</th>
                     <th>Boat</th>
                     <th>Arr. Date</th>
@@ -53,6 +54,7 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>@Html.DisplayFor(model => item.TripNo)</td>
                             <td>@Html.DisplayFor(model => item.SaleNo)</td>
                             <td>@Html.DisplayFor(model => item.BoatName)</td>
                             <td>@Convert.ToDateTime(item.StartDate).ToString("dd/MMM/yyyy")</td>

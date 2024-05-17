@@ -39,6 +39,7 @@ namespace FMS.Controllers
                 SaleId = s.SaleId,
                 EncId = _protector.Protect(s.SaleId.ToString()),
                 SaleNo = s.SaleNo,
+                TripNo = s.TripNo,
                 BoatName = s.BoatName,
                 StartDate = s.StartDate,
                 EndDate = s.EndDate,
@@ -464,10 +465,12 @@ namespace FMS.Controllers
             CreditHd ObjCreditHd = new CreditHd();
             List<CreditDt> ObjCreditDt = new List<CreditDt>();
 
-            if (!string.IsNullOrEmpty(JsonString) && !string.IsNullOrEmpty(JsonDetails))
+            if (!string.IsNullOrEmpty(JsonString))
             {
                 ObjCreditHd = JsonConvert.DeserializeObject<CreditHd>(JsonString)!;
-                ObjCreditDt = JsonConvert.DeserializeObject<List<CreditDt>>(JsonDetails)!;
+
+                if (!string.IsNullOrEmpty(JsonDetails))
+                    ObjCreditDt = JsonConvert.DeserializeObject<List<CreditDt>>(JsonDetails)!;
 
                 incomeReponce = await _transaction.UpsertAsyncCredit(ObjCreditHd);
 

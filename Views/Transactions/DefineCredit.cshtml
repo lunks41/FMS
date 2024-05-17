@@ -366,35 +366,35 @@
                     var JsonString = JSON.stringify(JsonCredit);
 
                     var grid = $("#grid_CreditDetails").data("kendoGrid");
+
                     if (grid != undefined) {
                         var data = grid.dataSource.data().length;
                         if (data > 0) {
                             var gridData = grid.dataSource.data();
                             var JsonDetails = JSON.stringify(gridData);
-
-                            var Url = '@Url.Action("DefineCredit", "Transactions")';
-                            var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
-
-                            $.ajax({
-                                type: "POST",
-                                url: Url,
-                                data: Params,
-                                success: function (e) {
-                                    response = JSON.parse(e)
-                                    if (response.Id > 0) {
-                                        toastr.success(response.Msg);
-                                    } else {
-                                        toastr.error(response.Msg);
-                                    }
-                                },
-                            })
-
-                            //CreateRecordNew(Url, Params, IsRedirect);
                         } else {
-
-                            alert("You can not save without details Credit");
+                            var JsonDetails = '';
                         }
+                    } else { 
+                        var JsonDetails = '';
                     }
+
+                    var Url = '@Url.Action("DefineCredit", "Transactions")';
+                    var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
+
+                    $.ajax({
+                        type: "POST",
+                        url: Url,
+                        data: Params,
+                        success: function (e) {
+                            response = JSON.parse(e)
+                            if (response.Id > 0) {
+                                toastr.success(response.Msg);
+                            } else {
+                                toastr.error(response.Msg);
+                            }
+                        },
+                    })
                 }
             }
         }

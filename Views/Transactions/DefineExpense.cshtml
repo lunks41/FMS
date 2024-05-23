@@ -12,109 +12,117 @@
 
 <div class="row">
     <div class="col-md-12">
-      @*   <form id="formAccountSettings" asp-controller="Transactions" asp-action="DefineExpense" asp-route-eid="@Model.EncId" asp-antiforgery="true"> *@
-            <div class="card mb-4">
-                <h4 class="card-header">
-                    Add Expense Details
-                    <div style="float:right">
-                        <button class="btn btn-primary" onclick="UpsertExpense()">Save</button>
+        @*   <form id="formAccountSettings" asp-controller="Transactions" asp-action="DefineExpense" asp-route-eid="@Model.EncId" asp-antiforgery="true"> *@
+        <div class="card mb-4">
+            <h4 class="card-header">
+                Add Expense Details
+                <div style="float:right">
+                    @if (Model.OwnerExpenseId > 0)
+                    {
+                        <button class="btn btn-success" onclick="UpsertExpense()">Update</button>
+                        <a asp-controller="Master" asp-action="DeleteCommissionType" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success" onclick="UpsertExpense()">Save</button>
+                    }
 
-                        <a asp-controller="Transactions" asp-action="GetExpense" class="btn btn-primary">Back</a>
-                    </div>
-                </h4>
-                <!-- Account -->
-                <div class="card-body pt-2 mt-1">
-                    <div class="row gy-4">
-                       @*  @Html.HiddenFor(m => m.OwnerExpenseId)
-                        @Html.HiddenFor(m => m.EncId) *@
-                        <input asp-for="OwnerExpenseId" hidden />
-                        <input asp-for="EncId" hidden />
-                        <label>Header</label>
-
-                        <div class="col-md-3">
-                            <div class="form-floating form-floating-outline">
-                                <input asp-for="OwnerExpenseNo" class="form-control" type="text" id="txt_ownerExpenseNo" name="ownerExpenseNo" readonly />
-                                <label for="ownerExpenseNo">Expense Number</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-floating form-floating-outline">
-                                <select id="ddsaleid" asp-for="SaleId" asp-items="ViewBag.SaleList" class="select2 form-select" autofocus>
-                                    <option value="">-- Select --</option>
-                                </select>
-                                <label for="country">Sale Number</label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-floating form-floating-outline">
-                                <input asp-for="TotalAmount" class="form-control" type="number" id="txt_totalamount" name="totalamount" readonly />
-                                <label for="totalamount">Total Amount</label>
-                            </div>
-                        </div>
-
-                        <label>Details</label>
-
-                        <div class="col-md-3">
-                            <div class="form-floating form-floating-outline">
-                                <select id="ddExpensetype" asp-items="ViewBag.ExpenseTypeList" class="select2 form-select">
-                                    <option value="">-- Select --</option>
-                                </select>
-                                <label for="expensetype">Expense Type</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="number" id="txt_Qty" name="qty" onblur="DetailsAmountCalculation()" />
-                                <label for="qty">Qty</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="number" id="txt_Price" name="price" onblur="DetailsAmountCalculation()" />
-                                <label for="price">Price</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="number" id="txt_Amount" name="amount" readonly />
-                                <label for="amount">Amount</label>
-                            </div>
-                        </div>
-                        <div class="col-md-1" id="SquenceNo">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" />
-                                <label for="SquenceNo">Squence No</label>
-                            </div>
-                        </div>
-                        <div class="col-md-1" id="SquenceNo" style="display:none">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="number" id="txt_ItemNumber" name="ItemNumber" readonly />
-                                <label for="ItemNumber">Item Number</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2 d-flex">
-                            <div class="form-floating form-floating-outline">
-                                <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="AddExpenseDetails()">Add</button>
-                                <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearExpenseDetails()">Clear</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br />
-
-                    <label>Grid Details</label>
-
-                    <br />
-
-                    <div id="grid_ExpenseDetails">
-                    </div>
-
+                    <a asp-controller="Transactions" asp-action="GetExpense" class="btn btn-primary">Back</a>
                 </div>
-                <!-- /Account -->
+            </h4>
+            <!-- Account -->
+            <div class="card-body pt-2 mt-1">
+                <div class="row gy-4">
+                    @*  @Html.HiddenFor(m => m.OwnerExpenseId)
+                    @Html.HiddenFor(m => m.EncId) *@
+                    <input asp-for="OwnerExpenseId" hidden />
+                    <input asp-for="EncId" hidden />
+                    <label>Header</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="OwnerExpenseNo" class="form-control" type="text" id="txt_ownerExpenseNo" name="ownerExpenseNo" readonly />
+                            <label for="ownerExpenseNo">Expense Number</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddsaleid" asp-for="SaleId" asp-items="ViewBag.SaleList" class="select2 form-select" autofocus>
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="country">Sale Number</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TotalAmount" class="form-control" type="number" id="txt_totalamount" name="totalamount" readonly />
+                            <label for="totalamount">Total Amount</label>
+                        </div>
+                    </div>
+
+                    <label>Details</label>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddExpensetype" asp-items="ViewBag.ExpenseTypeList" class="select2 form-select">
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="expensetype">Expense Type</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Qty" name="qty" onblur="DetailsAmountCalculation()" />
+                            <label for="qty">Qty</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Price" name="price" onblur="DetailsAmountCalculation()" />
+                            <label for="price">Price</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_Amount" name="amount" readonly />
+                            <label for="amount">Amount</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1" id="SquenceNo">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" />
+                            <label for="SquenceNo">Squence No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1" id="SquenceNo" style="display:none">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_ItemNumber" name="ItemNumber" readonly />
+                            <label for="ItemNumber">Item Number</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <button type="button" class="btn btn-outline-success tf-icons mdi mdi-plus-box-multiple" onclick="AddExpenseDetails()">Add</button>
+                            <button type="button" class="btn btn-outline-danger tf-icons mdi mdi-plus-box-multiple" onclick="ClearExpenseDetails()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <label>Grid Details</label>
+
+                <br />
+
+                <div id="grid_ExpenseDetails">
+                </div>
 
             </div>
-       @*  </form> *@
+            <!-- /Account -->
+
+        </div>
+        @*  </form> *@
     </div>
 </div>
 
@@ -126,14 +134,14 @@
         $(document).ready(function () {
             $("#SquenceNo").hide();
             ClearExpenseDetails();
-            
+
             $("#OwnerExpenseId").val();
             $("#EncId").val();
             LoadGetExpense();
         });
 
         function LoadGetExpense() {
-            
+
             var eid = $("#EncId").val();
             var GridName = 'ExpenseDetails';
             var Url = '@Url.Action("GetExpenseDetailsList", "Transactions")';
@@ -161,7 +169,7 @@
         function GridColumnTemplate_ExpenseDetails(GridData, Tab) {
 
             var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditExpenseDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
-            var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteExpenseDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+            var Delete = "<div  class='btn btn-icon btn-danger' onclick=\"DeleteExpenseDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
 
             var Template = Edit + '  ' + Delete;
 
@@ -219,7 +227,7 @@
 
             if (grid != undefined) {
                 var gridData = grid.dataSource.data();
-                
+
                 for (var i = 0; i < gridData.length; i++) {
 
                     var uid = gridData[i].uid;
@@ -322,8 +330,8 @@
                 $('#grid_ExpenseDetails').show();
                 ClearExpenseDetails();
                 HeaderAmountCalculation();
-            } else { 
-            
+            } else {
+
             }
 
         }
@@ -349,7 +357,7 @@
         }
 
         function UpsertExpense() {
-            
+
             if (ValidateExpense()) {
 
                 if (parseInt($("#txt_TotalAmt").val()) != 0) {
@@ -384,15 +392,15 @@
                                     response = JSON.parse(e)
                                     if (response.Id > 0) {
                                         toastr.success(response.Msg);
-                                    } else { 
+                                    } else {
                                         toastr.error(response.Msg);
                                     }
                                 },
                             })
 
                             //CreateRecordNew(Url, Params, IsRedirect);
-                        } else { 
-                        
+                        } else {
+
                             alert("You can not save without details expense");
                         }
                     }
@@ -420,7 +428,7 @@
         }
 
         function ValidateExpenseDetails() {
-            
+
             var Valid = true;
 
             var expensetype = $('#ddExpensetype').val();

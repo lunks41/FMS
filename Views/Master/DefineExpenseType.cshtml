@@ -13,7 +13,15 @@
                 <h4 class="card-header">
                     Add ExpenseType Details
                     <div style="float:right">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        @if (Model.ExpenseTypeId > 0)
+                        {
+                            <button type="submit" class="btn btn-success">Update</button>
+                            <a asp-controller="Master" asp-action="DeleteExpenseType" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success">Save</button>
+                        }
                         
                         <a asp-controller="Master" asp-action="GetExpenseType" class="btn btn-primary">Back</a>
                     </div>

@@ -17,7 +17,15 @@
             <h4 class="card-header">
                 Add Income Details
                 <div style="float:right">
-                    <button class="btn btn-primary" onclick="CreateIncome()">Save</button>
+                    @if (Model.IncomeId > 0)
+                    {
+                        <button class="btn btn-success" onclick="CreateIncome()">Update</button>
+                        <a asp-controller="Master" asp-action="DeleteCommissionType" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success" onclick="CreateIncome()">Save</button>
+                    }
 
                     <a asp-controller="Transactions" asp-action="GetIncome" class="btn btn-primary">Back</a>
                 </div>
@@ -99,8 +107,8 @@
                     </div>
                     <div class="col-md-2 d-flex">
                         <div class="form-floating form-floating-outline">
-                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="AddIncomeDetails()">Add</button>
-                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearIncomeDetails()">Clear</button>
+                            <button type="button" class="btn btn-outline-success tf-icons mdi mdi-plus-box-multiple" onclick="AddIncomeDetails()">Add</button>
+                            <button type="button" class="btn btn-outline-danger tf-icons mdi mdi-plus-box-multiple" onclick="ClearIncomeDetails()">Clear</button>
                         </div>
                     </div>
                 </div>
@@ -162,7 +170,7 @@
         function GridColumnTemplate_IncomeDetails(GridData, Tab) {
 
             var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditIncomeDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
-            var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteIncomeDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+            var Delete = "<div  class='btn btn-icon btn-danger' onclick=\"DeleteIncomeDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
 
             var Template = Edit + '  ' + Delete;
 
@@ -220,7 +228,7 @@
 
             if (grid != undefined) {
                 var gridData = grid.dataSource.data();
-                
+
                 for (var i = 0; i < gridData.length; i++) {
 
                     var uid = gridData[i].uid;
@@ -243,7 +251,7 @@
         }
 
         function ValidateIncomeDetails() {
-            
+
             var Valid = true;
 
             var incometype = $('#ddIncometype').val();
@@ -289,7 +297,7 @@
                 }
                 var dataSource = $("#grid_IncomeDetails").data().kendoGrid.dataSource;
                 var DataAdd = [];
-                
+
                 for (var i = 0; i < lengthgrid; i++) {
 
                     DataAdd.push({

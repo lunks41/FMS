@@ -16,7 +16,7 @@ namespace FMS.Data
         }
 
         #region Pnl
-        public async Task<IEnumerable<Pnl>> GetAllPnl(string Fillter)
+        public async Task<IEnumerable<Pnl>> GetAllPnl(string Fillter, int BoatId)
         {
             try
             {
@@ -28,7 +28,11 @@ namespace FMS.Data
                 if (!string.IsNullOrEmpty(Fillter))
                 {
                     searchText += " AND BoatName LIKE '%" + Fillter + "%'";
-                    searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
+                    searchText += " OR OwnerExpenseHd.SaleNo LIKE '%" + Fillter + "%'";
+                }
+                if (BoatId > 0)
+                {
+                    searchText += $" AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
                 }
 
                 parameters.Add("@SearchText", searchText);

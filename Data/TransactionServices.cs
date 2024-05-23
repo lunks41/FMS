@@ -2,6 +2,7 @@
 using FMS.Repository;
 using Dapper;
 using System.Data;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FMS.Data
 {
@@ -16,7 +17,7 @@ namespace FMS.Data
         }
 
         #region Sale
-        public async Task<IEnumerable<SaleHd>> GetAllSale(string Fillter)
+        public async Task<IEnumerable<SaleHd>> GetAllSale(string Fillter, int BoatId)
         {
             try
             {
@@ -29,6 +30,10 @@ namespace FMS.Data
                 {
                     searchText += " AND BoatName LIKE '%" + Fillter + "%'";
                     searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
+                }
+                if (BoatId > 0)
+                {
+                    searchText += $" AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
                 }
 
                 parameters.Add("@SearchText", searchText);
@@ -166,7 +171,7 @@ namespace FMS.Data
 
         #region Expense
 
-        public async Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string Fillter)
+        public async Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string Fillter, int BoatId)
         {
             try
             {
@@ -178,8 +183,12 @@ namespace FMS.Data
                 if (!string.IsNullOrEmpty(Fillter))
                 {
                     searchText += " AND BoatName LIKE '%" + Fillter + "%'";
-                    searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
+                    searchText += " OR OwnerExpenseHd.SaleNo LIKE '%" + Fillter + "%'";
                     searchText += " OR OwnerExpenseNo LIKE '%" + Fillter + "%'";
+                }
+                if (BoatId > 0)
+                {
+                    searchText += $"AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
                 }
 
                 parameters.Add("@SearchText", searchText);
@@ -295,7 +304,7 @@ namespace FMS.Data
 
         #region Income
 
-        public async Task<IEnumerable<IncomeHd>> GetAllIncome(string Fillter)
+        public async Task<IEnumerable<IncomeHd>> GetAllIncome(string Fillter, int BoatId)
         {
             try
             {
@@ -307,8 +316,12 @@ namespace FMS.Data
                 if (!string.IsNullOrEmpty(Fillter))
                 {
                     searchText += " AND BoatName LIKE '%" + Fillter + "%'";
-                    searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
+                    searchText += " OR IncomeHd.SaleNo LIKE '%" + Fillter + "%'";
                     searchText += " OR IncomeNo LIKE '%" + Fillter + "%'";
+                }
+                if (BoatId > 0)
+                {
+                    searchText += $"AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
                 }
 
                 parameters.Add("@SearchText", searchText);

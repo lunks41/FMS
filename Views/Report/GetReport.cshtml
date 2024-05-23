@@ -24,6 +24,15 @@
 
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
+                            <select id="ddboatid" asp-items="ViewBag.BoatsList" class="select2 form-select" autofocus>
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="country">Boat</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
                             <select id="ddreport" class="select2 form-select">
                                 <option value="">-- Select --</option>
                                 <option value="1">Sales</option>
@@ -65,6 +74,7 @@
                 var Url = '';
                 var Search = $("#txt_search").val();
                 var Reportid = $("#ddreport").val();
+                var BoatId = $("#ddboatid").val() == "" ? 0 : $("#ddboatid").val();
 
                 if (Reportid == 1) {
                     Url = '@Url.Action("GetSaleReportList", "Report")';
@@ -111,7 +121,7 @@
                 }
 
                 var GridName = 'ReportDetails';
-                var Params = { 'Search': Search };
+                var Params = { 'Search': Search, 'BoatId': BoatId };
                 var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: false }];
 
                 FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "", DataAdd = "");
@@ -120,6 +130,7 @@
             function ClearReport() {
                 $('#txt_search').val('');
                 $("#ddreport").val('');
+                $("#ddboatid").val('');
                 LoadReport();
             }
         </script>

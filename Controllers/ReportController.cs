@@ -2,6 +2,7 @@
 using FMS.Models;
 using Microsoft.AspNetCore.Authorization;
 using FMS.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FMS.Controllers;
 
@@ -10,26 +11,30 @@ public class ReportController : Controller
 {
     private readonly ILogger<ReportController> _logger;
     private readonly ITransaction _transaction;
+    private readonly IMaster _master;
     private readonly IReport _report;
 
-    public ReportController(ILogger<ReportController> logger, ITransaction transaction, IReport report)
+    public ReportController(ILogger<ReportController> logger, ITransaction transaction, IMaster master, IReport report)
     {
         _logger = logger;
         _transaction = transaction;
+        _master = master;
         _report = report;
     }
 
-    public IActionResult GetReport()
+    public async Task<IActionResult> GetReport()
     {
+        var boats = await _master.GetAllBoat("", "", 1);
+        ViewBag.BoatsList = new SelectList(boats, "BoatId", "BoatName");
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetSaleReportList(string Search)
+    public async Task<IActionResult> GetSaleReportList(string Search, int BoatId)
     {
         List<SaleHd> entity = new List<SaleHd>();
 
-        var Sales = await _transaction.GetAllSale(Search);
+        var Sales = await _transaction.GetAllSale(Search, BoatId);
 
         var model = Sales.Select(s => new SaleHd
         {
@@ -47,11 +52,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetExpenseReportList(string Search)
+    public async Task<IActionResult> GetExpenseReportList(string Search, int BoatId)
     {
         List<OwnerExpenseHd> entity = new List<OwnerExpenseHd>();
 
-        var Sales = await _transaction.GetAllExpense(Search);
+        var Sales = await _transaction.GetAllExpense(Search, BoatId);
 
         var model = Sales.Select(s => new OwnerExpenseHd
         {
@@ -68,11 +73,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetIncomeReportList(string Search)
+    public async Task<IActionResult> GetIncomeReportList(string Search, int BoatId)
     {
         List<IncomeHd> entity = new List<IncomeHd>();
 
-        var Sales = await _transaction.GetAllIncome(Search);
+        var Sales = await _transaction.GetAllIncome(Search,BoatId);
 
         var model = Sales.Select(s => new IncomeHd
         {
@@ -90,11 +95,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetPnlReportList(string Search)
+    public async Task<IActionResult> GetPnlReportList(string Search, int BoatId)
     {
         List<Pnl> entity = new List<Pnl>();
 
-        var Sales = await _report.GetAllPnl(Search);
+        var Sales = await _report.GetAllPnl(Search, BoatId);
 
         var model = Sales.Select(s => new Pnl
         {

@@ -16,8 +16,17 @@
             <h4 class="card-header">
                 Add Sale Details
                 <div style="float:right">
-                    <button class="btn btn-primary" onclick="UpsertSale()">Save</button>
-                    <a type="button" class="btn btn-primary" asp-action="GetSale" >Back</a>
+                    @if (Model.SaleId > 0)
+                    {
+                        <button class="btn btn-success" onclick="UpsertSale()">Update</button>
+                        <a asp-controller="Master" asp-action="DeleteCommissionType" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success" onclick="UpsertSale()">Save</button>
+                    }
+
+                    <a type="button" class="btn btn-primary" asp-action="GetSale">Back</a>
                 </div>
             </h4>
             <!-- Account -->
@@ -497,7 +506,7 @@
             //#region Ice Model Calacuation
 
             function icecalculation() {
-                
+
                 var iceqty = $('#txt_iceQty').val();
                 var iceprice = $('#txt_iceprice').val();
 
@@ -543,7 +552,7 @@
             //#region Beta Model Calacuation
 
             function MisSave() {
-                
+
                 var iceAMT = $('#txt_MISAmount1').val();
                 console.log(iceAMT);
                 $('#txt_Amount').val(iceAMT);
@@ -577,7 +586,7 @@
             function GridColumnTemplate_MISDetails(GridData, Tab) {
 
                 var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditExpenseDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
-                var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteExpenseDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+                var Delete = "<div  class='btn btn-icon btn-danger' onclick=\"DeleteExpenseDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
 
                 var Template = Edit + '  ' + Delete;
 
@@ -649,7 +658,7 @@
             function AddDetails() {
 
                 if (ValidateDetails()) {
-                    
+
                     var lengthgrid = 0;
                     var INVOICE_ID = 0;
                     var grid = undefined;
@@ -741,7 +750,7 @@
                     var gridData = grid.dataSource.data();
 
                     for (var i = 0; i < gridData.length; i++) {
-                        
+
                         var uid = gridData[i].uid;
                         var row = grid.table.find("tr[data-uid='" + uid + "']");
 
@@ -764,7 +773,7 @@
             //#endregion Beta Model Calacuation
 
             function funcNumberDays() {
-                
+
                 var date1 = $("#txt_startdate").val();
                 var date2 = $("#txt_enddate").val();
 
@@ -789,7 +798,7 @@
             }
 
             function salecalculation() {
-                
+
                 var txt_totalSaleAmount = parseFloat($('#txt_totalSaleAmount').val() == '' ? 0 : $('#txt_totalSaleAmount').val());
 
                 var txt_commisionAmount = parseFloat($('#txt_commisionAmount').val() == '' ? 0 : $('#txt_commisionAmount').val());
@@ -896,9 +905,9 @@
             function UpsertSale() {
 
                 if (ValidateSale()) {
-                    
+
                     var eid = $("#EncId").val();
-                    
+
                     var JsonSale = {
                         SaleId: $("#SaleId").val(),
                         SaleNo: $("#txt_saleNo").val(),
@@ -937,7 +946,7 @@
 
                     var grid = $("#grid_MISDetails").data("kendoGrid");
                     if (grid != undefined) {
-                        
+
                         var data = grid.dataSource.data().length;
                         if (data > 0) {
                             var gridData = grid.dataSource.data();
@@ -947,7 +956,7 @@
                         var JsonDetails = '';
                     }
 
-                    
+
                     var Url = '@Url.Action("DefineSale", "Transactions")';
                     var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
 
@@ -971,7 +980,7 @@
             //#endregion Save
 
             function addtogrid() {
-                
+
                 var tblexpensetype = $('#tblexpensetype').val();
                 var iceAMT = $('#txt_MisAmount').val();
                 var typeid = $('#ddExpensetype').val();
@@ -980,19 +989,19 @@
                 var typename = $("#ddExpensetype option:selected").text();
 
                 var content = `<tr>
-                                                                                <td style="display:none"> ${typeid}</td>
-                                                                                <td> ${typename}</td>
-                                                                                <td> ${iceAMT}</td>
-                                                                                <td>
-                                                                                    <div class="dropdown">
-                                                                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                                                                                        <div class="dropdown-menu">
-                                                                                                    <a class="dropdown-item"><i class="mdi mdi-pencil-outline me-1" onclick="editgrid()"></i> Edit</a>
-                                                                                                    <a class="dropdown-item"><i class="mdi mdi-trash-can-outline me-1" onclick="deletegrid()"></i> Delete</a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                        </tr>`;
+                                                                                            <td style="display:none"> ${typeid}</td>
+                                                                                            <td> ${typename}</td>
+                                                                                            <td> ${iceAMT}</td>
+                                                                                            <td>
+                                                                                                <div class="dropdown">
+                                                                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                                                                                                    <div class="dropdown-menu">
+                                                                                                                <a class="dropdown-item"><i class="mdi mdi-pencil-outline me-1" onclick="editgrid()"></i> Edit</a>
+                                                                                                                <a class="dropdown-item"><i class="mdi mdi-trash-can-outline me-1" onclick="deletegrid()"></i> Delete</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                    </tr>`;
                 $('#tblexpensetype').append(content);
 
                 var table = document.getElementById('mytable'),

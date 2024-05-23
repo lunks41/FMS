@@ -17,7 +17,15 @@
             <h4 class="card-header">
                 Add Credit Details
                 <div style="float:right">
-                    <button class="btn btn-primary" onclick="CreateCredit()">Save</button>
+                    @if (Model.CreditId > 0)
+                    {
+                        <button class="btn btn-success" onclick="CreateCredit()">Update</button>
+                        <a asp-controller="Master" asp-action="DeleteCommissionType" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success" onclick="CreateCredit()">Save</button>
+                    }
 
                     <a asp-controller="Transactions" asp-action="GetCredit" class="btn btn-primary">Back</a>
                 </div>
@@ -99,8 +107,8 @@
                     </div>
                     <div class="col-md-2 d-flex">
                         <div class="form-floating form-floating-outline">
-                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="AddCreditDetails()">Add</button>
-                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearCreditDetails()">Clear</button>
+                            <button type="button" class="btn btn-outline-success tf-icons mdi mdi-plus-box-multiple" onclick="AddCreditDetails()">Add</button>
+                            <button type="button" class="btn btn-outline-danger tf-icons mdi mdi-plus-box-multiple" onclick="ClearCreditDetails()">Clear</button>
                         </div>
                     </div>
                 </div>
@@ -159,7 +167,7 @@
         function GridColumnTemplate_CreditDetails(GridData, Tab) {
 
             var Edit = "<div  class='btn btn-icon btn-primary' onclick=\"EditCreditDt()\" title='Edit'><span class='mdi mdi-pencil'></span></div>";
-            var Delete = "<div  class='btn btn-icon btn-primary' onclick=\"DeleteCreditDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
+            var Delete = "<div  class='btn btn-icon btn-danger' onclick=\"DeleteCreditDt()\" title='Delete'><span class='mdi mdi-trash-can-outline'></span></div>";
 
             var Template = Edit + '  ' + Delete;
 

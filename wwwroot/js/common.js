@@ -386,10 +386,6 @@ function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Ag
     var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
     var CurrentDateTime = date + ' ' + time;
 
-    var ColsProp = JSON.stringify(Columns_properties).split('"').join("&quot;");
-
-    var templates = DataFunction[0].template;
-
     var toolbar = DataFunction[0].toolbar ? false : ["excel", "pdf", "search"];
 
     var save = DataFunction[0].save;
@@ -421,69 +417,77 @@ function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Ag
 
 function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight) {
 
-    if (e = JSON.parse(e), void 0 !== Columns_properties && "" !== Columns_properties && (hidecolumns = Columns_properties), $("#grid_" + GridName).html(""), null !== e && e.length > 0) {
+    if (e != "") {
 
-        //Adding Header Name With Total QTY
-        if ($("#li_" + GridName).html()) {
-            var Grid_Title = $("#li_" + GridName).html();
-            Grid_Title.indexOf(" (") > 0 && (Grid_Title = Grid_Title.substring(0, Grid_Title.indexOf(" ("))), $("#li_" + GridName).html(Grid_Title + " (" + e.length + ")"), null !== e && e.length > 0
-        }
 
-        GenerateGridModelColumnsProperties(e[0], GridName, Columns_properties, Aggregate, GridTemplate);
+        if (e = JSON.parse(e), void 0 !== Columns_properties && "" !== Columns_properties && (hidecolumns = Columns_properties), $("#grid_" + GridName).html(""), null !== e && e.length > 0) {
 
-        dataSource = new kendo.data.DataSource({
-            type: "text",
-            data: e,
-            schema: {
-                model: model
-            },
-            aggregate: Aggregate,
-            pageSize: PageSize == '' ? 500 : PageSize
-            /*group: gridGroup*/
+            //Adding Header Name With Total QTY
+            if ($("#li_" + GridName).html()) {
+                var Grid_Title = $("#li_" + GridName).html();
+                Grid_Title.indexOf(" (") > 0 && (Grid_Title = Grid_Title.substring(0, Grid_Title.indexOf(" ("))), $("#li_" + GridName).html(Grid_Title + " (" + e.length + ")"), null !== e && e.length > 0
+            }
 
-        });
+            GenerateGridModelColumnsProperties(e[0], GridName, Columns_properties, Aggregate, GridTemplate);
 
-        $("#grid_" + GridName).kendoGrid({
-            height: GridHeight,
-            dataSource: dataSource,
-            toolbar: toolbar,
-            excel: {
-                fileName: GridName + " (" + CurrentDateTime + ") " + ".xlsx",
-                filterable: true,
-                allPages: true
-            },
-            pdf: {
-                allPages: true,
-                avoidLinks: true,
-                paperSize: "A2",
-                margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
-                landscape: true,
-                repeatHeaders: true,
-                template: $("#page-template").html(),
-                scale: 0.7,
-                fileName: GridName + " (" + CurrentDateTime + ") " + ".PDF"
-            },
-            scrollable: true,
-            columns: columnsOptions,
-            dataBound: dataBound_function,
-            pageable: {
-                refresh: true,
-                pageSizes: true,
-                buttonCount: 5,
-                pageSizes: ["All", 10, 20, 50, 100, 500],
-            },
-            editable: true,
-            sortable: true,
-            selectable: true,
-            resizable: true,
-            reorderable: true,
-            columnMenu: true,
-            save: save_function
-        });
+            dataSource = new kendo.data.DataSource({
+                type: "text",
+                data: e,
+                schema: {
+                    model: model
+                },
+                aggregate: Aggregate,
+                pageSize: PageSize == '' ? 500 : PageSize
+                /*group: gridGroup*/
+
+            });
+
+            $("#grid_" + GridName).kendoGrid({
+                height: GridHeight,
+                dataSource: dataSource,
+                toolbar: toolbar,
+                excel: {
+                    fileName: GridName + " (" + CurrentDateTime + ") " + ".xlsx",
+                    filterable: true,
+                    allPages: true
+                },
+                pdf: {
+                    allPages: true,
+                    avoidLinks: true,
+                    paperSize: "A2",
+                    margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                    landscape: true,
+                    repeatHeaders: true,
+                    template: $("#page-template").html(),
+                    scale: 0.7,
+                    fileName: GridName + " (" + CurrentDateTime + ") " + ".PDF"
+                },
+                scrollable: true,
+                columns: columnsOptions,
+                dataBound: dataBound_function,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true,
+                    buttonCount: 5,
+                    pageSizes: ["All", 10, 20, 50, 100, 500],
+                },
+                editable: true,
+                sortable: true,
+                selectable: true,
+                resizable: true,
+                reorderable: true,
+                columnMenu: true,
+                save: save_function
+            });
+        } else $("#grid_" + GridName).html(
+            `<div class="alert alert-danger">
+            <strong>Data not available!</strong>
+        </div>`
+        )
     } else $("#grid_" + GridName).html(
         `<div class="alert alert-danger">
-                    <strong>Data not available!</strong>
-                  </div>`
+            <strong>Data not available!</strong>
+        </div>`
     )
 }
 

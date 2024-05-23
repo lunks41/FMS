@@ -22,6 +22,7 @@ namespace FMS.Data
         #endregion
 
         #region Report
+        public DbSet<Pnl>? pnl { get; set; }
         #endregion
     }
 }

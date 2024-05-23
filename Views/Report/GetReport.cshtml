@@ -1,5 +1,126 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Add New Expences - Expences";
 }
+
+@section PageScripts {
+    <script src="~/js/common.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h4 class="card-header">
+                Report
+            </h4>
+            <div class="card-body pt-2 mt-1">
+                <div class="row gy-4">
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="text" id="txt_search" name="search" autofocus />
+                            <label for="search">Search</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddreport" class="select2 form-select">
+                                <option value="">-- Select --</option>
+                                <option value="1">Sales</option>
+                                <option value="2">Expense</option>
+                                <option value="3">Income</option>
+                                <option value="4">P&L</option>
+                            </select>
+                            <label for="report">Report Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 d-flex">
+                        <div class="form-floating form-floating-outline">
+                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="LoadReport()">Search</button>
+                            <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearReport()">Clear</button>
+                        </div>
+                    </div>
+
+
+                    <div class="card-body pt-2 mt-1">
+
+                        <div id="grid_ReportDetails">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                LoadReport();
+            });
+
+            function LoadReport() {
+                debugger;
+                var Url = '';
+                var Search = $("#txt_search").val();
+                var Reportid = $("#ddreport").val();
+
+                if (Reportid == 1) {
+                    Url = '@Url.Action("GetSaleReportList", "Report")';
+
+                    var Columns_properties = [
+                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                        { columnName: 'TotalSaleAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Sale Amount' },
+                        { columnName: 'TotalExpenseAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
+                        { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
+                    ]
+                } else if (Reportid == 2) {
+                    Url = '@Url.Action("GetExpenseReportList", "Report")';
+                    var Columns_properties = [
+                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                        { columnName: 'OwnerExpenseNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
+                        { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
+                    ]
+                } else if (Reportid == 3) {
+                    Url = '@Url.Action("GetIncomeReportList", "Report")';
+
+                    var Columns_properties = [
+                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                        { columnName: 'IncomeNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
+                        { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
+                        { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
+                    ]
+                } else if (Reportid == 4) {
+                    Url = '@Url.Action("GetPnlReportList", "Report")';
+
+                    var Columns_properties = [
+                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                        { columnName: 'TotalIncome', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
+                        { columnName: 'TotalExpense', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
+                        { columnName: 'Totalpnl', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'P&L' }
+                    ]
+                }
+
+                var GridName = 'ReportDetails';
+                var Params = { 'Search': Search };
+                var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: false }];
+
+                FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "", DataAdd = "");
+            }
+
+            function ClearReport() {
+                $('#txt_search').val('');
+                $("#ddreport").val('');
+                LoadReport();
+            }
+        </script>
+    }

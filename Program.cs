@@ -15,6 +15,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<IMaster, MasterServices>();
 builder.Services.AddScoped<ITransaction, TransactionServices>();
+builder.Services.AddScoped<IReport, ReportServices>();
 
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

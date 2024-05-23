@@ -16,7 +16,7 @@ namespace FMS.Data
         }
 
         #region Sale
-        public async Task<IEnumerable<SaleHd>> GetAllSale(string SaleNo, string SaleName, int? IsActive)
+        public async Task<IEnumerable<SaleHd>> GetAllSale(string Fillter)
         {
             try
             {
@@ -25,13 +25,10 @@ namespace FMS.Data
 
                 string searchText = string.Empty;
 
-                if (!string.IsNullOrEmpty(SaleNo))
+                if (!string.IsNullOrEmpty(Fillter))
                 {
-                    searchText += " AND SaleNo LIKE '%" + SaleNo + "%'";
-                }
-                if (!string.IsNullOrEmpty(SaleName))
-                {
-                    searchText += " AND SaleName LIKE '%" + SaleName + "%'";
+                    searchText += " AND BoatName LIKE '%" + Fillter + "%'";
+                    searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
                 }
 
                 parameters.Add("@SearchText", searchText);
@@ -169,7 +166,7 @@ namespace FMS.Data
 
         #region Expense
 
-        public async Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string SaleNo, string SaleName)
+        public async Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string Fillter)
         {
             try
             {
@@ -178,13 +175,11 @@ namespace FMS.Data
 
                 string searchText = string.Empty;
 
-                if (!string.IsNullOrEmpty(SaleNo))
+                if (!string.IsNullOrEmpty(Fillter))
                 {
-                    searchText += " AND SaleNo LIKE '%" + SaleNo + "%'";
-                }
-                if (!string.IsNullOrEmpty(SaleName))
-                {
-                    searchText += " AND SaleName LIKE '%" + SaleName + "%'";
+                    searchText += " AND BoatName LIKE '%" + Fillter + "%'";
+                    searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
+                    searchText += " OR OwnerExpenseNo LIKE '%" + Fillter + "%'";
                 }
 
                 parameters.Add("@SearchText", searchText);
@@ -300,7 +295,7 @@ namespace FMS.Data
 
         #region Income
 
-        public async Task<IEnumerable<IncomeHd>> GetAllIncome(string SaleNo, string SaleName)
+        public async Task<IEnumerable<IncomeHd>> GetAllIncome(string Fillter)
         {
             try
             {
@@ -309,13 +304,11 @@ namespace FMS.Data
 
                 string searchText = string.Empty;
 
-                if (!string.IsNullOrEmpty(SaleNo))
+                if (!string.IsNullOrEmpty(Fillter))
                 {
-                    searchText += " AND SaleNo LIKE '%" + SaleNo + "%'";
-                }
-                if (!string.IsNullOrEmpty(SaleName))
-                {
-                    searchText += " AND SaleName LIKE '%" + SaleName + "%'";
+                    searchText += " AND BoatName LIKE '%" + Fillter + "%'";
+                    searchText += " OR SaleNo LIKE '%" + Fillter + "%'";
+                    searchText += " OR IncomeNo LIKE '%" + Fillter + "%'";
                 }
 
                 parameters.Add("@SearchText", searchText);

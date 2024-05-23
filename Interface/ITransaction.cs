@@ -5,7 +5,7 @@ namespace FMS.Data
     public interface ITransaction
     {
         #region Sale
-        Task<IEnumerable<SaleHd>> GetAllSale(string SaleCode, string SaleName, int? IsActive);
+        Task<IEnumerable<SaleHd>> GetAllSale(string? Fillter);
         Task<SaleHd> GetByIdAsyncSale(long SaleId);
         Task<IncomeReponce> UpsertAsyncSale(SaleHd model);
         Task<IncomeReponce> UpsertAsyncSaleDetails(SaleDt model);
@@ -14,7 +14,7 @@ namespace FMS.Data
         #endregion
 
         #region Expense
-        Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string? SaleCode, string? SaleName);
+        Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string? Fillter);
         Task<OwnerExpenseHd> GetByIdAsyncExpense(int ExpenseId);
         Task<IncomeReponce> UpsertAsyncExpense(OwnerExpenseHd model);
         Task<IncomeReponce> UpsertAsyncExpenseDetails(OwnerExpenseDt model);
@@ -23,7 +23,7 @@ namespace FMS.Data
         #endregion
 
         #region Income
-        Task<IEnumerable<IncomeHd>> GetAllIncome(string? SaleCode, string? SaleName);
+        Task<IEnumerable<IncomeHd>> GetAllIncome(string? Fillter);
         Task<IncomeHd> GetByIdAsyncIncome(int IncomeId);
         Task<IncomeReponce> UpsertAsyncIncome(IncomeHd model);
         Task<IncomeReponce> UpsertAsyncIncomeDetails(IncomeDt model);

@@ -15,6 +15,8 @@ namespace FMS.Models
         public int CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
+        public byte TripNo { get; set; }
+        public string? BoatName { get; set; }
         [NotMapped]
         public List<OwnerExpenseDt>? ownerExpensesDts { get; set; }
     }

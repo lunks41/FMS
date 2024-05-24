@@ -424,9 +424,9 @@ namespace FMS.Controllers
                 CreditNo = s.CreditNo,
                 BoatName = s.BoatName,
                 PersonName = s.PersonName,
-                CreditDate = s.CreditDate,
-                CreditAmount = s.CreditAmount,
-                BalanceAmount = s.BalanceAmount
+                TotalDebitAmount = s.TotalDebitAmount,
+                TotalCreditAmount = s.TotalCreditAmount,
+                TotalBalanceAmount = s.TotalBalanceAmount
             }).AsEnumerable();
 
             return View(model);
@@ -447,10 +447,7 @@ namespace FMS.Controllers
                     model.EncId = _protector.Protect(entity.CreditId.ToString());
                 }
             }
-            else 
-            {
-                model.CreditDate = DateTime.Now;
-            }
+            
 
             var boats = await _master.GetAllBoat("", "", 1);
             ViewBag.BoatsList = new SelectList(boats, "BoatId", "BoatName");
@@ -510,8 +507,9 @@ namespace FMS.Controllers
                         CreditNo = s.CreditNo,
                         ItemNo = s.ItemNo,
                         SquenceNo = s.SquenceNo,
-                        ReceivedDate = s.ReceivedDate,
-                        Amount = s.Amount
+                        PaymentDate = s.PaymentDate,
+                        DebitAmount = s.DebitAmount,
+                        CreditAmount = s.CreditAmount
                     }).ToList();
 
                     entity = model;

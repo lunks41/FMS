@@ -25,7 +25,7 @@
                     <th>Credit Number</th>
                     <th>Person Name</th>
                     <th>Boat</th>
-                    <th>Credit Date</th>
+                    <th>Total Debit Amount</th>
                     <th>Total Credit Amount</th>
                     <th>Balance Amount</th>
                     <th>User</th>
@@ -42,9 +42,9 @@
                             <td>@Html.DisplayFor(model => item.CreditNo)</td>
                             <td>@Html.DisplayFor(model => item.PersonName)</td>
                             <td>@Html.DisplayFor(model => item.BoatName)</td>
-                            <td>@Convert.ToDateTime(item.CreditDate).ToString("dd/MMM/yyyy")</td>
-                            <td>@Html.DisplayFor(model => item.CreditAmount)</td>
-                            <td>@Html.DisplayFor(model => item.BalanceAmount)</td>
+                            <td>@Html.DisplayFor(model => item.TotalDebitAmount)</td>
+                            <td>@Html.DisplayFor(model => item.TotalCreditAmount)</td>
+                            <td>@Html.DisplayFor(model => item.TotalBalanceAmount)</td>
                             <td>
                                 <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="Lilian Fuller">

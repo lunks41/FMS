@@ -507,9 +507,9 @@ namespace FMS.Data
                 parameters.Add("CreditNo", model.CreditNo, DbType.String);
                 parameters.Add("BoatId", model.BoatId, DbType.Int32);
                 parameters.Add("PersonName", model.PersonName, DbType.String);
-                parameters.Add("CreditDate", model.CreditDate, DbType.DateTime);
-                parameters.Add("CreditAmount", model.CreditAmount, DbType.Decimal);
-                parameters.Add("BalanceAmount", model.BalanceAmount, DbType.Decimal);
+                parameters.Add("TotalDebitAmount", model.TotalDebitAmount, DbType.Decimal);
+                parameters.Add("TotalCreditAmount", model.TotalCreditAmount, DbType.Decimal);
+                parameters.Add("TotalBalanceAmount", model.TotalBalanceAmount, DbType.Decimal);
                 parameters.Add("CreatedBy", 1, DbType.Int32);
 
                 return await _repository.UpsertAsync("USP_Credit", parameters);
@@ -529,8 +529,9 @@ namespace FMS.Data
                 parameters.Add("CreditNo", model.CreditNo, DbType.String);
                 parameters.Add("ItemNo", model.ItemNo, DbType.Byte);
                 parameters.Add("SquenceNo", model.SquenceNo, DbType.Byte);
-                parameters.Add("ReceivedDate", model.ReceivedDate, DbType.DateTime);
-                parameters.Add("Amount", model.Amount, DbType.Decimal);
+                parameters.Add("PaymentDate", model.PaymentDate, DbType.DateTime);
+                parameters.Add("DebitAmount", model.DebitAmount, DbType.Decimal);
+                parameters.Add("CreditAmount", model.CreditAmount, DbType.Decimal);
 
                 return await _repository.UpsertAsync("USP_CreditDt", parameters);
             }

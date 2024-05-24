@@ -61,20 +61,20 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
-                            <input asp-for="CreditAmount" class="form-control" type="number" id="txt_creditamount" name="creditamount" onblur="HeaderAmountCalculation()" />
-                            <label for="creditamount">Credit Amount</label>
+                            <input asp-for="TotalDebitAmount" class="form-control" type="number" id="txt_totaldebitamount" name="totaldebittamount" onblur="HeaderAmountCalculation()" readonly />
+                            <label for="totaldebittamount">Debit Amount</label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
-                            <input asp-for="CreditDate" class="form-control" type="date" id="txt_creditdate" name="creditdate" />
-                            <label for="creditdate">Credit Date</label>
+                            <input asp-for="TotalCreditAmount" class="form-control" type="number" id="txt_totalcreditamount" name="totalcreditamount" onblur="HeaderAmountCalculation()" readonly/>
+                            <label for="totalcreditamount">Credit Amount</label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
-                            <input asp-for="BalanceAmount" class="form-control" type="number" id="txt_balanceamount" name="balanceamount" readonly />
-                            <label for="balanceamount">Balance Amount</label>
+                            <input asp-for="TotalBalanceAmount" class="form-control" type="number" id="txt_totalbalanceamount" name="totalbalanceamount" readonly />
+                            <label for="totalbalanceamount">Balance Amount (Person Pay you)</label>
                         </div>
                     </div>
 
@@ -83,14 +83,20 @@
 
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
-                            <input class="form-control" type="date" id="txt_receiveddate" name="receiveddate" />
-                            <label for="dobBackdrop">Received Date</label>
+                            <input class="form-control" type="date" id="txt_PaymentDate" name="PaymentDate" />
+                            <label for="PaymentDate">Payment Date</label>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
-                            <input class="form-control" type="number" id="txt_Amount" name="amount" />
-                            <label for="amount">Amount</label>
+                            <input class="form-control" type="number" id="txt_debitamount" name="debitamount" />
+                            <label for="debitamountamount">Debit Amount (Person Pay)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="number" id="txt_creditamount" name="creditamount" />
+                            <label for="creditamount">Credit Amount (You Pay)</label>
                         </div>
                     </div>
                     <div class="col-md-1" id="SquenceNo">
@@ -135,7 +141,6 @@
         $(document).ready(function () {
             $("#SquenceNo").hide();
             ClearCreditDetails();
-
             $("#CreditId").val();
             $("#EncId").val();
             LoadGetCredit();
@@ -153,8 +158,9 @@
                 { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
                 { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
                 { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
-                { columnName: 'ReceivedDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'ReceivedDate' },
-                { columnName: 'Amount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Total' },
+                { columnName: 'PaymentDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'Payment Date' },
+                { columnName: 'DebitAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Debit Amount (Person Pay)' },
+                { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
             ]
 
             var Params = { 'eid': eid };
@@ -185,15 +191,17 @@
         }
 
         function EditCreditDt() {
-
+            
             var gridData = $("#grid_CreditDetails").data("kendoGrid");
 
             var selectedRows = gridData.select();
             selectedRows.each(function (index, row) {
                 var selectedItem = gridData.dataItem(row);
                 
-                $("#txt_receiveddate").val(selectedItem.ReceivedDate);
-                $("#txt_Amount").val(selectedItem.Amount);
+                //$("#txt_PaymentDate").data("kendoDatePicker").value(selectedItem.PaymentDate);
+                $("#txt_PaymentDate").val(formatDate(selectedItem.PaymentDate));
+                $("#txt_debitamount").val(selectedItem.DebitAmount);
+                $("#txt_creditamount").val(selectedItem.CreditAmount);
                 $("#txt_SquenceNo").val(selectedItem.SquenceNo);
                 $("#txt_ItemNumber").val(selectedItem.ItemNo);
             });
@@ -216,8 +224,8 @@
         }
 
         function HeaderAmountCalculation() {
-
-            var TotalAMT = 0;
+            debugger;
+            var Debitamt = 0, Creditamt = 0, TotalAMT = 0;
             var creditAmt = parseFloat($("#txt_creditamount").val() == '' ? 0 : $("#txt_creditamount").val());
 
             var grid = $("#grid_CreditDetails").data("kendoGrid");
@@ -226,39 +234,61 @@
                 var gridData = grid.dataSource.data();
                 
                 for (var i = 0; i < gridData.length; i++) {
-
+                    debugger;
                     var uid = gridData[i].uid;
                     var row = grid.table.find("tr[data-uid='" + uid + "']");
 
-                    var Amount = $(row).find("[data-field='Amount']").html();
+                    var DebitAmount = $(row).find("[data-field='DebitAmount']").html();
+                    var CreditAmount = $(row).find("[data-field='CreditAmount']").html();
 
-                    if (Amount != undefined) {
-                        Amount = (Amount.replace(',', ''));
-                        Amount = parseFloat(Amount);
+                    if (DebitAmount != undefined) {
+                        DebitAmount = (DebitAmount.replace(',', ''));
+                        DebitAmount = parseFloat(DebitAmount);
                     } else {
-                        Amount = gridData[i].Amount;
+                        DebitAmount = gridData[i].DebitAmount;
                     }
 
-                    TotalAMT = (parseFloat(TotalAMT) + parseFloat(Amount)).toFixed(2);
+                    if (CreditAmount != undefined) {
+                        CreditAmount = (CreditAmount.replace(',', ''));
+                        CreditAmount = parseFloat(CreditAmount);
+                    } else {
+                        CreditAmount = gridData[i].CreditAmount;
+                    }
+
+                    Debitamt = (parseFloat(Debitamt) + parseFloat(DebitAmount)).toFixed(2);
+                    Creditamt = (parseFloat(Creditamt) + parseFloat(CreditAmount)).toFixed(2);
                 }
 
-                $("#txt_totalamount").val(parseFloat(TotalAMT).toFixed(2));
+                $("#txt_totaldebitamount").val(parseFloat(Debitamt).toFixed(2));
+                $("#txt_totalcreditamount").val(parseFloat(Creditamt).toFixed(2));
             }
 
-            var txt_balanceamount = (creditAmt - parseFloat(TotalAMT)).toFixed(2);
-            $("#txt_balanceamount").val(txt_balanceamount);
+            var txt_balanceamount = (parseFloat(Debitamt) - parseFloat(Creditamt)).toFixed(2);
+            if (txt_balanceamount.includes('-'))
+                txt_balanceamount = parseFloat(txt_balanceamount.replace('-', ''));//To Covert into +ve
+
+            $("#txt_totalbalanceamount").val(txt_balanceamount);
         }
 
         function ValidateCreditDetails() {
 
             var Valid = true;
+            var paymentdate = $("#txt_PaymentDate").val();
+            var debitamount = $("#txt_debitamount").val();
+            var creditamount = $("#txt_creditamount").val();
 
-            var Amount = $("#txt_Amount").val();
-
-            if (Amount == "") {
-                toastr.warning('Please Enter Amount.');
+            if (paymentdate == "") {
+                toastr.warning('Please Enter Payment Date.');
                 Valid = false;
-                $("#txt_Amount").focus();
+                $("#txt_PaymentDate").focus();
+            } else if (debitamount == "") {
+                toastr.warning('Please Enter Debit amount.');
+                Valid = false;
+                $("#txt_debitamount").focus();
+            } else if (creditamount == "") {
+                toastr.warning('Please Enter Credit Amount.');
+                Valid = false;
+                $("#txt_creditamount").focus();
             }
 
             return Valid;
@@ -267,7 +297,7 @@
         function AddCreditDetails() {
 
             if (ValidateCreditDetails()) {
-
+                
                 var lengthgrid = 0;
                 var INVOICE_ID = 0;
                 var grid = undefined;
@@ -289,8 +319,9 @@
                         ItemNo: dataSource.data()[i].ItemNo,
                         CreditId: dataSource.data()[i].CreditId,
                         CreditNo: dataSource.data()[i].CreditNo,
-                        ReceivedDate: dataSource.data()[i].ReceivedDate,
-                        Amount: dataSource.data()[i].Amount,
+                        PaymentDate: dataSource.data()[i].PaymentDate,
+                        DebitAmount: dataSource.data()[i].DebitAmount,
+                        CreditAmount: dataSource.data()[i].CreditAmount,
                     });
                 }
 
@@ -301,20 +332,22 @@
                         ItemNo: lengthgrid + 1,
                         CreditId: INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID,
                         CreditNo: "",
-                        ReceivedDate: $("#txt_receiveddate").val(),
-                        Amount: $("#txt_Amount").val(),
+                        PaymentDate: $("#txt_PaymentDate").val(),
+                        DebitAmount: $("#txt_debitamount").val(),
+                        CreditAmount: $("#txt_creditamount").val()
                     });
                 }
                 else {
 
                     objIndex = DataAdd.findIndex((obj => obj.ItemNo == parseInt($("#txt_SquenceNo").val())));
-
+                    
                     DataAdd[objIndex].SquenceNo = $("#txt_SquenceNo").val();
                     DataAdd[objIndex].ItemNo = $("#txt_ItemNumber").val();
                     DataAdd[objIndex].CreditId = INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID;
                     DataAdd[objIndex].CreditNo = "";
-                    DataAdd[objIndex].ReceivedDate = $("#txt_receiveddate").val();
-                    DataAdd[objIndex].Amount = $("#txt_Amount").val();
+                    DataAdd[objIndex].PaymentDate = $("#txt_PaymentDate").val();
+                    DataAdd[objIndex].DebitAmount = $("#txt_debitamount").val();
+                    DataAdd[objIndex].CreditAmount = $("#txt_creditamount").val();
                 }
             }
 
@@ -323,8 +356,9 @@
                 { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
                 { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
                 { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
-                { columnName: 'ReceivedDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'Received Date' },
-                { columnName: 'Amount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Total' },
+                { columnName: 'PaymentDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'PaymentDate' },
+                { columnName: 'DebitAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Debit Amount (Person Pay)' },
+                { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
             ]
 
             var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
@@ -339,18 +373,12 @@
 
         function ClearCreditDetails() {
 
-            $("#txt_receiveddate").val('');
-            $("#txt_Amount").val('0.00');
+            $("#txt_PaymentDate").val('');
+            $("#txt_debitamount").val('0.00');
+            $("#txt_creditamount").val('0.00');
+            $("#txt_SquenceNo").val('');
+            $("#txt_ItemNumber").val('');
             $("#SquenceNo").hide();
-        }
-
-        function DetailsAmountCalculation() {
-            var qty = parseFloat($('#txt_Qty').val() == '' ? 0 : $('#txt_Qty').val());
-            var price = parseFloat($('#txt_Price').val() == '' ? 0 : $('#txt_Price').val());
-
-            var amt = qty * price;
-            $("#txt_Amount").val(amt);
-
         }
 
         function CreateCredit() {
@@ -363,12 +391,12 @@
 
                     var JsonCredit = {
                         CreditId: $("#CreditId").val(),
-                        CreditNo: $("#txt_CreditNo").val(),
+                        CreditNo: $("#txt_creditNo").val(),
                         BoatId: $("#ddboatid").val(),
                         PersonName: $("#txt_personname").val(),
-                        CreditDate: $("#txt_creditdate").val(),
-                        CreditAmount: $("#txt_creditamount").val(),
-                        BalanceAmount: $("#txt_balanceamount").val(),
+                        TotalDebitAmount: $("#txt_totaldebitamount").val(),
+                        TotalCreditAmount: $("#txt_totalcreditamount").val(),
+                        TotalBalanceAmount: $("#txt_totalbalanceamount").val(),
                     }
 
                     var JsonString = JSON.stringify(JsonCredit);
@@ -412,39 +440,34 @@
             var Valid = true;
 
             var SaleNo = $("#ddsaleid").val();
+            var Personname = $("#txt_personname").val();
             var TotalAmt = $("#txt_totalamount").val();
 
             if (SaleNo == "" || SaleNo == "0") {
                 toastr.warning('Please select Sales Number');
                 Valid = false;
-            } else if (TotalAmt == "") {
-                toastr.warning('Please Enter Amount');
+            } else if (Personname == "") {
+                toastr.warning('Please Enter Person Name');
                 Valid = false;
-                $("#txt_totalamount").focus();
+                $("#txt_personname").focus();
             }
 
             return Valid;
         }
 
-        function RedirectActionToList() {
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
 
-            var Url = '@Url.Action("GetCredit", "Transactions", new { area = "" })';
-            var Params = "";
-            var Type = 'GET';
-            CommonAjaxRequest(Url, Params, Type);
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
         }
-
-        function RedirectActionToEdit(data) {
-
-            if (data.RESULT > 0) {
-                var Url = '@Url.Action("DefineCredit", "Transactions", new { area = "" })';
-                var Params = "{'InvoiceId': '" + data.RESULT + "'}";
-
-                var Type = 'POST'
-                CommonAjaxRequest(Url, Params, Type);
-            }
-        }
-
     </script>
 
 }

@@ -46,6 +46,21 @@ namespace FMS.Data
             }
         }
 
+        public async Task<IEnumerable<Dashboard>> GetDashboard()
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+
+                var result = await _repository.GetAllAsync<Dashboard, dynamic>("Get_Dashboard", parameters);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         #endregion
 
     }

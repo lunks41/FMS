@@ -59,16 +59,21 @@
                             <label for="boat">Boat Name</label>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-floating form-floating-outline">
-                            <input asp-for="TotalDebitAmount" class="form-control" type="number" id="txt_totaldebitamount" name="totaldebittamount" onblur="HeaderAmountCalculation()" readonly />
-                            <label for="totaldebittamount">Debit Amount</label>
-                        </div>
-                    </div>
+                </div>
+
+                <br>
+                   <div class="row gy-4">
+
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
                             <input asp-for="TotalCreditAmount" class="form-control" type="number" id="txt_totalcreditamount" name="totalcreditamount" onblur="HeaderAmountCalculation()" readonly/>
                             <label for="totalcreditamount">Credit Amount</label>
+                        </div>
+                    </div>
+                     <div class="col-md-3">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TotalDebitAmount" class="form-control" type="number" id="txt_totaldebitamount" name="totaldebittamount" onblur="HeaderAmountCalculation()" readonly />
+                            <label for="totaldebittamount">Debit Amount</label>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -89,14 +94,14 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
-                            <input class="form-control" type="number" id="txt_debitamount" name="debitamount" />
-                            <label for="debitamountamount">Debit Amount (Person Pay)</label>
+                            <input class="form-control" type="number" id="txt_creditamount" name="creditamount" />
+                            <label for="creditamount">Credit Amount (You Pay)</label>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
-                            <input class="form-control" type="number" id="txt_creditamount" name="creditamount" />
-                            <label for="creditamount">Credit Amount (You Pay)</label>
+                            <input class="form-control" type="number" id="txt_debitamount" name="debitamount" />
+                            <label for="debitamountamount">Debit Amount (Person Pay)</label>
                         </div>
                     </div>
                     <div class="col-md-1" id="SquenceNo">
@@ -159,8 +164,8 @@
                 { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
                 { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
                 { columnName: 'PaymentDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'Payment Date' },
+                 { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
                 { columnName: 'DebitAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Debit Amount (Person Pay)' },
-                { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
             ]
 
             var Params = { 'eid': eid };
@@ -357,8 +362,8 @@
                 { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
                 { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
                 { columnName: 'PaymentDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'PaymentDate' },
+                 { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
                 { columnName: 'DebitAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Debit Amount (Person Pay)' },
-                { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
             ]
 
             var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];

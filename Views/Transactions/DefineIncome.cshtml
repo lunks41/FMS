@@ -20,7 +20,7 @@
                     @if (Model.IncomeId > 0)
                     {
                         <button class="btn btn-success" onclick="CreateIncome()">Update</button>
-                        <a asp-controller="Master" asp-action="DeleteCommissionType" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                        <a asp-controller="Transactions" asp-action="DeleteIncome" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
                     }
                     else
                     {

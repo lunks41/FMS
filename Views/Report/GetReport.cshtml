@@ -70,7 +70,7 @@
             });
 
             function LoadReport() {
-                debugger;
+                
                 var Url = '';
                 var Search = $("#txt_search").val();
                 var Reportid = $("#ddreport").val();
@@ -87,6 +87,8 @@
                         { columnName: 'TotalExpenseAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
                         { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
                     ]
+
+                    var Aggregate = [{ field: "TotalSaleAmount", aggregate: "Sum" }, { field: "TotalExpenseAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
                 } else if (Reportid == 2) {
                     Url = '@Url.Action("GetExpenseReportList", "Report")';
                     var Columns_properties = [
@@ -96,6 +98,8 @@
                         { columnName: 'OwnerExpenseNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
                         { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
                     ]
+
+                    var Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }];
                 } else if (Reportid == 3) {
                     Url = '@Url.Action("GetIncomeReportList", "Report")';
 
@@ -107,6 +111,8 @@
                         { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
                         { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
                     ]
+
+                    var Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
                 } else if (Reportid == 4) {
                     Url = '@Url.Action("GetPnlReportList", "Report")';
 
@@ -118,13 +124,15 @@
                         { columnName: 'TotalExpense', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
                         { columnName: 'Totalpnl', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'P&L' }
                     ]
+
+                    var Aggregate = [{ field: "TotalIncome", aggregate: "Sum" }, { field: "TotalExpense", aggregate: "Sum" }, { field: "Totalpnl", aggregate: "Sum" }];
                 }
 
                 var GridName = 'ReportDetails';
                 var Params = { 'Search': Search, 'BoatId': BoatId };
                 var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: false }];
 
-                FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "", DataAdd = "");
+                FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate, DataFunction, ScreenName = "", DataAdd = "");
             }
 
             function ClearReport() {

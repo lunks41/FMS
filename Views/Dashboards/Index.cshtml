@@ -397,10 +397,10 @@
                 url: Url,
                 data: Params,
                 success: function (e) {
-                    debugger;
+                    
                     response = JSON.parse(e)
                     if (response.length > 0) {
-                        debugger;
+                        
                         for (let i = 0; i < response.length; i++) {
                             FertizilerAmount = response[0].FertizilerAmount;
                             Ownershare = response[0].Ownershare;
@@ -444,7 +444,7 @@
                         $('#revenue1').append('0k');
 
                     }
-                    debugger;
+                    
                     $('#totalsale').append(totalsalesamount).append('K');
 
                     $('#totalearning').append(totalearningamount).append('K');

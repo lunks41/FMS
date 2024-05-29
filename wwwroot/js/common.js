@@ -447,7 +447,7 @@ function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function,
                 dataSource: dataSource,
                 toolbar: toolbar,
                 excel: {
-                    fileName: GridName + " (" + CurrentDateTime + ") " + ".xlsx",
+                    fileName: GridName + ".xlsx",
                     filterable: true,
                     allPages: true
                 },
@@ -590,7 +590,7 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             }
 
             if (isAggregate) {
-
+                debugger;
                 columnsOptions.push({
                     field: a.columnName,
                     title: (a.title != undefined) ? a.title : a.columnName,
@@ -598,7 +598,7 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
                     format: "{0:n2}",
                     /*template: "#=("+a.columnName+" < 0 ? '-$' : '') +"+ Math.abs(a.columnName)+" #",*/
                     aggregates: [aggregate],
-                    footerTemplate: "#=kendo.toString(" + aggregate + ", \"" + "{0:n2}" + "\")#", //n2
+                    footerTemplate: "#=kendo.toString(" + aggregate + ", \"n2\")#",
                     footerAttributes: {
                         "class": "aggregate_footertemplate_td",
                         "style": "text-align: right;font-size: 15px",

@@ -39,6 +39,7 @@
                                 <option value="2">Expense</option>
                                 <option value="3">Income</option>
                                 <option value="4">P&L</option>
+                                <option value="5">Commission</option>
                             </select>
                             <label for="report">Report Name</label>
                         </div>
@@ -70,7 +71,7 @@
             });
 
             function LoadReport() {
-                
+
                 var Url = '';
                 var Search = $("#txt_search").val();
                 var Reportid = $("#ddreport").val();
@@ -126,7 +127,41 @@
                     ]
 
                     var Aggregate = [{ field: "TotalIncome", aggregate: "Sum" }, { field: "TotalExpense", aggregate: "Sum" }, { field: "Totalpnl", aggregate: "Sum" }];
+                } else if (Reportid == 5) {
+                    Url = '@Url.Action("GetCommissionReportList", "Report")';
+
+                    var Columns_properties = [
+                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Sale No' },
+                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Boat Name' },
+
+                        { columnName: 'QtyIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Qty' },
+                        { columnName: 'PriceIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Price' },
+                        { columnName: 'AmountIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Amount' },
+
+                        { columnName: 'QtyFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Qty' },
+                        { columnName: 'PriceFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Price' },
+                        { columnName: 'AmountFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Amount' },
+
+                        { columnName: 'QtyFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Qty' },
+                        { columnName: 'PriceFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Price' },
+                        { columnName: 'AmountFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Amount' },
+
+                        { columnName: 'QtyShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Qty' },
+                        { columnName: 'PriceShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Price' },
+                        { columnName: 'AmountShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Amount' },
+
+                        { columnName: 'QtyOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Qty' },
+                        { columnName: 'PriceOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Price' },
+                        { columnName: 'AmountOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Amount' },
+                    ]
+
+                    var Aggregate = [{ field: "QtyIce", aggregate: "Sum" }, { field: "PriceIce", aggregate: "Sum" }, { field: "AmountIce", aggregate: "Sum" },
+                    { field: "QtyFuel", aggregate: "Sum" }, { field: "PriceFuel", aggregate: "Sum" }, { field: "AmountFuel", aggregate: "Sum" },
+                    { field: "QtyFertizer", aggregate: "Sum" }, { field: "PriceFertizer", aggregate: "Sum" }, { field: "AmountFertizer", aggregate: "Sum" },
+                    { field: "QtyShare", aggregate: "Sum" }, { field: "PriceShare", aggregate: "Sum" }, { field: "AmountShare", aggregate: "Sum" },
+                    { field: "QtyOwner", aggregate: "Sum" }, { field: "PriceOwner", aggregate: "Sum" }, { field: "AmountOwner", aggregate: "Sum" }];
                 }
+
 
                 var GridName = 'ReportDetails';
                 var Params = { 'Search': Search, 'BoatId': BoatId };

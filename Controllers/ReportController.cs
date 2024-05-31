@@ -77,7 +77,7 @@ public class ReportController : Controller
     {
         List<IncomeHd> entity = new List<IncomeHd>();
 
-        var Sales = await _transaction.GetAllIncome(Search,BoatId);
+        var Sales = await _transaction.GetAllIncome(Search, BoatId);
 
         var model = Sales.Select(s => new IncomeHd
         {
@@ -109,6 +109,40 @@ public class ReportController : Controller
             TotalExpense = s.TotalExpense,
             TotalIncome = s.TotalIncome,
             Totalpnl = s.Totalpnl
+        }).ToList();
+
+        entity = model;
+
+        return Json(System.Text.Json.JsonSerializer.Serialize(entity));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetCommissionReportList(string Search, int BoatId)
+    {
+        List<CommissionReport> entity = new List<CommissionReport>();
+
+        var Sales = await _report.GetAllCommission(Search, BoatId);
+
+        var model = Sales.Select(s => new CommissionReport
+        {
+            IncomeId = s.IncomeId,
+            SaleNo = s.SaleNo,
+            BoatName= s.BoatName,
+            QtyFertizer = s.QtyFertizer,
+            QtyFuel = s.QtyFuel,
+            QtyIce = s.QtyIce,
+            QtyOwner = s.QtyOwner,
+            QtyShare = s.QtyShare,
+            PriceFertizer = s.PriceFertizer,
+            PriceFuel = s.PriceFuel,
+            PriceIce = s.PriceIce,
+            PriceOwner  = s.PriceOwner,
+            PriceShare = s.PriceShare,
+            AmountFertizer = s.AmountFertizer,
+            AmountFuel = s.AmountFuel,
+            AmountIce = s.AmountIce,    
+            AmountOwner = s.AmountOwner,
+            AmountShare = s.AmountShare
         }).ToList();
 
         entity = model;

@@ -46,6 +46,23 @@ namespace FMS.Data
             }
         }
 
+        public async Task<IEnumerable<CommissionReport>> GetAllCommission(string Fillter, int BoatId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Type", "GET_ALL", DbType.String);
+                parameters.Add("@BoatId", BoatId);
+
+                var result = await _repository.GetAllAsync<CommissionReport, dynamic>("USP_RPTCommsion", parameters);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<Dashboard>> GetDashboard()
         {
             try

@@ -15,14 +15,25 @@
             <div class="card-body pt-2 mt-1">
                 <div class="row gy-4">
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
                             <input class="form-control" type="text" id="txt_search" name="search" autofocus />
                             <label for="search">Search</label>
                         </div>
                     </div>
-
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="date" id="txt_startdate" name="startDate" placeholder="start Date" />
+                            <label for="dobBackdrop">Start Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating form-floating-outline">
+                            <input class="form-control" type="date" id="txt_enddate" name="enddate" placeholder="End Date" />
+                            <label for="dobBackdrop">End Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
                             <select id="ddboatid" asp-items="ViewBag.BoatsList" class="select2 form-select" autofocus>
                                 <option value="">-- Select --</option>
@@ -30,8 +41,8 @@
                             <label for="country">Boat</label>
                         </div>
                     </div>
-
-                    <div class="col-md-3">
+                   
+                    <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
                             <select id="ddreport" class="select2 form-select">
                                 <option value="">-- Select --</option>
@@ -45,7 +56,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3 d-flex">
+                    <div class="col-md-2 d-flex">
                         <div class="form-floating form-floating-outline">
                             <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="LoadReport()">Search</button>
                             <button type="button" class="btn btn-outline-primary tf-icons mdi mdi-plus-box-multiple" onclick="ClearReport()">Clear</button>
@@ -68,19 +79,44 @@
         <script>
             $(document).ready(function () {
                 LoadReport();
+                debugger;
+                const date = new Date();
+                let statedDate = new Date(date.getFullYear(), date.getMonth(), 1);
+                let endedDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+                document.getElementById('txt_startdate').value = formatDate(statedDate);
+                document.getElementById('txt_enddate').value = formatDate(endedDate);
             });
+
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+
+                return [year, month, day].join('-');
+            }
 
             function LoadReport() {
 
-                var Url = '';
-                var Search = $("#txt_search").val();
-                var Reportid = $("#ddreport").val();
-                var BoatId = $("#ddboatid").val() == "" ? 0 : $("#ddboatid").val();
+                let Url = '';
+                let Search = $("#txt_search").val();
+                let Reportid = $("#ddreport").val();
+                let BoatId = $("#ddboatid").val() == "" ? 0 : $("#ddboatid").val();
+                let StartDate = $("#txt_startdate").val();
+                let EndDate = $("#txt_enddate").val();
+                let Columns_properties = '';
+                let Aggregate = [];
 
                 if (Reportid == 1) {
                     Url = '@Url.Action("GetSaleReportList", "Report")';
 
-                    var Columns_properties = [
+                    Columns_properties = [
                         { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
                         { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
                         { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
@@ -89,10 +125,10 @@
                         { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
                     ]
 
-                    var Aggregate = [{ field: "TotalSaleAmount", aggregate: "Sum" }, { field: "TotalExpenseAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
+                    Aggregate = [{ field: "TotalSaleAmount", aggregate: "Sum" }, { field: "TotalExpenseAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
                 } else if (Reportid == 2) {
                     Url = '@Url.Action("GetExpenseReportList", "Report")';
-                    var Columns_properties = [
+                    Columns_properties = [
                         { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
                         { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
                         { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
@@ -100,11 +136,11 @@
                         { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
                     ]
 
-                    var Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }];
+                    Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }];
                 } else if (Reportid == 3) {
                     Url = '@Url.Action("GetIncomeReportList", "Report")';
 
-                    var Columns_properties = [
+                    Columns_properties = [
                         { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
                         { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
                         { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
@@ -113,11 +149,11 @@
                         { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
                     ]
 
-                    var Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
+                    Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
                 } else if (Reportid == 4) {
                     Url = '@Url.Action("GetPnlReportList", "Report")';
 
-                    var Columns_properties = [
+                    Columns_properties = [
                         { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
                         { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
                         { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
@@ -126,11 +162,11 @@
                         { columnName: 'Totalpnl', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'P&L' }
                     ]
 
-                    var Aggregate = [{ field: "TotalIncome", aggregate: "Sum" }, { field: "TotalExpense", aggregate: "Sum" }, { field: "Totalpnl", aggregate: "Sum" }];
+                    Aggregate = [{ field: "TotalIncome", aggregate: "Sum" }, { field: "TotalExpense", aggregate: "Sum" }, { field: "Totalpnl", aggregate: "Sum" }];
                 } else if (Reportid == 5) {
                     Url = '@Url.Action("GetCommissionReportList", "Report")';
 
-                    var Columns_properties = [
+                    Columns_properties = [
                         { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Sale No' },
                         { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Boat Name' },
 
@@ -155,7 +191,7 @@
                         { columnName: 'AmountOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Amount' },
                     ]
 
-                    var Aggregate = [{ field: "QtyIce", aggregate: "Sum" }, { field: "PriceIce", aggregate: "Sum" }, { field: "AmountIce", aggregate: "Sum" },
+                    Aggregate = [{ field: "QtyIce", aggregate: "Sum" }, { field: "PriceIce", aggregate: "Sum" }, { field: "AmountIce", aggregate: "Sum" },
                     { field: "QtyFuel", aggregate: "Sum" }, { field: "PriceFuel", aggregate: "Sum" }, { field: "AmountFuel", aggregate: "Sum" },
                     { field: "QtyFertizer", aggregate: "Sum" }, { field: "PriceFertizer", aggregate: "Sum" }, { field: "AmountFertizer", aggregate: "Sum" },
                     { field: "QtyShare", aggregate: "Sum" }, { field: "PriceShare", aggregate: "Sum" }, { field: "AmountShare", aggregate: "Sum" },
@@ -164,7 +200,7 @@
 
 
                 var GridName = 'ReportDetails';
-                var Params = { 'Search': Search, 'BoatId': BoatId };
+                var Params = { 'Search': Search, 'BoatId': BoatId, 'StartDate': StartDate, 'EndDate': EndDate };
                 var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: false }];
 
                 FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate, DataFunction, ScreenName = "", DataAdd = "");

@@ -16,7 +16,7 @@ namespace FMS.Data
         }
 
         #region Pnl
-        public async Task<IEnumerable<Pnl>> GetAllPnl(string Fillter, int BoatId)
+        public async Task<IEnumerable<Pnl>> GetAllPnl(string Fillter, DateTime? StartDate, DateTime? EndDate, int BoatId)
         {
             try
             {
@@ -34,6 +34,7 @@ namespace FMS.Data
                 {
                     searchText += $" AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
                 }
+                searchText += $" AND SaleHd.StartDate BETWEEN '{StartDate?.ToString("yyyy-MM-dd")}' AND '{EndDate?.ToString("yyyy-MM-dd")}'";
 
                 parameters.Add("@SearchText", searchText);
 
@@ -46,13 +47,15 @@ namespace FMS.Data
             }
         }
 
-        public async Task<IEnumerable<CommissionReport>> GetAllCommission(string Fillter, int BoatId)
+        public async Task<IEnumerable<CommissionReport>> GetAllCommission(string Fillter, DateTime StartDate, DateTime EndDate, int BoatId)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("Type", "GET_ALL", DbType.String);
                 parameters.Add("@BoatId", BoatId);
+                parameters.Add("@StartDate", StartDate);
+                parameters.Add("@EndDate", EndDate);
 
                 var result = await _repository.GetAllAsync<CommissionReport, dynamic>("USP_RPTCommsion", parameters);
                 return result;

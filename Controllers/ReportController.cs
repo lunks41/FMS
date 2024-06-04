@@ -30,11 +30,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetSaleReportList(string Search, int BoatId)
+    public async Task<IActionResult> GetSaleReportList(string Search, int BoatId, DateTime StartDate, DateTime EndDate)
     {
         List<SaleHd> entity = new List<SaleHd>();
 
-        var Sales = await _transaction.GetAllSale(Search, BoatId);
+        var Sales = await _transaction.GetAllSale(Search,StartDate, EndDate,BoatId);
 
         var model = Sales.Select(s => new SaleHd
         {
@@ -52,11 +52,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetExpenseReportList(string Search, int BoatId)
+    public async Task<IActionResult> GetExpenseReportList(string Search, int BoatId, DateTime StartDate, DateTime EndDate)
     {
         List<OwnerExpenseHd> entity = new List<OwnerExpenseHd>();
 
-        var Sales = await _transaction.GetAllExpense(Search, BoatId);
+        var Sales = await _transaction.GetAllExpense(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new OwnerExpenseHd
         {
@@ -73,11 +73,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetIncomeReportList(string Search, int BoatId)
+    public async Task<IActionResult> GetIncomeReportList(string Search, int BoatId, DateTime StartDate, DateTime EndDate)
     {
         List<IncomeHd> entity = new List<IncomeHd>();
 
-        var Sales = await _transaction.GetAllIncome(Search, BoatId);
+        var Sales = await _transaction.GetAllIncome(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new IncomeHd
         {
@@ -95,11 +95,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetPnlReportList(string Search, int BoatId)
+    public async Task<IActionResult> GetPnlReportList(string Search, int BoatId, DateTime StartDate, DateTime EndDate)
     {
         List<Pnl> entity = new List<Pnl>();
 
-        var Sales = await _report.GetAllPnl(Search, BoatId);
+        var Sales = await _report.GetAllPnl(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new Pnl
         {
@@ -117,11 +117,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetCommissionReportList(string Search, int BoatId)
+    public async Task<IActionResult> GetCommissionReportList(string Search, int BoatId, DateTime StartDate, DateTime EndDate)
     {
         List<CommissionReport> entity = new List<CommissionReport>();
 
-        var Sales = await _report.GetAllCommission(Search, BoatId);
+        var Sales = await _report.GetAllCommission(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new CommissionReport
         {

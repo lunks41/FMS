@@ -17,7 +17,7 @@ namespace FMS.Data
         }
 
         #region Sale
-        public async Task<IEnumerable<SaleHd>> GetAllSale(string Fillter, int BoatId)
+        public async Task<IEnumerable<SaleHd>> GetAllSale(string? Fillter, DateTime? StartDate, DateTime? EndDate, int BoatId)
         {
             try
             {
@@ -34,6 +34,10 @@ namespace FMS.Data
                 if (BoatId > 0)
                 {
                     searchText += $" AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
+                }
+                if (StartDate != null && EndDate != null)
+                {
+                    searchText += $" AND SaleHd.StartDate BETWEEN '{StartDate?.ToString("yyyy-MM-dd")}' AND '{EndDate?.ToString("yyyy-MM-dd")}'";
                 }
 
                 parameters.Add("@SearchText", searchText);
@@ -171,7 +175,7 @@ namespace FMS.Data
 
         #region Expense
 
-        public async Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string Fillter, int BoatId)
+        public async Task<IEnumerable<OwnerExpenseHd>> GetAllExpense(string? Fillter, DateTime? StartDate, DateTime? EndDate, int BoatId)
         {
             try
             {
@@ -189,6 +193,10 @@ namespace FMS.Data
                 if (BoatId > 0)
                 {
                     searchText += $"AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
+                }
+                if (StartDate != null && EndDate != null)
+                {
+                    searchText += $" AND SaleHd.StartDate BETWEEN '{StartDate?.ToString("yyyy-MM-dd")}' AND '{EndDate?.ToString("yyyy-MM-dd")}'";
                 }
 
                 parameters.Add("@SearchText", searchText);
@@ -304,7 +312,7 @@ namespace FMS.Data
 
         #region Income
 
-        public async Task<IEnumerable<IncomeHd>> GetAllIncome(string Fillter, int BoatId)
+        public async Task<IEnumerable<IncomeHd>> GetAllIncome(string? Fillter, DateTime? StartDate, DateTime? EndDate, int BoatId)
         {
             try
             {
@@ -322,6 +330,10 @@ namespace FMS.Data
                 if (BoatId > 0)
                 {
                     searchText += $"AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
+                }
+                if (StartDate != null && EndDate != null) 
+                {
+                    searchText += $" AND SaleHd.StartDate BETWEEN '{StartDate?.ToString("yyyy-MM-dd")}' AND '{EndDate?.ToString("yyyy-MM-dd")}'";
                 }
 
                 parameters.Add("@SearchText", searchText);

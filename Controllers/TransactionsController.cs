@@ -33,7 +33,7 @@ namespace FMS.Controllers
 
         public async Task<IActionResult> GetSale(string Fillter)
         {
-            var Sales = await _transaction.GetAllSale(Fillter);
+            var Sales = await _transaction.GetAllSale(Fillter, null, null);
             var model = Sales.Select(s => new SaleHd
             {
                 SaleId = s.SaleId,
@@ -170,7 +170,7 @@ namespace FMS.Controllers
 
         public async Task<IActionResult> GetExpense()
         {
-            var Sales = await _transaction.GetAllExpense("");
+            var Sales = await _transaction.GetAllExpense("",null,null);
             var model = Sales.Select(s => new OwnerExpenseHd
             {
                 OwnerExpenseId = s.OwnerExpenseId,
@@ -199,7 +199,7 @@ namespace FMS.Controllers
                     model.EncId = eid;
                 }
             }
-            var sales = await _transaction.GetAllSale("");
+            var sales = await _transaction.GetAllSale("", null, null);
             ViewBag.SaleList = new SelectList(sales, "SaleId", "SaleNo");
 
             var expensetype = await _master.GetAllExpenseType("", "", 1);
@@ -295,7 +295,7 @@ namespace FMS.Controllers
 
         public async Task<IActionResult> GetIncome()
         {
-            var Sales = await _transaction.GetAllIncome("");
+            var Sales = await _transaction.GetAllIncome("",null,null);
             var model = Sales.Select(s => new IncomeHd
             {
                 IncomeId = s.IncomeId,
@@ -323,7 +323,7 @@ namespace FMS.Controllers
                     model.EncId = _protector.Protect(entity.IncomeId.ToString());
                 }
             }
-            var sales = await _transaction.GetAllSale("");
+            var sales = await _transaction.GetAllSale("", null, null);
             ViewBag.SaleList = new SelectList(sales, "SaleId", "SaleNo");
 
             var CommissionType = await _master.GetAllCommissionType("", "", 1);

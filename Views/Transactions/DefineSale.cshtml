@@ -564,7 +564,7 @@
 
                 var eid = $("#EncId").val();
                 var Url = '@Url.Action("GetSaleDetailsList", "Transactions")';
-                var PageSize = 20;
+                var PageSize = 60;
 
                 var Columns_properties = [
                     { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
@@ -580,7 +580,7 @@
 
                 var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
 
-                FillUpdatedGrid(Url, Params, GridName = 'MISDetails', PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "");
+                FillUpdatedGrid(Url, Params, GridName = 'MISDetails', PageSize = 60, Columns_properties, Aggregate = "", DataFunction, ScreenName = "", ReportName = "Sales Details List");
             }
 
             function GridColumnTemplate_MISDetails(GridData, Tab) {
@@ -723,7 +723,7 @@
 
                     var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
 
-                    FillUpdatedGrid(Url = '', Params = '', GridName = 'MISDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "", JSON.stringify(DataAdd));
+                    FillUpdatedGrid(Url = '', Params = '', GridName = 'MISDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "", ReportName = "Sales Details List", JSON.stringify(DataAdd));
 
                     $('#grid_MISDetails').show();
                     ClearDetails();

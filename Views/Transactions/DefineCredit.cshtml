@@ -8,6 +8,39 @@
     <script src="~/js/common.js"></script>
 }
 
+@section PageStyles {
+    <style>
+        .page-template {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+            .page-template .header {
+                position: absolute;
+                top: 30px;
+                left: 30px;
+                right: 30px;
+                border-bottom: 1px solid #888;
+                text-align: center;
+                font-size: 18px;
+            }
+
+            .page-template .footer {
+                position: absolute;
+                bottom: 30px;
+                left: 30px;
+                right: 30px;
+            }
+
+        .k-pdf-export colgroup > col:nth-child(4) {
+            width: 0;
+        }
+    </style>
+}
+
 @* ************** Content ************** *@
 
 <div class="row">
@@ -106,7 +139,7 @@
                     </div>
                     <div class="col-md-1" id="SquenceNo">
                         <div class="form-floating form-floating-outline">
-                            <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" />
+                            <input class="form-control" type="number" id="txt_SquenceNo" name="SquenceNo" readonly />
                             <label for="SquenceNo">Squence No</label>
                         </div>
                     </div>
@@ -141,6 +174,17 @@
 
 @section Scripts {
 
+    <script type="x/kendo-template" id="page-template">
+        <div class="page-template">
+            <div class="header">
+                Credit Details Report
+            </div>
+            <div class="footer">
+                <div style="float: right">Page #: pageNum # of #: totalPages #</div>
+            </div>
+        </div>
+    </script>
+
     <script>
 
         $(document).ready(function () {
@@ -156,11 +200,11 @@
             var eid = $("#EncId").val();
             var GridName = 'CreditDetails';
             var Url = '@Url.Action("GetCreditDetailsList", "Transactions", new { area = "" })';
-            var PageSize = 20;
+            var PageSize = 60;
 
             var Columns_properties = [
                 { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
-                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: true, islocked: false, iseditable: false },
                 { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
                 { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
                 { columnName: 'PaymentDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'Payment Date' },
@@ -168,11 +212,13 @@
                 { columnName: 'DebitAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Debit Amount (Person Pay)' },
             ]
 
+            var Aggregate = [{ field: "CreditAmount", aggregate: "Sum" }, { field: "DebitAmount", aggregate: "Sum" }];
+
             var Params = { 'eid': eid };
 
             var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
 
-            FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "");
+            FillUpdatedGrid(Url, Params, GridName, PageSize = 60, Columns_properties, Aggregate, DataFunction, ScreenName = "", ReportName = "Credit Details");
         }
 
         function GridColumnTemplate_CreditDetails(GridData, Tab) {
@@ -302,7 +348,7 @@
         function AddCreditDetails() {
 
             if (ValidateCreditDetails()) {
-                
+
                 var lengthgrid = 0;
                 var INVOICE_ID = 0;
                 var grid = undefined;
@@ -316,7 +362,7 @@
                 }
                 var dataSource = $("#grid_CreditDetails").data().kendoGrid.dataSource;
                 var DataAdd = [];
-                
+
                 for (var i = 0; i < lengthgrid; i++) {
 
                     DataAdd.push({
@@ -345,7 +391,7 @@
                 else {
 
                     objIndex = DataAdd.findIndex((obj => obj.ItemNo == parseInt($("#txt_SquenceNo").val())));
-                    
+
                     DataAdd[objIndex].SquenceNo = $("#txt_SquenceNo").val();
                     DataAdd[objIndex].ItemNo = $("#txt_ItemNumber").val();
                     DataAdd[objIndex].CreditId = INVOICE_ID == 0 ? lengthgrid + 1 : INVOICE_ID;
@@ -358,17 +404,17 @@
 
             var Columns_properties = [
                 { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
-                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: false, islocked: false, iseditable: false },
+                { columnName: 'SquenceNo', dataType: 'string', width: 50, title: 'Sr', isHidden: true, islocked: false, iseditable: false },
                 { columnName: 'CreditId', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'ID' },
                 { columnName: 'CreditNo', isHidden: true, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Number' },
                 { columnName: 'PaymentDate', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'date', title: 'PaymentDate' },
-                 { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
+                { columnName: 'CreditAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Credit Amount (You Pay)' },
                 { columnName: 'DebitAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Debit Amount (Person Pay)' },
             ]
 
             var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
 
-            FillUpdatedGrid(Url = '', Params = '', GridName = 'CreditDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "Credit", JSON.stringify(DataAdd));
+            FillUpdatedGrid(Url = '', Params = '', GridName = 'CreditDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "Credit", ReportName = "Credit Details", JSON.stringify(DataAdd));
 
             $('#grid_CreditDetails').show();
             ClearCreditDetails();

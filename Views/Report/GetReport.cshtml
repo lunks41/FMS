@@ -6,6 +6,38 @@
     <script src="~/js/common.js"></script>
 }
 
+@section PageStyles {
+    <style>
+        .page-template {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .page-template .header {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            right: 30px;
+            border-bottom: 1px solid #888;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .page-template .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+        }
+
+        .k-pdf-export colgroup > col:nth-child(4) {
+            width: 0;
+        }
+    </style>
+}
+
 <div class="row">
     <div class="col-md-12">
         <div class="card mb-4">
@@ -41,7 +73,7 @@
                             <label for="country">Boat</label>
                         </div>
                     </div>
-                   
+
                     <div class="col-md-2">
                         <div class="form-floating form-floating-outline">
                             <select id="ddreport" class="select2 form-select">
@@ -76,7 +108,21 @@
     </div>
 
     @section Scripts {
+        
+        <script type="x/kendo-template" id="page-template">
+            <div class="page-template">
+                <div class="header">
+                    Report
+                </div>
+                <div class="footer">
+                    <div style="float: right">Page #: pageNum # of #: totalPages #</div>
+                </div>
+            </div>
+        </script>
+
         <script>
+            var reportName = '';
+
             $(document).ready(function () {
                 LoadReport();
                 debugger;
@@ -112,98 +158,129 @@
                 let EndDate = $("#txt_enddate").val();
                 let Columns_properties = '';
                 let Aggregate = [];
+                
 
-                if (Reportid == 1) {
-                    Url = '@Url.Action("GetSaleReportList", "Report")';
+                if (ValidateDetails()) {
 
-                    Columns_properties = [
-                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
-                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
-                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
-                        { columnName: 'TotalSaleAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Sale Amount' },
-                        { columnName: 'TotalExpenseAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
-                        { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
-                    ]
+                    if (Reportid == 1) {
+                        Url = '@Url.Action("GetSaleReportList", "Report")';
+                        reportName = "Sales Report";
 
-                    Aggregate = [{ field: "TotalSaleAmount", aggregate: "Sum" }, { field: "TotalExpenseAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
-                } else if (Reportid == 2) {
-                    Url = '@Url.Action("GetExpenseReportList", "Report")';
-                    Columns_properties = [
-                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
-                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
-                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
-                        { columnName: 'OwnerExpenseNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
-                        { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
-                    ]
+                        Columns_properties = [
+                            { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                            { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                            { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                            { columnName: 'TotalSaleAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Sale Amount' },
+                            { columnName: 'TotalExpenseAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
+                            { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
+                        ]
 
-                    Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }];
-                } else if (Reportid == 3) {
-                    Url = '@Url.Action("GetIncomeReportList", "Report")';
+                        Aggregate = [{ field: "TotalSaleAmount", aggregate: "Sum" }, { field: "TotalExpenseAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
+                    } else if (Reportid == 2) {
+                        Url = '@Url.Action("GetExpenseReportList", "Report")';
+                        reportName = "Expense Report";
 
-                    Columns_properties = [
-                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
-                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
-                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
-                        { columnName: 'IncomeNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
-                        { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
-                        { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
-                    ]
+                        Columns_properties = [
+                            { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                            { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                            { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                            { columnName: 'OwnerExpenseNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
+                            { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
+                        ]
 
-                    Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
-                } else if (Reportid == 4) {
-                    Url = '@Url.Action("GetPnlReportList", "Report")';
+                        Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }];
+                    } else if (Reportid == 3) {
+                        Url = '@Url.Action("GetIncomeReportList", "Report")';
+                        reportName = "Income Report";
 
-                    Columns_properties = [
-                        { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
-                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
-                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
-                        { columnName: 'TotalIncome', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
-                        { columnName: 'TotalExpense', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
-                        { columnName: 'Totalpnl', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'P&L' }
-                    ]
+                        Columns_properties = [
+                            { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                            { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                            { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                            { columnName: 'IncomeNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Expense No' },
+                            { columnName: 'TotalAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
+                            { columnName: 'BalanceAmount', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Balance Amount' },
+                        ]
 
-                    Aggregate = [{ field: "TotalIncome", aggregate: "Sum" }, { field: "TotalExpense", aggregate: "Sum" }, { field: "Totalpnl", aggregate: "Sum" }];
-                } else if (Reportid == 5) {
-                    Url = '@Url.Action("GetCommissionReportList", "Report")';
+                        Aggregate = [{ field: "TotalAmount", aggregate: "Sum" }, { field: "BalanceAmount", aggregate: "Sum" }];
+                    } else if (Reportid == 4) {
+                        Url = '@Url.Action("GetPnlReportList", "Report")';
+                        reportName = "Profit & Loss Report";
 
-                    Columns_properties = [
-                        { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Sale No' },
-                        { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Boat Name' },
+                        Columns_properties = [
+                            { columnName: 'TripNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Trip No' },
+                            { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Sale No' },
+                            { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'string', title: 'Boat Name' },
+                            { columnName: 'TotalIncome', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Income Amount' },
+                            { columnName: 'TotalExpense', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'Expense Amount' },
+                            { columnName: 'Totalpnl', isHidden: false, islocked: false, iseditable: false, width: '100px', dataType: 'amount', title: 'P&L' }
+                        ]
 
-                        { columnName: 'QtyIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Qty' },
-                        { columnName: 'PriceIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Price' },
-                        { columnName: 'AmountIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Amount' },
+                        Aggregate = [{ field: "TotalIncome", aggregate: "Sum" }, { field: "TotalExpense", aggregate: "Sum" }, { field: "Totalpnl", aggregate: "Sum" }];
+                    } else if (Reportid == 5) {
+                        Url = '@Url.Action("GetCommissionReportList", "Report")';
+                        reportName = "Commission Report";
 
-                        { columnName: 'QtyFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Qty' },
-                        { columnName: 'PriceFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Price' },
-                        { columnName: 'AmountFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Amount' },
+                        Columns_properties = [
+                            { columnName: 'SaleNo', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Sale No' },
+                            { columnName: 'BoatName', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'string', title: 'Boat Name' },
 
-                        { columnName: 'QtyFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Qty' },
-                        { columnName: 'PriceFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Price' },
-                        { columnName: 'AmountFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Amount' },
+                            { columnName: 'QtyIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Qty' },
+                            { columnName: 'PriceIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Price' },
+                            { columnName: 'AmountIce', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Ice Amount' },
 
-                        { columnName: 'QtyShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Qty' },
-                        { columnName: 'PriceShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Price' },
-                        { columnName: 'AmountShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Amount' },
+                            { columnName: 'QtyFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Qty' },
+                            { columnName: 'PriceFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Price' },
+                            { columnName: 'AmountFuel', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fuel Amount' },
 
-                        { columnName: 'QtyOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Qty' },
-                        { columnName: 'PriceOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Price' },
-                        { columnName: 'AmountOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Amount' },
-                    ]
+                            { columnName: 'QtyFertizer', isHidden: true, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Qty' },
+                            { columnName: 'PriceFertizer', isHidden: true, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer Price' },
+                            { columnName: 'AmountFertizer', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Fertizer' },
 
-                    Aggregate = [{ field: "QtyIce", aggregate: "Sum" }, { field: "PriceIce", aggregate: "Sum" }, { field: "AmountIce", aggregate: "Sum" },
-                    { field: "QtyFuel", aggregate: "Sum" }, { field: "PriceFuel", aggregate: "Sum" }, { field: "AmountFuel", aggregate: "Sum" },
-                    { field: "QtyFertizer", aggregate: "Sum" }, { field: "PriceFertizer", aggregate: "Sum" }, { field: "AmountFertizer", aggregate: "Sum" },
-                    { field: "QtyShare", aggregate: "Sum" }, { field: "PriceShare", aggregate: "Sum" }, { field: "AmountShare", aggregate: "Sum" },
-                    { field: "QtyOwner", aggregate: "Sum" }, { field: "PriceOwner", aggregate: "Sum" }, { field: "AmountOwner", aggregate: "Sum" }];
+                            { columnName: 'QtyOwner', isHidden: true, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Qty' },
+                            { columnName: 'PriceOwner', isHidden: true, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Price' },
+                            { columnName: 'AmountOwner', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Commission' },
+
+                            { columnName: 'QtyShare', isHidden: true, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Qty' },
+                            { columnName: 'PriceShare', isHidden: true, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Share Price' },
+                            { columnName: 'AmountShare', isHidden: false, islocked: false, iseditable: false, width: 130, dataType: 'amount', title: 'Owner Share' },
+                        ]
+
+                        Aggregate = [{ field: "QtyIce", aggregate: "Sum" }, { field: "PriceIce", aggregate: "Sum" }, { field: "AmountIce", aggregate: "Sum" },
+                        { field: "QtyFuel", aggregate: "Sum" }, { field: "PriceFuel", aggregate: "Sum" }, { field: "AmountFuel", aggregate: "Sum" },
+                        { field: "QtyFertizer", aggregate: "Sum" }, { field: "PriceFertizer", aggregate: "Sum" }, { field: "AmountFertizer", aggregate: "Sum" },
+                        { field: "QtyShare", aggregate: "Sum" }, { field: "PriceShare", aggregate: "Sum" }, { field: "AmountShare", aggregate: "Sum" },
+                        { field: "QtyOwner", aggregate: "Sum" }, { field: "PriceOwner", aggregate: "Sum" }, { field: "AmountOwner", aggregate: "Sum" }];
+                    }
+
+
+                    var GridName = 'ReportDetails';
+                    var Params = { 'Search': Search, 'BoatId': BoatId, 'StartDate': StartDate, 'EndDate': EndDate };
+                    var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: false }];
+
+                    FillUpdatedGrid(Url, Params, GridName, PageSize = 60, Columns_properties, Aggregate, DataFunction, ScreenName = "", ReportName = reportName, DataAdd = "");
+                }
+            }
+
+            function ValidateDetails() {
+
+                var Valid = true;
+
+                var boat = $('#ddboatid').val();
+                var reporttype = $('#ddreport').val();
+
+                // if (boat == "" || parseFloat(boat) <= 0) {
+                //     Valid = false;
+                //     $("#ddboatid").focus();
+                //     toastr.warning('Please Select Boat Name');
+                // } else
+                if (reporttype == "" || parseFloat(reporttype) <= 0) {
+                    Valid = false;
+                    $("#ddreport").focus();
+                    toastr.warning('Please Select Report Type');
                 }
 
-
-                var GridName = 'ReportDetails';
-                var Params = { 'Search': Search, 'BoatId': BoatId, 'StartDate': StartDate, 'EndDate': EndDate };
-                var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: false }];
-
-                FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate, DataFunction, ScreenName = "", DataAdd = "");
+                return Valid;
             }
 
             function ClearReport() {

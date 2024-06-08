@@ -379,14 +379,14 @@ function DeleteRecord(e, t, o) {
 }
 
 //*************** GRIDS BLOCK BEGIN ***************
-function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Aggregate, DataFunction, ScreenName, DataAdd) {
+function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Aggregate, DataFunction, ScreenName, ReportName, DataAdd) {
     
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
     var CurrentDateTime = date + ' ' + time;
 
-    var toolbar = DataFunction[0].toolbar ? false : ["excel", "pdf", "search"];
+    var toolbar = DataFunction[0].toolbar ? false : ["pdf", "search"];
 
     var save = DataFunction[0].save;
     var dataBound = DataFunction[0].dataBound;
@@ -396,7 +396,7 @@ function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Ag
     var GridHeight = DataFunction[0].GridHeight == true ? '500px' : false;
 
     if (Url == '') {
-        GridLayout(DataAdd, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight);
+        GridLayout(DataAdd, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight, ReportName);
     }
     else {
         
@@ -408,14 +408,15 @@ function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Ag
             async: true,
             success: function (e) {
 
-                GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight);
+                GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight, ReportName);
             },
             
         }), KendoGridToolTip(GridName)
     }
 }
 
-function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight) {
+
+function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight, ReportName) {
 
     if (e != "") {
 
@@ -447,20 +448,20 @@ function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function,
                 dataSource: dataSource,
                 toolbar: toolbar,
                 excel: {
-                    fileName: GridName + ".xlsx",
+                    fileName: "anv.xlsx",
                     filterable: true,
                     allPages: true
                 },
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
-                    paperSize: "A2",
-                    margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                    paperSize: "A4",
+                    margin: { top: "1.5cm", right: "0.5cm", bottom: "1cm", left: "0.5cm" },
                     landscape: true,
                     repeatHeaders: true,
                     template: $("#page-template").html(),
                     scale: 0.7,
-                    fileName: GridName + " (" + CurrentDateTime + ") " + ".PDF"
+                    fileName: ReportName + " (" + CurrentDateTime + ") " + ".PDF"
                 },
                 scrollable: true,
                 columns: columnsOptions,

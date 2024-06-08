@@ -146,7 +146,7 @@
             var eid = $("#EncId").val();
             var GridName = 'IncomeDetails';
             var Url = '@Url.Action("GetIncomeDetailsList", "Transactions", new { area = "" })';
-            var PageSize = 20;
+            var PageSize = 60;
 
             var Columns_properties = [
                 { columnName: 'ItemNo', dataType: 'string', width: 130, isHidden: true, islocked: false, iseditable: false },
@@ -164,7 +164,7 @@
 
             var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
 
-            FillUpdatedGrid(Url, Params, GridName, PageSize = 20, Columns_properties, Aggregate = "", DataFunction, ScreenName = "");
+            FillUpdatedGrid(Url, Params, GridName, PageSize = 60, Columns_properties, Aggregate = "", DataFunction, ScreenName = "", ReportName = "Income List");
         }
 
         function GridColumnTemplate_IncomeDetails(GridData, Tab) {
@@ -358,7 +358,7 @@
 
             var DataFunction = [{ GridHeight: false, template: false, toolbar: false, dataBound: false, save: false, GridColumnTemplate: true }];
 
-            FillUpdatedGrid(Url = '', Params = '', GridName = 'IncomeDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "Income", JSON.stringify(DataAdd));
+            FillUpdatedGrid(Url = '', Params = '', GridName = 'IncomeDetails', PageSize = '', Columns_properties, Aggregate = '', DataFunction, ScreenName = "Income", ReportName = "Income List", JSON.stringify(DataAdd));
 
             $('#grid_IncomeDetails').show();
             ClearIncomeDetails();

@@ -541,7 +541,7 @@ namespace FMS.Data
                 parameters.Add("CreditNo", model.CreditNo, DbType.String);
                 parameters.Add("ItemNo", model.ItemNo, DbType.Byte);
                 parameters.Add("SquenceNo", model.SquenceNo, DbType.Byte);
-                parameters.Add("PaymentDate", model.PaymentDate, DbType.DateTime);
+                parameters.Add("PaymentDate", model.PaymentDate, DbType.Date);
                 parameters.Add("DebitAmount", model.DebitAmount, DbType.Decimal);
                 parameters.Add("CreditAmount", model.CreditAmount, DbType.Decimal);
 

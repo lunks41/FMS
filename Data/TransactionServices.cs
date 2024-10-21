@@ -13,10 +13,10 @@ namespace FMS.Data
         public TransactionServices(IRepository repository)
         {
             _repository = repository;
-
         }
 
         #region Sale
+
         public async Task<IEnumerable<SaleHd>> GetAllSale(string? Fillter, DateTime? StartDate, DateTime? EndDate, int BoatId)
         {
             try
@@ -33,7 +33,7 @@ namespace FMS.Data
                 }
                 if (BoatId > 0)
                 {
-                    searchText += $" AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
+                    searchText += $" AND SaleHd.BoatId = {BoatId} ";
                 }
                 if (StartDate != null && EndDate != null)
                 {
@@ -50,6 +50,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<SaleHd> GetByIdAsyncSale(long SaleId)
         {
             try
@@ -66,6 +67,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IEnumerable<SaleDt>> GetByIdAsyncSaleDetails(long SaleId)
         {
             try
@@ -83,6 +85,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncSale(SaleHd model)
         {
             try
@@ -123,13 +126,13 @@ namespace FMS.Data
                 parameters.Add("CreatedBy", 1, DbType.Int32);
 
                 return await _repository.UpsertAsync("USP_Sale", parameters);
-
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncSaleDetails(SaleDt model)
         {
             try
@@ -144,13 +147,13 @@ namespace FMS.Data
                 parameters.Add("MisAmount", model.MisAmount, DbType.Decimal);
 
                 return await _repository.UpsertAsync("USP_SaleDt", parameters);
-
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
+
         public async Task<IncomeReponce> DeleteAsyncSale(int SaleId, int CreatedBY)
         {
             IncomeReponce resultReponce = new IncomeReponce();
@@ -171,7 +174,7 @@ namespace FMS.Data
             }
         }
 
-        #endregion
+        #endregion Sale
 
         #region Expense
 
@@ -209,6 +212,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<OwnerExpenseHd> GetByIdAsyncExpense(int OwnerExpenseId)
         {
             try
@@ -226,6 +230,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IEnumerable<OwnerExpenseDt>> GetByIdAsyncExpenseDetails(int OwnerExpenseId)
         {
             try
@@ -243,6 +248,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncExpense(OwnerExpenseHd model)
         {
             try
@@ -257,13 +263,13 @@ namespace FMS.Data
                 parameters.Add("CreatedBy", 1, DbType.Int32);
 
                 return await _repository.UpsertAsync("USP_OwnerExpense", parameters);
-
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncExpenseDetails(OwnerExpenseDt model)
         {
             try
@@ -280,7 +286,6 @@ namespace FMS.Data
                 parameters.Add("Amount", model.Amount, DbType.Decimal);
 
                 return await _repository.UpsertAsync("USP_OwnerExpenseDt", parameters);
-
             }
             catch (Exception ex)
             {
@@ -308,7 +313,7 @@ namespace FMS.Data
             }
         }
 
-        #endregion
+        #endregion Expense
 
         #region Income
 
@@ -331,7 +336,7 @@ namespace FMS.Data
                 {
                     searchText += $"AND SaleHd.BoatId = {BoatId} OR ({BoatId} = 0)";
                 }
-                if (StartDate != null && EndDate != null) 
+                if (StartDate != null && EndDate != null)
                 {
                     searchText += $" AND SaleHd.StartDate BETWEEN '{StartDate?.ToString("yyyy-MM-dd")}' AND '{EndDate?.ToString("yyyy-MM-dd")}'";
                 }
@@ -346,6 +351,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IncomeHd> GetByIdAsyncIncome(int IncomeId)
         {
             try
@@ -363,6 +369,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IEnumerable<IncomeDt>> GetByIdAsyncIncomeDetails(int IncomeId)
         {
             try
@@ -380,6 +387,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncIncome(IncomeHd model)
         {
             try
@@ -401,6 +409,7 @@ namespace FMS.Data
                 return null;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncIncomeDetails(IncomeDt model)
         {
             try
@@ -423,6 +432,7 @@ namespace FMS.Data
                 return null;
             }
         }
+
         public async Task<IncomeReponce> DeleteAsyncIncome(int IncomeId, int CreatedBY)
         {
             IncomeReponce resultReponce = new IncomeReponce();
@@ -443,7 +453,7 @@ namespace FMS.Data
             }
         }
 
-        #endregion
+        #endregion Income
 
         #region Credit
 
@@ -475,6 +485,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<CreditHd> GetByIdAsyncCredit(int CreditId)
         {
             try
@@ -492,6 +503,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IEnumerable<CreditDt>> GetByIdAsyncCreditDetails(int CreditId)
         {
             try
@@ -509,6 +521,7 @@ namespace FMS.Data
                 throw;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncCredit(CreditHd model)
         {
             try
@@ -531,6 +544,7 @@ namespace FMS.Data
                 return null;
             }
         }
+
         public async Task<IncomeReponce> UpsertAsyncCreditDetails(CreditDt model)
         {
             try
@@ -552,6 +566,7 @@ namespace FMS.Data
                 return null;
             }
         }
+
         public async Task<IncomeReponce> DeleteAsyncCredit(int CreditId, int CreatedBY)
         {
             IncomeReponce resultReponce = new IncomeReponce();
@@ -571,7 +586,7 @@ namespace FMS.Data
                 return resultReponce;
             }
         }
-        #endregion
 
+        #endregion Credit
     }
 }

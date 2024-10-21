@@ -10,14 +10,12 @@ namespace FMS.Controllers;
 public class ReportController : Controller
 {
     private readonly ILogger<ReportController> _logger;
-    private readonly ITransaction _transaction;
     private readonly IMaster _master;
     private readonly IReport _report;
 
-    public ReportController(ILogger<ReportController> logger, ITransaction transaction, IMaster master, IReport report)
+    public ReportController(ILogger<ReportController> logger, IMaster master, IReport report)
     {
         _logger = logger;
-        _transaction = transaction;
         _master = master;
         _report = report;
     }
@@ -34,7 +32,7 @@ public class ReportController : Controller
     {
         List<SaleHd> entity = new List<SaleHd>();
 
-        var Sales = await _transaction.GetAllSale(Search,StartDate, EndDate,BoatId);
+        var Sales = await _report.GetAllSaleReport(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new SaleHd
         {
@@ -56,7 +54,7 @@ public class ReportController : Controller
     {
         List<OwnerExpenseHd> entity = new List<OwnerExpenseHd>();
 
-        var Sales = await _transaction.GetAllExpense(Search, StartDate, EndDate, BoatId);
+        var Sales = await _report.GetAllExpenseReport(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new OwnerExpenseHd
         {
@@ -77,7 +75,7 @@ public class ReportController : Controller
     {
         List<IncomeHd> entity = new List<IncomeHd>();
 
-        var Sales = await _transaction.GetAllIncome(Search, StartDate, EndDate, BoatId);
+        var Sales = await _report.GetAllIncomeReport(Search, StartDate, EndDate, BoatId);
 
         var model = Sales.Select(s => new IncomeHd
         {
@@ -127,7 +125,7 @@ public class ReportController : Controller
         {
             IncomeId = s.IncomeId,
             SaleNo = s.SaleNo,
-            BoatName= s.BoatName,
+            BoatName = s.BoatName,
             QtyFertizer = s.QtyFertizer,
             QtyFuel = s.QtyFuel,
             QtyIce = s.QtyIce,
@@ -136,11 +134,11 @@ public class ReportController : Controller
             PriceFertizer = s.PriceFertizer,
             PriceFuel = s.PriceFuel,
             PriceIce = s.PriceIce,
-            PriceOwner  = s.PriceOwner,
+            PriceOwner = s.PriceOwner,
             PriceShare = s.PriceShare,
             AmountFertizer = s.AmountFertizer,
             AmountFuel = s.AmountFuel,
-            AmountIce = s.AmountIce,    
+            AmountIce = s.AmountIce,
             AmountOwner = s.AmountOwner,
             AmountShare = s.AmountShare
         }).ToList();

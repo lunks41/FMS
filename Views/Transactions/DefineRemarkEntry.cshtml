@@ -1,0 +1,215 @@
+﻿@model RemarkEntry;
+
+@{
+    ViewData["Title"] = "Add New  RemarkEntry -  RemarkEntry";
+}
+
+@section PageScripts {
+    <script src="~/js/common.js"></script>
+}
+
+@section PageStyles {
+    <style>
+        .page-template {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+            .page-template .header {
+                position: absolute;
+                top: 30px;
+                left: 30px;
+                right: 30px;
+                border-bottom: 1px solid #888;
+                text-align: center;
+                font-size: 18px;
+            }
+
+            .page-template .footer {
+                position: absolute;
+                bottom: 30px;
+                left: 30px;
+                right: 30px;
+            }
+
+        .k-pdf-export colgroup > col:nth-child(4) {
+            width: 0;
+        }
+    </style>
+}
+
+@* ************** Content ************** *@
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.AntiForgeryToken()
+        <div class="card mb-4">
+            <h4 class="card-header">
+                Add RemarkEntry Details
+                <div style="float:right">
+                    @if (Model.RemarkEntryId > 0)
+                    {
+                        <button class="btn btn-success" onclick="CreateRemarkEntry()">Update</button>
+                        <a asp-controller="Transactions" asp-action="DeleteRemarkEntry" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success" onclick="CreateRemarkEntry()">Save</button>
+                    }
+
+                    <a asp-controller="Transactions" asp-action="GetRemarkEntry" class="btn btn-primary">Back</a>
+                </div>
+            </h4>
+            <!-- Account -->
+            <div class="card-body pt-2 mt-1">
+                <div class="row gy-4">
+                    <input asp-for="RemarkEntryId" hidden />
+                    <input asp-for="EncId" hidden />
+                    <label>Header</label>
+
+                    <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="RemarkEntryNo" class="form-control" type="text" id="txt_remarkentryno" name="remarkentryno" readonly />
+                            <label for="txt_remarkentryno">RemarkEntry No</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="AccountDate" class="form-control" type="date" id="txt_accountdate" name="accountdate" autofocus />
+                            <label for="txt_accountdate">Account Date</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                            <select id="ddboatid" asp-for="BoatId" asp-items="ViewBag.BoatsList" class="select2 form-select">
+                                <option value="">-- Select --</option>
+                            </select>
+                            <label for="boat">Boat Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="form-floating form-floating-outline">
+                            <textarea asp-for="Remarks" class="form-control" id="txt_remarks" name="remarks" rows="3" style="min-height: 75px;"></textarea>
+                            <label for="txt_remarks">Remarks</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                            <input asp-for="TotalAmount" class="form-control" type="number" id="txt_totalamount" name="totalamount" />
+                            <label for="txt_totalamount">Total Amount</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Account -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="x/kendo-template" id="page-template">
+        <div class="page-template">
+            <div class="header">
+                RemarkEntry Details Report
+            </div>
+            <div class="footer">
+                <div style="float: right">Page #: pageNum # of #: totalPages #</div>
+            </div>
+        </div>
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#RemarkEntryId").val();
+            $("#EncId").val();
+
+            // Set today's date in the AccountDate field
+            var today = new Date().toISOString().split('T')[0];
+            $("#txt_accountdate").val(today);
+        });
+
+        function CreateRemarkEntry() {
+
+            if (ValidateRemarkEntry()) {
+
+                if (parseInt($("#txt_totalamount").val()) != 0) {
+
+                    var eid = $("#EncId").val();
+
+                    var JsonRemarkEntry = {
+                        RemarkEntryId: $("#RemarkEntryId").val(),
+                        RemarkEntryNo: $("#txt_remarkentryno").val(),
+                        BoatId: $("#ddboatid").val(),
+                        AccountDate: $("#txt_accountdate").val(),
+                        Remarks: $("#txt_remarks").val(),
+                        TotalAmount: $("#txt_totalamount").val(),
+                    }
+
+                    var JsonString = JSON.stringify(JsonRemarkEntry);
+
+                    var JsonDetails = '';
+
+                    var Url = '@Url.Action("DefineRemarkEntry", "Transactions")';
+                    var Params = { 'eid': eid, 'JsonString': JsonString, 'JsonDetails': JsonDetails };
+
+                    $.ajax({
+                        type: "POST",
+                        url: Url,
+                        data: Params,
+                        success: function (e) {
+                            response = JSON.parse(e)
+                            if (response.Id > 0) {
+                                toastr.success(response.Msg);
+                            } else {
+                                toastr.error(response.Msg);
+                            }
+                        },
+                    })
+                }
+            }
+        }
+
+        function ValidateRemarkEntry() {
+
+            var Valid = true;
+
+            var SaleNo = $("#ddsaleid").val();
+            var AccountDate = $("#txt_accountdate").val();
+
+            if (SaleNo == "" || SaleNo == "0") {
+                toastr.warning('Please select Sales Number');
+                Valid = false;
+            } else if (AccountDate == "") {
+                toastr.warning('Please Enter Account Date');
+                Valid = false;
+                $("#txt_accountdate").focus();
+            }
+
+            return Valid;
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+    </script>
+
+}

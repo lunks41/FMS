@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using FMS.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FMS.Controllers;
 
@@ -82,13 +82,11 @@ public class AuthController : Controller
         }
         catch (Exception)
         {
-
             throw;
         }
-
     }
 
-    #endregion
+    #endregion RegisterBasic
 
     #region Login / LogOut Basic
 
@@ -176,8 +174,7 @@ public class AuthController : Controller
         return RedirectToAction("LoginBasic", "Auth", new { area = "" });
     }
 
-    #endregion
-
+    #endregion Login / LogOut Basic
 
     public IActionResult ForgotPasswordBasic() => View();
 }

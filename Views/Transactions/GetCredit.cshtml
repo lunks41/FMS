@@ -26,7 +26,7 @@
                     <th>Person Name</th>
                     <th>Boat</th>
                     <th>Total Credit Amount</th>
-                     <th>Total Debit Amount</th>
+                    <th>Total Debit Amount</th>
                     <th>Balance Amount</th>
                     <th>User</th>
                     <th>Actions</th>
@@ -38,12 +38,12 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                           
+
                             <td>@Html.DisplayFor(model => item.CreditNo)</td>
                             <td>@Html.DisplayFor(model => item.PersonName)</td>
                             <td>@Html.DisplayFor(model => item.BoatName)</td>
                             <td>@Html.DisplayFor(model => item.TotalCreditAmount)</td>
-                              <td>@Html.DisplayFor(model => item.TotalDebitAmount)</td>
+                            <td>@Html.DisplayFor(model => item.TotalDebitAmount)</td>
                             <td>@Html.DisplayFor(model => item.TotalBalanceAmount)</td>
                             <td>
                                 <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
@@ -57,11 +57,10 @@
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-action="DefineCredit" asp-route-eid="@item.EncId"><i class="mdi mdi-pencil-outline me-1"></i> Edit</a>
-                                      @*   <a class="dropdown-item" asp-action="DeleteCredit" asp-route-eid="@item.EncId"><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a> *@
+                                        @*   <a class="dropdown-item" asp-action="DeleteCredit" asp-route-eid="@item.EncId"><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a> *@
                                     </div>
                                 </div>
                             </td>
-
                         </tr>
                     }
                 }

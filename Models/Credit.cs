@@ -17,6 +17,7 @@ namespace FMS.Models
         public int CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
+
         [NotMapped]
         public ICollection<CreditDt>? CreditsDts { get; set; }
     }

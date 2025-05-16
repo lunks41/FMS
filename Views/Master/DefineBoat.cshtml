@@ -21,7 +21,9 @@
                         {
                             <button type="submit" class="btn btn-success">Update</button>
                             <a asp-controller="Master" asp-action="DeleteBoat" asp-route-eid="@Model.EncId" class="btn btn-danger">Delete</a>
-                        }else{
+                        }
+                        else
+                        {
                             <button type="submit" class="btn btn-success">Save</button>
                         }
                         <a asp-controller="Master" asp-action="GetBoat" class="btn btn-primary">Back</a>
@@ -56,5 +58,3 @@
         </form>
     </div>
 </div>
-
-

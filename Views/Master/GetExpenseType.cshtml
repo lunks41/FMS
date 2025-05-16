@@ -7,7 +7,6 @@
     <script src="~/js/pages-account-settings-account.js"></script>
 }
 
-
 <div class="card">
     <div class="card-header">
         <h3 class="card-title text-bold">
@@ -57,10 +56,10 @@
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-action="DefineExpenseType" asp-route-eid="@item.EncId"><i class="mdi mdi-pencil-outline me-1"></i> Edit</a>
-                                       @*  @if (@item.IsActive)
-                                        {
-                                            <a class="dropdown-item" asp-action="DeleteExpenseType" asp-route-eid="@item.EncId"><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a>
-                                        } *@
+                                        @*  @if (@item.IsActive)
+                                            {
+                                                <a class="dropdown-item" asp-action="DeleteExpenseType" asp-route-eid="@item.EncId"><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a>
+                                            } *@
                                     </div>
                                 </div>
                             </td>

@@ -1,6 +1,6 @@
-﻿using FMS.Models;
+﻿using Dapper;
+using FMS.Models;
 using FMS.Repository;
-using Dapper;
 using System.Data;
 
 namespace FMS.Data

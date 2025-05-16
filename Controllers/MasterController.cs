@@ -1,11 +1,8 @@
-﻿using FMS.Data;
+﻿using AutoMapper;
+using FMS.Data;
 using FMS.Models;
-using AutoMapper;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using static Dapper.SqlMapper;
 
 namespace FMS.Controllers
 {
@@ -15,6 +12,7 @@ namespace FMS.Controllers
         private readonly IMaster _master;
         private readonly IDataProtector _protector;
         private readonly IMapper _mapper;
+
         public MasterController(ApplicationDbContext applicationDbContext, IMaster master, IDataProtectionProvider dataProtectionProvider, IMapper mapper)
         {
             _applicationDbContext = applicationDbContext;
@@ -24,6 +22,7 @@ namespace FMS.Controllers
         }
 
         #region Boat
+
         public async Task<IActionResult> GetBoat(string BoatCode, string BoatName, int? IsActive)
         {
             var boats = await _master.GetAllBoat(BoatCode, BoatName, IsActive);
@@ -38,7 +37,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineBoat(string eid, string Msg)
@@ -105,9 +103,11 @@ namespace FMS.Controllers
             return RedirectToAction("GetBoat", "Master");
             //return resultReponce.Id > 0 ? Content("success") : Content("error");
         }
-        #endregion
+
+        #endregion Boat
 
         #region ExpenseType
+
         public async Task<IActionResult> GetExpenseType(string ExpenseTypeCode, string ExpenseTypeName, int? IsActive)
         {
             var ExpenseTypes = await _master.GetAllExpenseType(ExpenseTypeCode, ExpenseTypeName, IsActive);
@@ -122,7 +122,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineExpenseType(string eid, string Msg)
@@ -188,9 +187,11 @@ namespace FMS.Controllers
 
             return RedirectToAction("GetExpenseType", "Master");
         }
-        #endregion
+
+        #endregion ExpenseType
 
         #region CommissionType
+
         public async Task<IActionResult> GetCommissionType(string CommissionTypeCode, string CommissionTypeName, int? IsActive)
         {
             var CommissionTypes = await _master.GetAllCommissionType(CommissionTypeCode, CommissionTypeName, IsActive);
@@ -205,7 +206,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineCommissionType(string eid, string Msg)
@@ -271,6 +271,7 @@ namespace FMS.Controllers
 
             return RedirectToAction("GetCommissionType", "Master");
         }
-        #endregion
+
+        #endregion CommissionType
     }
 }

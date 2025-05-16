@@ -29,10 +29,7 @@ $gray-900: rgba($black, 0.87) !default;
 // scss-docs-end gray-color-variables
 
 // scss-docs-start gray-colors-map
-$grays: (
-  '25': $gray-25,
-  '50': $gray-50
-) !default;
+$grays: ( '25': $gray-25, '50': $gray-50 ) !default;
 // scss-docs-end gray-colors-map
 
 // scss-docs-start color-variables
@@ -61,17 +58,7 @@ $gray: $gray-100 !default; // (C)
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
-$theme-colors: (
-  'primary': $primary,
-  'secondary': $secondary,
-  'success': $success,
-  'info': $info,
-  'warning': $warning,
-  'danger': $danger,
-  'light': $light,
-  'dark': $dark,
-  'gray': $gray
-) !default;
+$theme-colors: ( 'primary': $primary, 'secondary': $secondary, 'success': $success, 'info': $info, 'warning': $warning, 'danger': $danger, 'light': $light, 'dark': $dark, 'gray': $gray ) !default;
 // scss-docs-end theme-colors-map
 
 $color-scheme: 'light' !default; // (C)
@@ -95,27 +82,7 @@ $prefix: $variable-prefix !default;
 
 $spacer: 1rem !default;
 
-$sizes-px: (
-  px-18: 18px,
-  px-20: 20px,
-  px-30: 30px,
-  px-40: 40px,
-  px-50: 50px,
-  px-75: 75px,
-  px-100: 100px,
-  px-120: 120px,
-  px-150: 150px,
-  px-200: 200px,
-  px-250: 250px,
-  px-300: 300px,
-  px-350: 350px,
-  px-400: 400px,
-  px-500: 500px,
-  px-600: 600px,
-  px-700: 700px,
-  px-800: 800px,
-  auto: auto
-) !default; // (C)
+$sizes-px: ( px-18: 18px, px-20: 20px, px-30: 30px, px-40: 40px, px-50: 50px, px-75: 75px, px-100: 100px, px-120: 120px, px-150: 150px, px-200: 200px, px-250: 250px, px-300: 300px, px-350: 350px, px-400: 400px, px-500: 500px, px-600: 600px, px-700: 700px, px-800: 800px, auto: auto ) !default; // (C)
 
 // * Body
 // *******************************************************************************
@@ -141,12 +108,7 @@ $link-hover-decoration: null !default;
 // Grid containers
 
 // scss-docs-start container-max-widths
-$container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  xxl: 1440px // Custom xxl size
+$container-max-widths: ( sm: 540px, md: 720px, lg: 960px, xl: 1140px, xxl: 1440px // Custom xxl size
 ) !default;
 // scss-docs-end container-max-widths
 
@@ -207,8 +169,7 @@ $caret-spacing: 0.5em !default;
 // *******************************************************************************
 
 // scss-docs-start font-variables
-$font-family-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell',
-  'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !default;
+$font-family-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !default;
 $font-family-serif: Georgia, 'Times New Roman', serif !default; // (C)
 $font-family-monospace: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !default;
 // stylelint-enable value-keyword-case
@@ -254,14 +215,7 @@ $headings-color: rgba-to-hex($gray-900, $rgba-to-hex-bg) !default;
 // scss-docs-end headings-variables
 
 // scss-docs-start display-headings
-$display-font-sizes: (
-  1: 4rem,
-  2: 3.5rem,
-  3: 3rem,
-  4: 2.5rem,
-  5: 2rem,
-  6: 1.5rem
-) !default;
+$display-font-sizes: ( 1: 4rem, 2: 3.5rem, 3: 3rem, 4: 2.5rem, 5: 2rem, 6: 1.5rem ) !default;
 
 $display-font-weight: 500 !default;
 
@@ -303,15 +257,7 @@ $zindex-tooltip: 1099 !default;
 $zindex-notification: 999999 !default; // (C)
 
 // scss-docs-start zindex-levels-map
-$zindex-levels: (
-  n1: -1,
-  0: 0,
-  1: 1,
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5
-) !default;
+$zindex-levels: ( n1: -1, 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 ) !default;
 // scss-docs-end zindex-levels-map
 
 // * Tables
@@ -350,16 +296,7 @@ $table-caption-color: $text-muted !default;
 $table-bg-scale: -80% !default;
 
 // scss-docs-start table-loop
-$table-variants: (
-  'primary': shift-color($primary, $table-bg-scale),
-  'secondary': shift-color($secondary, $table-bg-scale),
-  'success': shift-color($success, $table-bg-scale),
-  'info': shift-color($info, $table-bg-scale),
-  'warning': shift-color($warning, $table-bg-scale),
-  'danger': shift-color($danger, $table-bg-scale),
-  'light': rgba-to-hex($gray-100, $rgba-to-hex-bg),
-  'dark': $dark
-) !default;
+$table-variants: ( 'primary': shift-color($primary, $table-bg-scale), 'secondary': shift-color($secondary, $table-bg-scale), 'success': shift-color($success, $table-bg-scale), 'info': shift-color($info, $table-bg-scale), 'warning': shift-color($warning, $table-bg-scale), 'danger': shift-color($danger, $table-bg-scale), 'light': rgba-to-hex($gray-100, $rgba-to-hex-bg), 'dark': $dark ) !default;
 // scss-docs-end table-loop
 
 // * Buttons + Forms
@@ -420,8 +357,7 @@ $btn-focus-box-shadow: 0px 4px 8px 0px rgba($black, 0.12) !default;
 $btn-active-box-shadow: 0 6px 18px -8px rgba($black, 0.56) !default;
 
 $btn-fab-box-shadow: 0px 1px 14px 0px rgba($black, 0.12) !default;
-$btn-fab-active-box-shadow: 0px 7px 8px -4px rgba($black, 0.2), 0px 12px 17px 2px rgba($black, 0.14),
-  0px 5px 22px 4px rgba($black, 0.12) !default;
+$btn-fab-active-box-shadow: 0px 7px 8px -4px rgba($black, 0.2), 0px 12px 17px 2px rgba($black, 0.14), 0px 5px 22px 4px rgba($black, 0.12) !default;
 
 $btn-border-radius: $border-radius !default;
 $btn-border-radius-xs: $border-radius-xs !default; // (C)
@@ -500,10 +436,7 @@ $input-focus-border-color: tint-color($component-active-bg, $input-focus-border-
 $input-placeholder-color: rgba-to-hex($gray-400, $rgba-to-hex-bg) !default;
 
 $input-height-inner: add(($input-btn-font-size * $input-btn-line-height), ($input-btn-padding-y * 2)) !default;
-$input-height-inner-sm: add(
-  ($input-btn-font-size-sm * $input-btn-line-height-sm),
-  ($input-btn-padding-y-sm * 2)
-) !default; // (C)
+$input-height-inner-sm: add( ($input-btn-font-size-sm * $input-btn-line-height-sm), ($input-btn-padding-y-sm * 2) ) !default; // (C)
 $input-height-inner-lg: add(($font-size-lg * $line-height-lg), ($input-btn-padding-y-lg * 2)) !default; // (C)
 
 $input-height: add(($input-line-height * 1rem), ($input-padding-y * 2)) !default;
@@ -590,9 +523,7 @@ $form-floating-line-height: $line-height-base !default;
 $form-floating-input-padding-t: ($form-floating-padding-y * 1.5) !default;
 $form-floating-input-padding-b: calc(($form-floating-padding-y * 0.5) + $border-width) !default;
 $form-floating-input-bg: rgba-to-hex($gray-50, $rgba-to-hex-bg) !default; // (C)
-$form-floating-height: calc(
-  ($font-size-base * $form-floating-line-height) + ($form-floating-padding-y * 2) + ($border-width * 2)
-) !default;
+$form-floating-height: calc( ($font-size-base * $form-floating-line-height) + ($form-floating-padding-y * 2) + ($border-width * 2) ) !default;
 $form-floating-label-height: 1.75em !default;
 $form-floating-label-opacity: 1 !default;
 $form-floating-transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out !default;
@@ -601,10 +532,8 @@ $form-floating-label-transform: scale($form-floating-label-transform-scale) tran
 $form-floating-label-transform-rtl: scale($form-floating-label-transform-scale) translateY(-0.6rem) translateX(-0.15rem) !default; // (C)
 
 // Outline
-$form-floating-outline-label-transform: scale($form-floating-label-transform-scale) translateY(-0.7rem)
-  translateX(-$input-focus-border-width) !default; // (C)
-$form-floating-outline-label-transform-rtl: scale($form-floating-label-transform-scale) translateY(-0.7rem)
-  translateX(-$input-focus-border-width) !default; // (C)
+$form-floating-outline-label-transform: scale($form-floating-label-transform-scale) translateY(-0.7rem) translateX(-$input-focus-border-width) !default; // (C)
+$form-floating-outline-label-transform-rtl: scale($form-floating-label-transform-scale) translateY(-0.7rem) translateX(-$input-focus-border-width) !default; // (C)
 
 // * Navs
 // *******************************************************************************

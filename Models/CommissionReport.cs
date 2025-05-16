@@ -2,7 +2,6 @@
 {
     public class CommissionReport
     {
-
         public byte IncomeId { get; set; }
         public string? SaleNo { get; set; }
         public string? BoatName { get; set; }

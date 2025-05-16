@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FMS.Models
+﻿namespace FMS.Models
 {
     public class Pnl
     {

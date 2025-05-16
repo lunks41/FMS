@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-
-namespace FMS.Models
+﻿namespace FMS.Models
 {
     public class Dashboard
     {
@@ -12,7 +9,5 @@ namespace FMS.Models
         public decimal? FertizilerAmount { get; set; }
         public decimal? Ownershare { get; set; }
         public decimal? Fuelamount { get; set; }
-        
-        
     }
 }

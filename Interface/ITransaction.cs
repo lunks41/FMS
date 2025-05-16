@@ -67,5 +67,17 @@ namespace FMS.Data
         Task<IncomeReponce> DeleteAsyncCredit(int CreditId, int CreatedBY);
 
         #endregion Credit
+
+        #region RemarkEntry
+
+        Task<IEnumerable<RemarkEntry>> GetAllRemarkEntry(string? SaleCode, string? SaleName);
+
+        Task<RemarkEntry> GetByIdAsyncRemarkEntry(int RemarkEntryId);
+
+        Task<IncomeReponce> UpsertAsyncRemarkEntry(RemarkEntry model);
+
+        Task<IncomeReponce> DeleteAsyncRemarkEntry(int RemarkEntryId, int CreatedBY);
+
+        #endregion RemarkEntry
     }
 }

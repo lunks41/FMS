@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FMS.Data;
 using FMS.Models;
 using Microsoft.AspNetCore.Authorization;
-using FMS.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FMS.Controllers;

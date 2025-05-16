@@ -1,9 +1,7 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using FMS.Data;
 using FMS.Models;
 using Microsoft.AspNetCore.Authorization;
-using FMS.Data;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FMS.Controllers;
 
@@ -18,6 +16,7 @@ public class DashboardsController : Controller
         _logger = logger;
         _report = report;
     }
+
     public async Task<IActionResult> Index() => View();
 
     [HttpPost]

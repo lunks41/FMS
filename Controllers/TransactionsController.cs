@@ -1,15 +1,10 @@
-﻿using FMS.Data;
+﻿using AutoMapper;
+using FMS.Data;
 using FMS.Models;
-using AutoMapper;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Collections.Immutable;
-using System.Text.Json;
-using static Dapper.SqlMapper;
 
 namespace FMS.Controllers
 {
@@ -20,6 +15,7 @@ namespace FMS.Controllers
         private readonly IMaster _master;
         private readonly IDataProtector _protector;
         private readonly IMapper _mapper;
+
         public TransactionsController(ApplicationDbContext applicationDbContext, ITransaction transaction, IMaster master, IDataProtectionProvider dataProtectionProvider, IMapper mapper)
         {
             _applicationDbContext = applicationDbContext;
@@ -53,7 +49,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineSale(string eid, string Msg)
@@ -70,14 +65,15 @@ namespace FMS.Controllers
                     model.EncId = _protector.Protect(entity.SaleId.ToString());
                 }
             }
-            else {
+            else
+            {
                 model.StartDate = DateTime.Now;
                 model.EndDate = DateTime.Now;
             }
             var boats = await _master.GetAllBoat("", "", 1);
             ViewBag.BoatsList = new SelectList(boats, "BoatId", "BoatName");
 
-            var expensetype = await _master.GetAllExpenseType("","",1);
+            var expensetype = await _master.GetAllExpenseType("", "", 1);
             ViewBag.ExpenseTypeList = new SelectList(expensetype, "ExpenseTypeId", "ExpenseTypeName");
 
             return View(model);
@@ -86,11 +82,11 @@ namespace FMS.Controllers
         [HttpPost]
         public async Task<IActionResult> DefineSale(string eid, string JsonString, string JsonDetails)
         {
-            IncomeReponce incomeReponce =new IncomeReponce();  
+            IncomeReponce incomeReponce = new IncomeReponce();
             SaleHd ObjSale = new SaleHd();
             List<SaleDt> ObjMisExpense = new List<SaleDt>();
 
-            if (!string.IsNullOrEmpty(JsonString) )
+            if (!string.IsNullOrEmpty(JsonString))
             {
                 ObjSale = JsonConvert.DeserializeObject<SaleHd>(JsonString)!;
 
@@ -163,14 +159,15 @@ namespace FMS.Controllers
             return RedirectToAction("GetSale", "Transactions");
         }
 
-        #endregion
+        #endregion Sale
 
         #region Expenses
+
         //public IActionResult GetExpense() => View();
 
         public async Task<IActionResult> GetExpense()
         {
-            var Sales = await _transaction.GetAllExpense("",null,null);
+            var Sales = await _transaction.GetAllExpense("", null, null);
             var model = Sales.Select(s => new OwnerExpenseHd
             {
                 OwnerExpenseId = s.OwnerExpenseId,
@@ -181,7 +178,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineExpense(string eid, string Msg)
@@ -288,14 +284,13 @@ namespace FMS.Controllers
             return RedirectToAction("GetExpense", "Transactions");
         }
 
-
-        #endregion
+        #endregion Expenses
 
         #region Incomes
 
         public async Task<IActionResult> GetIncome()
         {
-            var Sales = await _transaction.GetAllIncome("",null,null);
+            var Sales = await _transaction.GetAllIncome("", null, null);
             var model = Sales.Select(s => new IncomeHd
             {
                 IncomeId = s.IncomeId,
@@ -306,7 +301,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineIncome(string eid, string Msg)
@@ -411,9 +405,11 @@ namespace FMS.Controllers
 
             return RedirectToAction("GetIncome", "Transactions");
         }
-        #endregion
+
+        #endregion Incomes
 
         #region Credits
+
         public async Task<IActionResult> GetCredit()
         {
             var Sales = await _transaction.GetAllCredit("", "");
@@ -430,7 +426,6 @@ namespace FMS.Controllers
             }).AsEnumerable();
 
             return View(model);
-
         }
 
         public async Task<IActionResult> DefineCredit(string eid, string Msg)
@@ -447,7 +442,6 @@ namespace FMS.Controllers
                     model.EncId = _protector.Protect(entity.CreditId.ToString());
                 }
             }
-            
 
             var boats = await _master.GetAllBoat("", "", 1);
             ViewBag.BoatsList = new SelectList(boats, "BoatId", "BoatName");
@@ -534,6 +528,84 @@ namespace FMS.Controllers
 
             return RedirectToAction("GetCredit", "Transactions");
         }
-        #endregion
+
+        #endregion Credits
+
+        #region RemarkEntrys
+
+        public async Task<IActionResult> GetRemarkEntry()
+        {
+            var Sales = await _transaction.GetAllRemarkEntry("", "");
+            var model = Sales.Select(s => new RemarkEntry
+            {
+                RemarkEntryId = s.RemarkEntryId,
+                EncId = _protector.Protect(s.RemarkEntryId.ToString()),
+                RemarkEntryNo = s.RemarkEntryNo,
+                BoatName = s.BoatName,
+                AccountDate = s.AccountDate,
+                Remarks = s.Remarks,
+                TotalAmount = s.TotalAmount,
+            }).AsEnumerable();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> DefineRemarkEntry(string eid, string Msg)
+        {
+            ViewBag.Msg = Msg;
+            RemarkEntry model = new RemarkEntry();
+            if (!string.IsNullOrEmpty(eid))
+            {
+                var decryptedid = General.ConvertToInt(_protector.Unprotect(eid));
+                if (decryptedid > 0)
+                {
+                    var entity = await _transaction.GetByIdAsyncRemarkEntry(decryptedid);
+                    _mapper.Map(entity, model);
+                    model.EncId = _protector.Protect(entity.RemarkEntryId.ToString());
+                }
+            }
+
+            var boats = await _master.GetAllBoat("", "", 1);
+            ViewBag.BoatsList = new SelectList(boats, "BoatId", "BoatName");
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DefineRemarkEntry(string eid, string JsonString, string JsonDetails)
+        {
+            IncomeReponce incomeReponce = new IncomeReponce();
+            RemarkEntry ObjRemarkEntry = new RemarkEntry();
+
+            if (!string.IsNullOrEmpty(JsonString))
+            {
+                ObjRemarkEntry = JsonConvert.DeserializeObject<RemarkEntry>(JsonString)!;
+
+                incomeReponce = await _transaction.UpsertAsyncRemarkEntry(ObjRemarkEntry);
+
+                ViewBag.Msg = "Data " + (incomeReponce.Id > 0 ? "updated" : "inserted") + " successfully.";
+            }
+
+            return Json(System.Text.Json.JsonSerializer.Serialize(incomeReponce));
+        }
+
+        public async Task<IActionResult> DeleteRemarkEntry(string eid)
+        {
+            IncomeReponce resultReponce = new IncomeReponce();
+            if (!string.IsNullOrEmpty(eid))
+            {
+                var decryptedid = General.ConvertToInt(_protector.Unprotect(eid));
+                if (decryptedid > 0)
+                {
+                    resultReponce = await _transaction.DeleteAsyncRemarkEntry(decryptedid, 1);
+                }
+            }
+
+            ViewBag.Msg = resultReponce.Id > 0 ? "Delete successfully" : resultReponce.Msg;
+
+            return RedirectToAction("GetRemarkEntry", "Transactions");
+        }
+
+        #endregion RemarkEntry
     }
 }

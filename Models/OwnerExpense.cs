@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FMS.Models
@@ -17,6 +16,7 @@ namespace FMS.Models
         public int? UpdatedBy { get; set; }
         public byte TripNo { get; set; }
         public string? BoatName { get; set; }
+
         [NotMapped]
         public List<OwnerExpenseDt>? ownerExpensesDts { get; set; }
     }

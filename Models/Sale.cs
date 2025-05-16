@@ -8,6 +8,7 @@ namespace FMS.Models
     {
         [Key]
         public long SaleId { get; set; }
+
         public string? SaleNo { get; set; }
         public int BoatId { get; set; }
         public string? BoatName { get; set; }
@@ -44,6 +45,7 @@ namespace FMS.Models
         public int CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
+
         [NotMapped]
         public List<SaleDt> ObjSaleDt { get; set; }
     }

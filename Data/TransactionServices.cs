@@ -1,8 +1,7 @@
-﻿using FMS.Models;
+﻿using Dapper;
+using FMS.Models;
 using FMS.Repository;
-using Dapper;
 using System.Data;
-using Microsoft.IdentityModel.Tokens;
 
 namespace FMS.Data
 {
@@ -588,5 +587,98 @@ namespace FMS.Data
         }
 
         #endregion Credit
+
+        #region RemarkEntry
+
+        public async Task<IEnumerable<RemarkEntry>> GetAllRemarkEntry(string SaleNo, string SaleName)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Type", "GET_ALL", DbType.String);
+
+                string searchText = string.Empty;
+
+                if (!string.IsNullOrEmpty(SaleNo))
+                {
+                    searchText += " AND SaleNo LIKE '%" + SaleNo + "%'";
+                }
+                if (!string.IsNullOrEmpty(SaleName))
+                {
+                    searchText += " AND SaleName LIKE '%" + SaleName + "%'";
+                }
+
+                parameters.Add("@SearchText", searchText);
+
+                var result = await _repository.GetAllAsync<RemarkEntry, dynamic>("USP_RemarkEntry", parameters);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<RemarkEntry> GetByIdAsyncRemarkEntry(int RemarkEntryId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Type", "GET_BY_ID", DbType.String);
+                parameters.Add("RemarkEntryId", RemarkEntryId, DbType.Int32);
+
+                IEnumerable<RemarkEntry> RemarkEntrysHd = await _repository.GetByIdAsync<RemarkEntry, dynamic>("USP_RemarkEntry", parameters);
+
+                return RemarkEntrysHd.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IncomeReponce> UpsertAsyncRemarkEntry(RemarkEntry model)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Type", "INSERT_UPDATE", DbType.String);
+                parameters.Add("RemarkEntryId", model.RemarkEntryId, DbType.Int32);
+                parameters.Add("RemarkEntryNo", model.RemarkEntryNo, DbType.String);
+                parameters.Add("BoatId", model.BoatId, DbType.Int32);
+                parameters.Add("AccountDate", model.AccountDate, DbType.Date);
+                parameters.Add("Remarks", model.Remarks, DbType.String);
+                parameters.Add("TotalAmount", model.TotalAmount, DbType.Decimal);
+                parameters.Add("CreatedBy", 1, DbType.Int32);
+
+                return await _repository.UpsertAsync("USP_RemarkEntry", parameters);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IncomeReponce> DeleteAsyncRemarkEntry(int RemarkEntryId, int CreatedBY)
+        {
+            IncomeReponce resultReponce = new IncomeReponce();
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Type", "DELETE", DbType.String);
+                parameters.Add("RemarkEntryId", RemarkEntryId, DbType.Int32);
+                parameters.Add("CreatedBy", CreatedBY, DbType.Int32);
+
+                resultReponce = await _repository.UpsertAsync("USP_RemarkEntry", parameters);
+
+                return resultReponce;
+            }
+            catch (Exception ex)
+            {
+                return resultReponce;
+            }
+        }
+
+        #endregion RemarkEntry
     }
 }

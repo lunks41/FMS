@@ -17,17 +17,22 @@ namespace FMS.Models
             //    .ForMember(dest => dest.OccupationName, opt => opt.Ignore())
 
             #region Master
+
             CreateMap<Boat, Boat>().ReverseMap();
             CreateMap<ExpenseType, ExpenseType>().ReverseMap();
             CreateMap<CommissionType, CommissionType>().ReverseMap();
-            #endregion
+
+            #endregion Master
 
             #region Transactions
+
             CreateMap<SaleHd, SaleHd>().ReverseMap();
             CreateMap<OwnerExpenseHd, OwnerExpenseHd>().ReverseMap();
             CreateMap<IncomeHd, IncomeHd>().ReverseMap();
             CreateMap<CreditHd, CreditHd>().ReverseMap();
-            #endregion
+            CreateMap<RemarkEntry, RemarkEntry>().ReverseMap();
+
+            #endregion Transactions
         }
     }
 }

@@ -2,10 +2,10 @@
 // *******************************************************************************
 
 @mixin template-toast-variant($parent, $background, $color: null) {
-  $label-color: if($color, $color, $background);
-  $color: if($color, $color, color-contrast($background));
+    $label-color: if($color, $color, $background);
+    $color: if($color, $color, color-contrast($background));
 }
 
 @mixin template-toast-theme($parent, $background, $color: null) {
-  @include template-toast-variant($parent, $background, $color);
+    @include template-toast-variant($parent, $background, $color);
 }

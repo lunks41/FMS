@@ -1,7 +1,6 @@
-﻿using FMS.Models;
-using Dapper;
+﻿using Dapper;
+using FMS.Models;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Caching.Memory;
 using System.Data;
 
 namespace FMS.Repository
@@ -9,6 +8,7 @@ namespace FMS.Repository
     public class Repository : IRepository
     {
         private readonly IConfiguration _configuration;
+
         public Repository(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -33,7 +33,6 @@ namespace FMS.Repository
 
         public async Task<IEnumerable<T>> GetByIdAsync<T, P>(string spName, P Parameters)
         {
-
             using IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("DbConnection"));
             return await connection.QueryAsync<T>(spName, Parameters, commandType: CommandType.StoredProcedure);
         }

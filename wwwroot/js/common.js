@@ -1,7 +1,5 @@
-
 /// ### Auto Complete DropDown ###///
 function BindAutoCompleteComboBoxData(e, t, o, a) {
-
     $.ajax({
         url: e,
         async: !1,
@@ -10,7 +8,6 @@ function BindAutoCompleteComboBoxData(e, t, o, a) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (e) {
-
             e = JSON.parse(e), null !== e && e.length > 0 ? ($("#" + t).kendoAutoComplete({
                 dataTextField: o,
                 dataValueField: a,
@@ -23,7 +20,6 @@ function BindAutoCompleteComboBoxData(e, t, o, a) {
                         void 0 !== o && null !== o && OnSelectDropdown(o, t)
                     }
                     else {
-
                     }
                 },
                 change: function (e) {
@@ -39,12 +35,10 @@ function BindAutoCompleteComboBoxData(e, t, o, a) {
                 filter: "contains"
             }), $("#" + t).data("kendoAutoComplete").text(""))
         },
-        
     })
 }
 
 function AutoWithBindAutoCompleteComboBox(e) {
-
     var t = $("#" + e).data("kendoAutoComplete"),
         o = t.list.width();
     o > 100 && t.list.width("auto")
@@ -53,7 +47,6 @@ function AutoWithBindAutoCompleteComboBox(e) {
 /// ### Combo Box DropDown ###///
 
 function BindComboBox(e, t, o, a) {
-
     $.ajax({
         url: e,
         async: !1,
@@ -62,7 +55,6 @@ function BindComboBox(e, t, o, a) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (e) {
-
             e = JSON.parse(e), null !== e && e.length > 0 ? ($("#" + t).kendoComboBox({
                 dataTextField: o,
                 dataValueField: a,
@@ -74,16 +66,13 @@ function BindComboBox(e, t, o, a) {
                 //serverFiltering: !0,
                 dataSource: e,
                 select: function (e) {
-
                     if (e.dataItem) {
                         var o = this.dataItem(e.item.index());
                         void 0 !== o && null !== o && OnSelectDropdown(o, t)
                     }
                     else { }
-
                 },
                 change: function (e) {
-
                     if (e.dataItem) {
                         var o = this.dataItem(e.item);
                         void 0 !== o && null !== o ? OnSelectDropdown(o, t) : ($("#" + t).data("kendoComboBox").text(""), $("#" + t).data("kendoComboBox").value(""))
@@ -96,12 +85,10 @@ function BindComboBox(e, t, o, a) {
                 filter: "contains"
             }), $("#" + t).data("kendoComboBox").text(""), $("#" + t).data("kendoComboBox").value(''))
         },
-        
     })
 }
 
 function AutoWithBindComboBox(e) {
-
     var t = $("#" + e).data("kendoComboBox"),
         o = t.list.width();
     o > 100 && t.list.width("auto")
@@ -109,7 +96,6 @@ function AutoWithBindComboBox(e) {
 /// ### Combo Box DropDown ###///
 /// ### Multi Select DropDown and Multi Column Dropwn ###///
 function BindMultiSelectComboBox(e, t, o, a) {
-
     $.ajax({
         url: e,
         async: !1,
@@ -118,7 +104,6 @@ function BindMultiSelectComboBox(e, t, o, a) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (e) {
-
             e = JSON.parse(e), null !== e && e.length > 0 ? ($("#" + t).kendoMultiSelect({
                 dataTextField: o,
                 dataValueField: a,
@@ -126,16 +111,13 @@ function BindMultiSelectComboBox(e, t, o, a) {
                 filter: "contains",
                 dataSource: e,
                 select: function (e) {
-
                     if (e.dataItem) {
                         var o = this.dataItem(e.item.index());
                         void 0 !== o && null !== o && OnSelectDropdown(o, t)
                     }
                     else { }
-
                 },
                 change: function (e) {
-
                     if (e.dataItem) {
                         var o = this.dataItem(e.item);
                         void 0 !== o && null !== o ? OnSelectDropdown(o, t) : ($("#" + t).data("kendoMultiSelect").text(""), $("#" + t).data("kendoMultiSelect").value(""))
@@ -148,12 +130,10 @@ function BindMultiSelectComboBox(e, t, o, a) {
                 filter: "contains"
             }), $("#" + t).data("kendoMultiSelect").text(""), $("#" + t).data("kendoMultiSelect").value(''))
         },
-        
     })
 }
 
 function BindMultiColumnComboBox(e, t, o, a, Columns_properties, filterFields) {
-
     $.ajax({
         url: e,
         async: !1,
@@ -162,7 +142,6 @@ function BindMultiColumnComboBox(e, t, o, a, Columns_properties, filterFields) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (e) {
-
             e = JSON.parse(e), null !== e && e.length > 0 ? ($("#" + t).kendoMultiColumnComboBox({
                 dataTextField: o,
                 dataValueField: a,
@@ -188,7 +167,6 @@ function BindMultiColumnComboBox(e, t, o, a, Columns_properties, filterFields) {
                     }
                     else {
                     }
-
                 }
             }), SelectedDropdown(t)) : ($("#" + t).kendoMultiColumnComboBox({
                 dataSource: [],
@@ -196,12 +174,10 @@ function BindMultiColumnComboBox(e, t, o, a, Columns_properties, filterFields) {
                 filter: "contains"
             }), $("#" + t).data("kendoMultiColumnComboBox").text(""))
         },
-        
     })
 }
 
 function AutoWithBindMultiColumnComboBox(e) {
-
     var t = $("#" + e).data("kendoMultiColumnComboBox"),
         o = t.list.width();
     o > 50 && t.list.width("auto")
@@ -219,7 +195,6 @@ function BindDropdown(e, t, o, a) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (e) {
-
             //Harshad Added On 20 JAn 2024 Some Drop have array values and some JSON Format
             if (typeof e === "object") {
                 e = e; //return Array [ return Json((ObjBindSuperObjects), JsonRequestBehavior.AllowGet);]
@@ -234,25 +209,19 @@ function BindDropdown(e, t, o, a) {
                 filter: "contains",
                 dataSource: e,
                 select: function (e) {
-
                     if (e.dataItem) {
-
                         //var o = this.dataItem(e.item.index());
                         var o = e.dataItem;
                         void 0 !== o && null !== o && OnSelectDropdown(o, t)
                     } else {
-
                     }
                 },
                 change: function (e) {
-
                     if (e.dataItem) {
-
                         //var o = this.dataItem(e.item);
                         var o = e.dataItem;
                         void 0 !== o && null !== o && OnSelectDropdown(o, t)
                     } else {
-
                     }
                 }
             }), SelectedDropdown(t)) : ($("#" + t).kendoDropDownList({
@@ -261,15 +230,13 @@ function BindDropdown(e, t, o, a) {
                 filter: "contains"
             }), $("#" + t).data("kendoDropDownList").text(""))
         },
-        
     })
 }
 
 /// ### Dropdown ###///
 
 function CommonAjaxRequest(e, t, o) {
-
-     $.ajax({
+    $.ajax({
         url: e,
         type: o,
         cache: !1,
@@ -277,18 +244,14 @@ function CommonAjaxRequest(e, t, o) {
         data: t,
         dataType: "html",
         success: function (e) {
-
             setTimeout(function () {
-                
             }, 500), $("#Content").html(e), $("html, body").animate({
                 scrollTop: 0
             }, "slow"), void 0 !== $("#login-form").html() && null !== $("#login-form").html() ? $("#divReplacement").html(e) : void 0 !== $("#error-form").html() && null !== $("#error-form").html() && $("#divReplacement").html(e)
         },
-        
     })
 }
 function CreateRecordNew(Url, Params, o, a) {
-    
     $.ajax({
         type: "POST",
         url: Url,
@@ -296,71 +259,60 @@ function CreateRecordNew(Url, Params, o, a) {
         dataType: "json",
         async: true,
         success: function (n) {
-            
             n = JSON.parse(n), setTimeout(function () {
             }, 500), "" !== n && null !== n && null !== n.ERROR_MESSAGE && "" !== n.ERROR_MESSAGE ? (setTimeout(function () {
             }, 500), setTimeout(function () {
                 n.RESULT > 0 ? (toastr.success(n.ERROR_MESSAGE), 1 === o ? (RedirectActionToList(n), a()) : 2 === o ? RedirectActionToEdit(n) : DefaultSelection()) : toastr.error(n.ERROR_MESSAGE)
             }, 1e3)) : $("#lbl_Message").text("Error occurred in Url=" + e + ", Param" + t)
         },
-        
     })
 }
 function UpdateRecordNew(e, t, o) {
-     $.ajax({
+    $.ajax({
         type: "POST",
         url: e,
         data: t,
         dataType: "json",
         success: function (a) {
-
             a = JSON.parse(a), setTimeout(function () {
-                
             }, 500), "" !== a && null !== a && null !== a.ERROR_MESSAGE && "" !== a.ERROR_MESSAGE ? (setTimeout(function () {
-                
             }, 500), setTimeout(function () {
                 a.RESULT > 0 ? (toastr.success(a.ERROR_MESSAGE), 1 === o ? RedirectActionToList(a) : 2 === o ? RedirectActionToEdit(a) : DefaultSelection()) : toastr.error(a.ERROR_MESSAGE)
             }, 1e3)) : $("#lbl_Message").text("Error occurred in Url=" + e + ", Param" + t)
         },
-        
     })
 }
 function CreateRecord(e, t, o) {
-     $.ajax({
+    $.ajax({
         type: "POST",
         url: e,
         data: t,
         dataType: "json",
         success: function (a) {
             a = JSON.parse(a), setTimeout(function () {
-                
             }, 500), "" !== a && null !== a ? (null !== a.ERROR_MESSAGE && "" !== a.ERROR_MESSAGE ? (setTimeout(function () {
-                
             }, 500), a.RESULT > 0 ? toastr.success(a.ERROR_MESSAGE) : toastr.error(a.ERROR_MESSAGE)) : $("#lbl_Message").text("Error occurred in Url=" + e + ", Param" + t), setTimeout(function () {
                 a.RESULT > 0 && (o ? RedirectAction(a) : DefaultSelection())
             }, 1e3)) : $("#lbl_Message").text("Error occurred in Url=" + e + ", Param" + t)
         },
-        
     })
 }
 function UpdateRecord(e, t, o) {
-     $.ajax({
+    $.ajax({
         type: "POST",
         url: e,
         data: t,
         dataType: "json",
         success: function (a) {
             a = JSON.parse(a), setTimeout(function () {
-                
             }, 500), "" !== a && null !== a ? (null !== a.ERROR_MESSAGE && "" !== a.ERROR_MESSAGE ? $("#lbl_Message").text(a.ERROR_MESSAGE) : $("#lbl_Message").text("Error occurred in Url=" + e + "Param" + t), setTimeout(function () {
                 a.RESULT > 0 && (o ? RedirectAction(a) : DefaultSelection())
             }, 1e3)) : $("#lbl_Message").text("Error occurred in Url=" + e + "Param" + t)
         },
-        
     })
 }
 function DeleteRecord(e, t, o) {
-     $.ajax({
+    $.ajax({
         url: e,
         type: "POST",
         cache: !1,
@@ -369,18 +321,15 @@ function DeleteRecord(e, t, o) {
         dataType: "json",
         success: function (a) {
             a = JSON.parse(a), setTimeout(function () {
-                
             }, 1e3), "" !== a && null !== a ? (null !== a.ERROR_MESSAGE && "" !== a.ERROR_MESSAGE ? $("#lbl_DeletePopupMessage").text(a.ERROR_MESSAGE) : $("#lbl_DeletePopupMessage").text("DeleteFailed"), a.RESULT > 0 && (setTimeout(function () {
                 ClosePopup("Popup_Delete")
             }, 1e3), o ? LoadTabsGrid() : DeleteRedirect())) : $("#lbl_Message").text("Error occurred in Url=" + e + "Param" + t)
         },
-        
     })
 }
 
 //*************** GRIDS BLOCK BEGIN ***************
 function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Aggregate, DataFunction, ScreenName, ReportName, DataAdd) {
-    
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
@@ -399,7 +348,6 @@ function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Ag
         GridLayout(DataAdd, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight, ReportName);
     }
     else {
-        
         $.ajax({
             type: "POST",
             url: Url,
@@ -407,22 +355,15 @@ function FillUpdatedGrid(Url, Params, GridName, PageSize, Columns_properties, Ag
             dataType: "json",
             async: true,
             success: function (e) {
-
                 GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight, ReportName);
             },
-            
         }), KendoGridToolTip(GridName)
     }
 }
 
-
 function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function, Columns_properties, ScreenName, GridName, PageSize, CurrentDateTime, Aggregate, GridHeight, ReportName) {
-
     if (e != "") {
-
-
         if (e = JSON.parse(e), void 0 !== Columns_properties && "" !== Columns_properties && (hidecolumns = Columns_properties), $("#grid_" + GridName).html(""), null !== e && e.length > 0) {
-
             //Adding Header Name With Total QTY
             if ($("#li_" + GridName).html()) {
                 var Grid_Title = $("#li_" + GridName).html();
@@ -440,7 +381,6 @@ function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function,
                 aggregate: Aggregate,
                 pageSize: PageSize == '' ? 500 : PageSize
                 /*group: gridGroup*/
-
             });
 
             $("#grid_" + GridName).kendoGrid({
@@ -493,26 +433,21 @@ function GridLayout(e, toolbar, GridTemplate, save_function, dataBound_function,
 }
 
 function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Aggregate, GridTemplate) {
-
     columnsOptions = [], model = {}, modelfields = null, model.id = "ID";
     var o = {};
     modelfields = new Array;
     aggregateArray = [];
 
     if (GridTemplate) {
-
         (GridName == 'Active' || GridName == 'Inactive') ? GridColumnTemplate(e, GridName) : eval("GridColumnTemplate_" + GridName + "(e, GridName)");
     }
 
     for (let a of Columns_properties) {
-
         modelfields.push(a.columnName);
 
         if (a.dataType == "date") {
-
             o[a.columnName] = { type: "date", editable: a.iseditable };
             columnsOptions.push({
-
                 field: a.columnName,
                 title: (a.title != undefined) ? a.title : a.columnName,
                 type: "date",
@@ -533,10 +468,8 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.dataType == "dateongrid") {
-
             o[a.columnName] = { type: "date", editable: a.iseditable };
             columnsOptions.push({
-
                 field: a.columnName,
                 title: (a.title != undefined) ? a.title : a.columnName,
                 type: "date",
@@ -550,7 +483,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.dataType == "datetime") {
-
             o[a.columnName] = { type: "date", editable: a.iseditable };
 
             columnsOptions.push({
@@ -574,7 +506,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.dataType == "amount") {
-
             o[a.columnName] = {
                 type: "number", editable: a.iseditable, /*validation: validation*/
             };
@@ -582,7 +513,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             var aggregate = "";
 
             for (let x in Aggregate) {
-
                 if (Aggregate[x].field == a.columnName) {
                     isAggregate = true;
                     aggregate = Aggregate[x].aggregate;
@@ -651,10 +581,8 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
                     }
                 })
             }
-
         }
         else if (a.dataType == "ex_Rate") {
-
             o[a.columnName] = { type: "number", editable: a.iseditable };
             columnsOptions.push({
                 field: a.columnName,
@@ -682,7 +610,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.dataType == "checkbox") {
-
             o[a.columnName] = { type: "boolean", editable: a.iseditable };
 
             columnsOptions.push({
@@ -708,7 +635,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.datatype == "editable") {
-
             o[a.columnname] = { type: "number", editable: a.iseditable, validation: { required: true } }; // Value should be change as a number in column cell https://docs.telerik.com/kendo-ui/api/javascript/ui/grid/configuration/columns.editoroptions,
             https://dojo.telerik.com/OhaVAKor/12
 
@@ -741,7 +667,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.dataType == "bool") {
-
             o[a.columnName] = { type: "boolean", editable: a.iseditable };
 
             columnsOptions.push({
@@ -766,7 +691,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
             })
         }
         else if (a.dataType == "stringlink") {
-
             o[a.columnName] = { type: "string", editable: a.iseditable };
             columnsOptions.push({
                 field: a.columnName,
@@ -806,7 +730,6 @@ function GenerateGridModelColumnsProperties(e, GridName, Columns_properties, Agg
                         extra: !1
                     },
                     ui: function (e) {
-
                         e.kendoAutoComplete({
                             dataSource: e
                         });

@@ -1,8 +1,7 @@
-﻿using FMS.Models;
+﻿using Dapper;
+using FMS.Models;
 using FMS.Repository;
-using Dapper;
 using System.Data;
-using System.Linq.Expressions;
 
 namespace FMS.Data
 {
@@ -13,7 +12,6 @@ namespace FMS.Data
         public MasterServices(IRepository repository)
         {
             _repository = repository;
-
         }
 
         #region Boat
@@ -131,12 +129,12 @@ namespace FMS.Data
 
             IEnumerable<Boat> Boat = await _repository.GetByIdAsync<Boat, dynamic>("USP_BOAT", parameters);
             return Boat.FirstOrDefault();
-
         }
 
-        #endregion
+        #endregion Boat
 
         #region ExpenseType
+
         public async Task<IEnumerable<ExpenseType>> GetAllExpenseType(string ExpenseTypeCode, string ExpenseTypeName, int? IsActive)
         {
             try
@@ -250,12 +248,12 @@ namespace FMS.Data
 
             IEnumerable<ExpenseType> ExpenseType = await _repository.GetByIdAsync<ExpenseType, dynamic>("USP_ExpenseType", parameters);
             return ExpenseType.FirstOrDefault();
-
         }
 
-        #endregion
+        #endregion ExpenseType
 
         #region CommissionType
+
         public async Task<IEnumerable<CommissionType>> GetAllCommissionType(string CommissionTypeCode, string CommissionTypeName, int? IsActive)
         {
             try
@@ -369,10 +367,8 @@ namespace FMS.Data
 
             IEnumerable<CommissionType> CommissionType = await _repository.GetByIdAsync<CommissionType, dynamic>("USP_CommissionType", parameters);
             return CommissionType.FirstOrDefault();
-
         }
 
-        #endregion
-
+        #endregion CommissionType
     }
 }

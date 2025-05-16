@@ -2,11 +2,11 @@
 // *******************************************************************************
 
 @mixin template-progress-bar-theme($background, $color: null) {
-  .progress-bar {
-    background-color: $background;
-  }
+    .progress-bar {
+        background-color: $background;
+    }
 }
 
 @mixin template-progress-bar-shadow-variant($parent, $background-shadow) {
-  $background-shadow: $background-shadow;
+    $background-shadow: $background-shadow;
 }

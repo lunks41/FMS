@@ -34,7 +34,7 @@
             <div class="card-body pt-2 mt-1">
                 <div class="row gy-4">
                     @*  @Html.HiddenFor(m => m.OwnerExpenseId)
-                    @Html.HiddenFor(m => m.EncId) *@
+                        @Html.HiddenFor(m => m.EncId) *@
                     <input asp-for="OwnerExpenseId" hidden />
                     <input asp-for="EncId" hidden />
                     <label>Header</label>
@@ -117,10 +117,8 @@
 
                 <div id="grid_ExpenseDetails">
                 </div>
-
             </div>
             <!-- /Account -->
-
         </div>
         @*  </form> *@
     </div>
@@ -475,6 +473,5 @@
                 CommonAjaxRequest(Url, Params, Type);
             }
         }
-
     </script>
 }

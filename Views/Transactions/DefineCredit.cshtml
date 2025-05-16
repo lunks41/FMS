@@ -95,15 +95,15 @@
                 </div>
 
                 <br>
-                   <div class="row gy-4">
+                <div class="row gy-4">
 
                     <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
-                            <input asp-for="TotalCreditAmount" class="form-control" type="number" id="txt_totalcreditamount" name="totalcreditamount" onblur="HeaderAmountCalculation()" readonly/>
+                            <input asp-for="TotalCreditAmount" class="form-control" type="number" id="txt_totalcreditamount" name="totalcreditamount" onblur="HeaderAmountCalculation()" readonly />
                             <label for="totalcreditamount">Credit Amount</label>
                         </div>
                     </div>
-                     <div class="col-md-3">
+                    <div class="col-md-3">
                         <div class="form-floating form-floating-outline">
                             <input asp-for="TotalDebitAmount" class="form-control" type="number" id="txt_totaldebitamount" name="totaldebittamount" onblur="HeaderAmountCalculation()" readonly />
                             <label for="totaldebittamount">Debit Amount</label>
@@ -115,7 +115,6 @@
                             <label for="totalbalanceamount">Balance Amount (Person Pay you)</label>
                         </div>
                     </div>
-
 
                     <label>Details</label>
 
@@ -167,7 +166,6 @@
                 </div>
             </div>
             <!-- /Account -->
-
         </div>
     </div>
 </div>
@@ -242,13 +240,13 @@
         }
 
         function EditCreditDt() {
-            
+
             var gridData = $("#grid_CreditDetails").data("kendoGrid");
 
             var selectedRows = gridData.select();
             selectedRows.each(function (index, row) {
                 var selectedItem = gridData.dataItem(row);
-                
+
                 //$("#txt_PaymentDate").data("kendoDatePicker").value(selectedItem.PaymentDate);
                 $("#txt_PaymentDate").val(formatDate(selectedItem.PaymentDate));
                 $("#txt_debitamount").val(selectedItem.DebitAmount);
@@ -275,7 +273,7 @@
         }
 
         function HeaderAmountCalculation() {
-            
+
             var Debitamt = 0, Creditamt = 0, TotalAMT = 0;
             var creditAmt = parseFloat($("#txt_creditamount").val() == '' ? 0 : $("#txt_creditamount").val());
 
@@ -283,9 +281,9 @@
 
             if (grid != undefined) {
                 var gridData = grid.dataSource.data();
-                
+
                 for (var i = 0; i < gridData.length; i++) {
-                    
+
                     var uid = gridData[i].uid;
                     var row = grid.table.find("tr[data-uid='" + uid + "']");
 
@@ -466,7 +464,7 @@
                         } else {
                             var JsonDetails = '';
                         }
-                    } else { 
+                    } else {
                         var JsonDetails = '';
                     }
 
@@ -526,6 +524,3 @@
     </script>
 
 }
-
-
-
